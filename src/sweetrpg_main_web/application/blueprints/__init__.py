@@ -3,7 +3,6 @@ __author__ = "Paul Schifferer <dm@sweetrpg.com>"
 """
 """
 
-
 from functools import wraps
 from flask import redirect, session, render_template, request
 from sweetrpg_main_web.application import constants
@@ -13,12 +12,8 @@ from werkzeug.exceptions import HTTPException
 import json
 import os
 from sweetrpg_main_web.application import constants
-
-# from sweetrpg_main_web.application.models import constants as model_constants
-# from .. import render_page, requires_auth
-# from sweetrpg_main_web.application.models.user import User
-# from sweetrpg_main_web.application.utils.user import has_role
-
+import analytics
+import datetime
 
 # def requires_auth(f):
 #     @wraps(f)
@@ -33,14 +28,25 @@ from sweetrpg_main_web.application import constants
 def user_info(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        userinfo = None
+
         if constants.SWEETRPG_AUTH_KEY in session:
-            kwargs.update({
-                'userinfo': session[constants.SWEETRPG_AUTH_KEY],
-            })
+            userinfo = session[constants.SWEETRPG_AUTH_KEY]
         elif constants.SWEETRPG_AUTH_KEY in request.cookies:
+            userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
+
+        print(userinfo)
+        if userinfo:
             kwargs.update({
-                'userinfo': request.cookies[constants.SWEETRPG_AUTH_KEY],
+                'userinfo': userinfo,
             })
+
+            analytics.identify('f4ca124298', {
+                'name': 'Michael Bolton',
+                'email': userinfo,
+                'created_at': datetime.datetime.now()
+            })
+
         return f(*args, **kwargs)
 
     return decorated
@@ -154,7 +160,7 @@ def main_page():
         'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
     }
     print(context)
-    return render_template("index.html", **context)
+    return render_page("index.html", context)
 
 
 from sweetrpg_web_core.blueprints import health
