@@ -9,3 +9,4 @@ data:
   PORT: "8080"
   SERVICE_CHECK_URL: http://dev.sweetrpg.com/health/ping
   HEALTH_CHECK_URL: http://dev.sweetrpg.com/health/status
+  APPLICATION_BASE_PATH: ""
