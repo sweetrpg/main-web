@@ -11,7 +11,6 @@ from flask_session import Session
 from dotenv import load_dotenv, find_dotenv
 from sweetrpg_main_web.application.cache import cache
 from sweetrpg_main_web.application import constants
-from sweetrpg_client.client import Client as APIClient
 from logging.config import dictConfig
 from redis.client import Redis
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
@@ -98,9 +97,6 @@ def create_app(app_name=constants.APPLICATION_NAME):
     app.logger.info("Setting up endpoints...")
 
     from sweetrpg_main_web.application.blueprints import blueprint as main_blueprint
-
-    from sweetrpg_main_web.application.blueprints.volumes import blueprint as volumes_blueprint
-    main_blueprint.register_blueprint(volumes_blueprint)
 
     from sweetrpg_web_core.blueprints.health import blueprint as health_blueprint
     main_blueprint.register_blueprint(health_blueprint)
