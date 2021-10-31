@@ -25,7 +25,7 @@ import datetime
 #     return _check_auth
 
 
-def user_info(f):
+def tracked(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         userinfo = None
@@ -45,6 +45,10 @@ def user_info(f):
                 'name': 'Michael Bolton',
                 'email': userinfo,
                 'created_at': datetime.datetime.now()
+            })
+
+            analytics.track('f4ca124298', 'Main Page', {
+                'plan': 'Enterprise'
             })
 
         return f(*args, **kwargs)
@@ -153,12 +157,13 @@ def error_handler(ex):
     return response
 
 
-@user_info
+@tracked
 @blueprint.route("/")
 def main_page():
     context = {
         'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
     }
+
     print(context)
     return render_page("index.html", context)
 
