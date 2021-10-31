@@ -30,15 +30,15 @@ def tracked(f):
     def decorated(*args, **kwargs):
         userinfo = None
 
-        print(session)
-        print(request)
+        print(f"session: {session}")
+        print(f"request: {request}")
 
         if constants.SWEETRPG_AUTH_KEY in session:
             userinfo = session[constants.SWEETRPG_AUTH_KEY]
         elif constants.SWEETRPG_AUTH_KEY in request.cookies:
             userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
 
-        print(userinfo)
+        print(f"userinfo: {userinfo}")
         if userinfo:
             kwargs.update({
                 'userinfo': userinfo,
