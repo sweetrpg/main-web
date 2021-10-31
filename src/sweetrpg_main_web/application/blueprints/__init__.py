@@ -30,16 +30,20 @@ from sweetrpg_main_web.application import constants
 #     return _check_auth
 
 
-# def user_info(f):
-#     @wraps(f)
-#     def decorated(*args, **kwargs):
-#         if constants.PROFILE_KEY in session:
-#             kwargs.update({
-#                 'userinfo': session[constants.PROFILE_KEY],
-#             })
-#         return f(*args, **kwargs)
+def user_info(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if constants.SWEETRPG_AUTH_KEY in session:
+            kwargs.update({
+                'userinfo': session[constants.SWEETRPG_AUTH_KEY],
+            })
+        elif constants.SWEETRPG_AUTH_KEY in request.cookies:
+            kwargs.update({
+                'userinfo': request.cookies[constants.SWEETRPG_AUTH_KEY],
+            })
+        return f(*args, **kwargs)
 
-#     return decorated
+    return decorated
 
 
 def error_page(message, code):
@@ -143,9 +147,14 @@ def error_handler(ex):
     return response
 
 
+@user_info
 @blueprint.route("/")
 def main_page():
-    return render_template("index.html")
+    context = {
+        'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
+    }
+    print(context)
+    return render_template("index.html", **context)
 
 
 from sweetrpg_web_core.blueprints import health
