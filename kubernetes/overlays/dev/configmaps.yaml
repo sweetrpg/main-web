@@ -10,3 +10,4 @@ data:
   SERVICE_CHECK_URL: http://dev.sweetrpg.com/health/ping
   HEALTH_CHECK_URL: http://dev.sweetrpg.com/health/status
   APPLICATION_BASE_PATH: ""
+  LIBRARY_API_BASE_URL: ""
