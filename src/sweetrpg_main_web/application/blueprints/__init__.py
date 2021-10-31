@@ -72,15 +72,16 @@ def render_page(page, context={}):
     show_cookie_message = True
     if request.cookies.get("cookies-accepted"):
         show_cookie_message = False
+    context.update({
+            "showCookieMessage": show_cookie_message,
+    })
 
     userinfo = session.get(constants.PROFILE_KEY)
     if userinfo:
-        context.update(
-            {
-                "showCookieMessage": show_cookie_message,
+        context.update({
                 "userinfo": userinfo,
-            }
-        )
+                "segment_write_key": os.environ.get(constants.SEGMENT_WRITE_KEY, "")
+        })
     print(f"context: {context}")
 
     return render_template(page, **context)
