@@ -28,11 +28,12 @@ import datetime
 def tracked(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        userinfo = None
-
+        print(f"args: {args}")
+        print(f"kwargs: {kwargs}")
         print(f"session: {session}")
         print(f"request: {request}")
 
+        userinfo = None
         if constants.SWEETRPG_AUTH_KEY in session:
             userinfo = session[constants.SWEETRPG_AUTH_KEY]
         elif constants.SWEETRPG_AUTH_KEY in request.cookies:
@@ -71,19 +72,45 @@ def error_page(message, code):
 
 
 def render_page(page, context={}):
+    print(f"session: {session}")
+    print(f"request: {request}")
+
+    userinfo = None
+    if constants.PROFILE_KEY in session:
+        userinfo = session[constants.PROFILE_KEY]
+    elif constants.SWEETRPG_AUTH_KEY in request.cookies:
+        userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
+        session[constants.PROFILE_KEY] = userinfo
+
+    print(f"(updated) session: {session}")
+    print(f"userinfo: {userinfo}")
+    if userinfo:
+        # kwargs.update({
+        #     'userinfo': userinfo,
+        # })
+
+        analytics.identify('f4ca124298', {
+            'name': 'Michael Bolton',
+            'email': userinfo,
+            'created_at': datetime.datetime.now()
+        })
+
+        analytics.track('f4ca124298', page, {
+            'plan': 'Enterprise'  # TODO
+        })
 
     show_cookie_message = True
     if request.cookies.get("cookies-accepted"):
         show_cookie_message = False
     context.update({
-            "showCookieMessage": show_cookie_message,
+        "showCookieMessage": show_cookie_message,
     })
 
     userinfo = session.get(constants.PROFILE_KEY)
     if userinfo:
         context.update({
-                "userinfo": userinfo,
-                "segment_write_key": os.environ.get(constants.SEGMENT_WRITE_KEY, "")
+            "userinfo": userinfo,
+            "segment_write_key": os.environ.get(constants.SEGMENT_WRITE_KEY, "")
         })
     print(f"context: {context}")
 
@@ -161,14 +188,13 @@ def error_handler(ex):
     return response
 
 
-@tracked
 @blueprint.route("/")
 def main_page():
     context = {
         'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
     }
 
-    print(context)
+    print(f"context: {context}")
     return render_page("index.html", context)
 
 

@@ -51,7 +51,7 @@ def create_app(app_name=constants.APPLICATION_NAME):
     )
 
     app = Flask(app_name)
-    app.debug = app.config["DEBUG"]
+    app.debug = app.config.get(constants.DEBUG, False)
     app.config.from_object("sweetrpg_main_web.application.config.BaseConfig")
     # env = DotEnv(app)
 
@@ -62,8 +62,8 @@ def create_app(app_name=constants.APPLICATION_NAME):
     # oauth.init_app(app)
 
     app.logger.info("Setting up analytics...")
-    analytics.write_key = app.config.get("SEGMENT_WRITE_KEY")
-    analytics.debug = app.config.get("DEBUG") or False
+    analytics.write_key = app.config.get(constants.SEGMENT_WRITE_KEY)
+    analytics.debug = app.config.get(constants.DEBUG, False)
 
     app.logger.info("Setting up session manager...")
     session = Session(app)
