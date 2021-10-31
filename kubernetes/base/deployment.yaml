@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+    name: web
+
+spec:
+    replicas: 1
+    strategy:
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 1
+        type: RollingUpdate
+    selector:
+        matchLabels:
+            platform: sweetrpg
+            app: main
+            component: web
+    template:
+        metadata:
+            labels:
+                platform: sweetrpg
+                app: main
+                component: web
+        spec:
+            serviceAccountName: web
+            imagePullSecrets:
+                - name: sweetrpg-registry
+            containers:
+                - name: web-app
+                  image: registry.sweetrpg.com/sweetrpg-main-web:latest
+                  imagePullPolicy: Always
+                  envFrom:
+                      - configMapRef:
+                            name: web-common
+                      - configMapRef:
+                            name: web-env
+                      - secretRef:
+                            name: web-auth
+                      - secretRef:
+                            name: web-misc
+                      - secretRef:
+                            name: web-cache
+                  env: []
+                  ports:
+                      - containerPort: 8282
+                        name: http
+                  resources:
+                      requests:
+                          cpu: "20m"
+                          memory: "55m"
+                      limits:
+                          cpu: "1.0"
+                          memory: "1Gi"
+                  livenessProbe:
+                      httpGet:
+                          path: /health/ping
+                          port: 8282
+                      initialDelaySeconds: 90
+                      timeoutSeconds: 10
+                  readinessProbe:
+                      httpGet:
+                          path: /health/ping
+                          port: 8282
+                      initialDelaySeconds: 30
+                      timeoutSeconds: 10
+                  volumeMounts:
+                      - mountPath: /data
+                        name: data
+                      - mountPath: /config
+                        name: config
+            volumes:
+                - name: config
+                  secret:
+                      secretName: web-files
+                      items:
+                          - key: newrelic.ini
+                            path: newrelic.ini
+                - name: data
+                  emptyDir: {}
+            restartPolicy: Always

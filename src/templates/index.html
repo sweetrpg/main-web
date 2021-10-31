@@ -1,0 +1,25 @@
+{% extends 'layout/base.html' %}
+
+{% set big_footer = True %}
+
+{% block title %}Main{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <!-- Volumes -->
+        <div class="card" style="width: 18rem;">
+            <img src="{{ url_for('static', filename='images/library/volumes-large.png') }}" class="card-img-top" alt="Volumes">
+            <div class="card-body">
+                <h5 class="card-title">Volumes</h5>
+                <p class="card-text">Look through the catalog of RPG volumes.</p>
+                <a href="{{ url_for('web.volumes.get_volumes') }}" class="btn btn-primary">Explore</a>
+            </div>
+        </div>
+
+        <!-- TODO: more -->
+    </div>
+</div>
+
+{% endblock %}

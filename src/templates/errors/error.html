@@ -1,0 +1,18 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+
+Something bad seems to have happened in the application. The following error message is
+what came back. It may or may not be useful to you, but our administrators have been
+notified, and will hopefully have it fixed shortly.
+
+<div class="container">
+<h1>{{ code }}</h1>
+<div class="alert alert-danger" role="alert">
+    {{ message }}
+</div>
+</div>
+
+{% endblock %}

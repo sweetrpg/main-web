@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+
+metadata:
+    name: web
+
+spec:
+    selector:
+        app: main
+        component: web
+        platform: sweetrpg
+    type: LoadBalancer
+    ports:
+        - name: http
+          port: 8080
+          targetPort: http
