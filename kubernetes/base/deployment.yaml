@@ -44,7 +44,7 @@ spec:
                             name: web-cache
                   env: []
                   ports:
-                      - containerPort: 8282
+                      - containerPort: 8080
                         name: http
                   resources:
                       requests:
@@ -56,13 +56,13 @@ spec:
                   livenessProbe:
                       httpGet:
                           path: /health/ping
-                          port: 8282
+                          port: 8080
                       initialDelaySeconds: 90
                       timeoutSeconds: 10
                   readinessProbe:
                       httpGet:
                           path: /health/ping
-                          port: 8282
+                          port: 8080
                       initialDelaySeconds: 30
                       timeoutSeconds: 10
                   volumeMounts:
