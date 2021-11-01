@@ -178,7 +178,7 @@ def _track():
     if user_info:
         analytics.identify('f4ca124298', {
             'name': 'Michael Bolton',
-            'email': user_info,
+            'email': 'me@example.org',
             'created_at': datetime.datetime.now()
         })
 
