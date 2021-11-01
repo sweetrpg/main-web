@@ -32,6 +32,7 @@ footer, nav {
   line-height: 60px;
   background-color: black;
   color: lightgrey;
+    z-index: 9999;
 }
 
 .card {
