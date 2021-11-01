@@ -219,7 +219,7 @@ def _track():
             'created_at': datetime.datetime.now()
         })
 
-        analytics.track(user_id, request.url, {
+        analytics.track(user_id, request.full_path, {
             'user_agent': request.headers.get('User-Agent')
         })
 

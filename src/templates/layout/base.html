@@ -27,14 +27,14 @@
 </div>
 
 {% if showCookieMessage %}
-<footer id="cookie-footer">
+<div id="cookie-footer">
     <div id="cookieMessage" class="container">
         <span class="muted">
             This site uses cookies! To accept this, click
             <a href="#" onclick="cookiesConfirmed()">OK</a>
         </span>
     </div>
-</footer>
+</div>
 
 <script src="{{ url_for('static', filename='js/cookies.js') }}" type="text/javascript"></script>
 {% endif %}
