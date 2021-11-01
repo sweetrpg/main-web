@@ -21,14 +21,23 @@ SENTRY_DSN = "SENTRY_DSN"
 SENTRY_ENV = "SENTRY_ENV"
 
 APPLICATION_NAME = "sweetrpg-main-web"
+
+# session keys
 PROFILE_KEY = "profile"
 JWT_PAYLOAD = "jwt_payload"
 CURRENT_USER_ID = "current_user_id"
+SESSION_ACCESS_TOKEN = "access_token"
+SESSION_EMAIL = "email"
+SESSION_USER_ID = "user_id"
+
+# global keys
 SWEETRPG_API_CLIENT_KEY = "sweetrpg-api-client"
 
-SEGMENT_WRITE_KEY = "SEGMENT_WRITE_KEY"
+# cookies
+SWEETRPG_AUTH_KEY = 'sweetrpg-auth'
 
 # Configuration
+SEGMENT_WRITE_KEY = "SEGMENT_WRITE_KEY"
 DEBUG = "DEBUG"
 PORT = "PORT"
 LOG_LEVEL = "LOG_LEVEL"
@@ -48,5 +57,3 @@ LOGSTASH_PORT = "LOGSTASH_PORT"
 
 LIBRARY_API_BASE_URL = 'LIBRARY_API_BASE_URL'
 APPLICATION_BASE_PATH = 'APPLICATION_BASE_PATH'
-
-SWEETRPG_AUTH_KEY = 'sweetrpg-auth'
