@@ -99,8 +99,6 @@ monotonic==1.6
     # via analytics-python
 mypy-extensions==0.4.3
     # via black
-newrelic==7.2.2.169
-    # via -r requirements/app.in
 packaging==21.2
     # via
     #   pallets-sphinx-themes

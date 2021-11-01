@@ -20,4 +20,3 @@ SQLAlchemy==1.4.26
 urllib3==1.26.7
 python-logstash-async
 uwsgi
-newrelic

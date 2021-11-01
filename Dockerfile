@@ -32,7 +32,7 @@ RUN apt-get update \
     && apt-get install -y git iproute2 procps lsb-release \
     #
     # Install pylint
-    && pip install pylint \
+    && pip install pylint newrelic \
     #
     # Other stuff
     # && apt-get install -y postgresql-client \
