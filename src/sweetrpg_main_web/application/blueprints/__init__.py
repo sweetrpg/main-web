@@ -188,12 +188,23 @@ def _populate():
     elif constants.SWEETRPG_AUTH_KEY in request.cookies:
         userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
         session[constants.PROFILE_KEY] = userinfo
-    session[constants.SESSION_ACCESS_TOKEN] = request.headers.get('# X-Forwarded-Access-Token')
-    session[constants.SESSION_EMAIL] = request.headers.get('# X-Forwarded-Email')
-    session[constants.SESSION_USER_ID] = request.headers.get('# X-Forwarded-User')
+    session[constants.SESSION_ACCESS_TOKEN] = request.headers.get('X-Forwarded-Access-Token')
+    session[constants.SESSION_EMAIL] = request.headers.get('X-Forwarded-Email')
+    session[constants.SESSION_USER_ID] = request.headers.get('X-Forwarded-User')
 
     print(f"(updated) session: {session}")
     print(f"userinfo: {userinfo}")
+
+
+@blueprint.before_request
+def _store_user():
+    email = session.get(constants.SESSION_EMAIL)
+    print(f"email: {email}")
+    user_id = session.get(constants.SESSION_USER_ID)
+    print(f"user_id: {user_id}")
+    if user_id and email:
+        # TODO: store user
+        pass
 
 
 @blueprint.before_request
