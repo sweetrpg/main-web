@@ -72,33 +72,6 @@ def error_page(message, code):
 
 
 def render_page(page, context={}):
-    print(f"session: {session}")
-    print(f"request: {request}")
-
-    userinfo = None
-    if constants.PROFILE_KEY in session:
-        userinfo = session[constants.PROFILE_KEY]
-    elif constants.SWEETRPG_AUTH_KEY in request.cookies:
-        userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
-        session[constants.PROFILE_KEY] = userinfo
-
-    print(f"(updated) session: {session}")
-    print(f"userinfo: {userinfo}")
-    if userinfo:
-        # kwargs.update({
-        #     'userinfo': userinfo,
-        # })
-
-        analytics.identify('f4ca124298', {
-            'name': 'Michael Bolton',
-            'email': userinfo,
-            'created_at': datetime.datetime.now()
-        })
-
-        analytics.track('f4ca124298', page, {
-            'plan': 'Enterprise'  # TODO
-        })
-
     show_cookie_message = True
     if request.cookies.get("cookies-accepted"):
         show_cookie_message = False
@@ -109,7 +82,7 @@ def render_page(page, context={}):
     userinfo = session.get(constants.PROFILE_KEY)
     if userinfo:
         context.update({
-            "userinfo": userinfo,
+            "user_info": userinfo,
             "segment_write_key": os.environ.get(constants.SEGMENT_WRITE_KEY, "")
         })
     print(f"context: {context}")
@@ -179,6 +152,39 @@ class UserAuthorizationException(Exception):
 
 blueprint = Blueprint("web", __name__)
 
+
+@blueprint.before_request
+def _populate():
+    print(f"session: {session}")
+    print(f"headers: {request.headers}")
+    print(f"cookies: {request.cookies}")
+    print(f"args: {request.args}")
+
+    userinfo = None
+    if constants.PROFILE_KEY in session:
+        userinfo = session[constants.PROFILE_KEY]
+    elif constants.SWEETRPG_AUTH_KEY in request.cookies:
+        userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
+        session[constants.PROFILE_KEY] = userinfo
+
+    print(f"(updated) session: {session}")
+    print(f"userinfo: {userinfo}")
+
+
+@blueprint.before_request
+def _track():
+    user_info = session.get(constants.PROFILE_KEY)
+    print(f"user_info: {user_info}")
+    if user_info:
+        analytics.identify('f4ca124298', {
+            'name': 'Michael Bolton',
+            'email': user_info,
+            'created_at': datetime.datetime.now()
+        })
+
+        analytics.track('f4ca124298', request.url, {
+            'plan': 'Enterprise'  # TODO
+        })
 
 @blueprint.errorhandler(Exception)
 def error_handler(ex):
