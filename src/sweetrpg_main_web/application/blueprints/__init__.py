@@ -86,21 +86,6 @@ class UserAuthorizationException(Exception):
         self.reason = reason
 
 
-# def _check_user(role_name: str):
-#     user_id = session.get(constants.CURRENT_USER_ID)
-#     if user_id:
-#         user = User.query.filter_by(id=user_id).first()
-#         if user:
-#             if has_role(user, role_name):
-#                 return user
-
-#             raise UserAuthorizationException('insufficient permissions')
-
-#         raise UserAuthorizationException('user not found')
-
-#     raise UserAuthorizationException('no user in session')
-
-
 # def admin_required(f):
 #     @wraps(f)
 #     def _get_user(*args, **kwargs):
