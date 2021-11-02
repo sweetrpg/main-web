@@ -60,6 +60,11 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 0.0.0 # Optional fallback tag to use when no tag can be found
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
@@ -68,6 +73,7 @@ jobs:
             registry.sweetrpg.com/sweetrpg-main-web
           tags: |
             type=raw,value=latest
+            type=raw,value=${{ steps.previoustag.outputs.tag }}
             type=ref,event=branch
             type=ref,event=tag
             type=semver,pattern={{version}}
