@@ -15,15 +15,6 @@ from sweetrpg_main_web.application import constants
 import analytics
 import datetime
 
-# def requires_auth(f):
-#     @wraps(f)
-#     def _check_auth(*args, **kwargs):
-#         if constants.PROFILE_KEY not in session:
-#             return redirect('/auth/login')
-#         return f(*args, **kwargs)
-
-#     return _check_auth
-
 
 def tracked(f):
     @wraps(f)
