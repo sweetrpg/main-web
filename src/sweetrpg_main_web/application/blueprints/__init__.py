@@ -86,20 +86,6 @@ class UserAuthorizationException(Exception):
         self.reason = reason
 
 
-# def user_required(f):
-#     @wraps(f)
-#     def _get_user(*args, **kwargs):
-#         try:
-#             user = _check_user(model_constants.ROLE_USER)
-#             return f(user, *args, **kwargs)
-#         except UserAuthorizationException as e:
-#             return jsonify({
-#                 'error': "Unauthorized; " + e.reason
-#             }), 401
-
-#     return _get_user
-
-
 # def user_optional(f):
 #     @wraps(f)
 #     def _get_user(*args, **kwargs):
