@@ -68,7 +68,12 @@ jobs:
           push: true
           no-cache: true
           tags: ${{ steps.meta.outputs.tags }}
-          build-args: [ BUILD_NUMBER=${{ env.GITHUB_RUN_ID }}, BUILD_JOB=${{ env.GITHUB_JOB }}, BUILD_SHA=${{ env.GITHUB_SHA }}, BUILD_DATE=TODO ]
+          build-args: |
+              BUILD_NUMBER=${GITHUB_RUN_ID}
+              BUILD_JOB=${{ env.GITHUB_JOB }}
+              BUILD_SHA=${{ env.GITHUB_SHA }}
+              BUILD_DATE=TODO
+              BUILD_VERSION=TODO
       # - name: Scan image
       #   uses: sysdiglabs/scan-action@v1
       #   with:
