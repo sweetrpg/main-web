@@ -86,18 +86,6 @@ class UserAuthorizationException(Exception):
         self.reason = reason
 
 
-# def user_optional(f):
-#     @wraps(f)
-#     def _get_user(*args, **kwargs):
-#         try:
-#             user = _check_user(model_constants.ROLE_USER)
-#             return f(user, *args, **kwargs)
-#         except UserAuthorizationException as e:
-#             return f(None, *args, **kwargs)
-
-#     return _get_user
-
-
 blueprint = Blueprint("web", __name__)
 
 

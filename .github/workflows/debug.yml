@@ -63,7 +63,7 @@ jobs:
         with:
           semver_only: true
           initial_version: v0.0.0
-          with_initial_version: true 
+          with_initial_version: true
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
