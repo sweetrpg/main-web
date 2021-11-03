@@ -10,23 +10,7 @@ on:
             - created
     push:
         branches:
-            - develop
-        tags:
             - '*'
-        paths:
-            - "src/**"
-            - "tests/**"
-            - setup.cfg
-            - setup.py
-            - tox.ini
-            - "requirements/**"
-            - Dockerfile
-            - scripts/entrypoint.sh
-    workflow_run:
-        workflows: ["CI"]
-        branches: [develop]
-        types:
-            - completed
 
 jobs:
   debug:

@@ -87,3 +87,4 @@ jobs:
               with:
                   bump: "--patch"
                   github_token: ${{ secrets.GITHUB_TOKEN }}
+                  upload_to_pypi: false
