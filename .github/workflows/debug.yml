@@ -59,6 +59,7 @@ jobs:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
       - name: 'Get Previous tag'
+        id: previoustag
         uses: actions-ecosystem/action-get-latest-tag@v1
         with:
           semver_only: true
