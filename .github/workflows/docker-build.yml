@@ -81,7 +81,7 @@ jobs:
               BUILD_JOB=${{ github.job }}
               BUILD_SHA=${{ github.sha }}
               BUILD_DATE=${{ github.event.commits[0].timestamp }}
-              BUILD_VERSION=${{ github.event.ref }}
+              BUILD_VERSION=${{ steps.previoustag.outputs.tag }}
       # - name: Scan image
       #   uses: sysdiglabs/scan-action@v1
       #   with:
