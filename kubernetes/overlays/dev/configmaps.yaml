@@ -12,3 +12,4 @@ data:
   APPLICATION_BASE_PATH: ""
   LIBRARY_API_BASE_URL: ""
   BUILD_INFO_PATH: "/app/build-info.json"
+  STATIC_ASSET_PREFIX: "https://dev.sweetrpg.com/static"

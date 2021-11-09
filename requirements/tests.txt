@@ -12,7 +12,7 @@ attrs==21.2.0
     # via pytest
 backoff==1.10.0
     # via analytics-python
-backports.entry-points-selectable==1.1.0
+backports.entry-points-selectable==1.1.1
     # via virtualenv
 blinker==1.4
     # via
@@ -137,7 +137,7 @@ six==1.16.0
     #   virtualenv
 sqlalchemy==1.4.26
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.6
+sweetrpg-web-core==0.0.7
     # via -r requirements/app.in
 toml==0.10.2
     # via
