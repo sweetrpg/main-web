@@ -6,7 +6,7 @@ setup(
     install_requires=[
         "Authlib",
         "blinker",
-        "dnspython<2.0.0",
+        "dnspython<3.0.0",
         "Flask-Caching",
         "Flask-CORS",
         "Flask-DotEnv",

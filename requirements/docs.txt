@@ -24,7 +24,7 @@ charset-normalizer==2.0.7
     # via requests
 click==8.0.3
     # via flask
-dnspython==1.16.0
+dnspython==2.1.0
     # via -r requirements/app.in
 docutils==0.16
     # via
