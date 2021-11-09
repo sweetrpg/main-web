@@ -27,6 +27,21 @@ spec:
             serviceAccountName: web
             imagePullSecrets:
                 - name: sweetrpg-registry
+            initContainers:
+            - name: init-templates
+              image: alpine/git
+              args:
+                  - clone
+                  - "--single-branch"
+                  - "--"
+                  - "https://$(GIT_USERNAME):$(GIT_PASSWORD)@github.com/$(GIT_REPO).git"
+                  - "/work/."
+              envFrom:
+                - secretRef:
+                    name: template-credentials
+              volumeMounts:
+              - mountPath: /work
+                name: templates
             containers:
                 - name: web-app
                   image: registry.sweetrpg.com/sweetrpg-main-web:latest
@@ -70,6 +85,9 @@ spec:
                         name: data
                       - mountPath: /config
                         name: config
+                      - mountPath: /app/templates
+                        name: templates
+                        subPath: templates
             volumes:
                 - name: config
                   secret:
@@ -78,5 +96,7 @@ spec:
                           - key: newrelic.ini
                             path: newrelic.ini
                 - name: data
+                  emptyDir: {}
+                - name: templates
                   emptyDir: {}
             restartPolicy: Always

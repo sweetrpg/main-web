@@ -9,7 +9,11 @@ scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 pushd ${scriptdir}
 
 echo "Deleting old secrets..."
-kubectl delete -n "${ns}" secret sweetrpg-registry web-files web-cache web-auth web-misc web-common || true
+kubectl delete -n "${ns}" secret template-credentials sweetrpg-registry web-files web-cache web-auth web-misc web-common || true
+
+echo "Git credentials for template copying..."
+kubectl create -n "${ns}" secret generic template-credentials \
+    --from-env-file=../git-templates.env
 
 echo "Docker registry config..."
 kubectl create -n "${ns}" secret docker-registry sweetrpg-registry \
