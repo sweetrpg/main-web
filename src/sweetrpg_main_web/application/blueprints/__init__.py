@@ -67,7 +67,7 @@ def render_page(page, context={}):
     if request.cookies.get("cookies-accepted"):
         show_cookie_message = False
     context.update({
-        "showCookieMessage": show_cookie_message,
+            "showCookieMessage": show_cookie_message,
     })
 
     userinfo = session.get(constants.PROFILE_KEY)
@@ -120,9 +120,9 @@ def _populate():
     elif constants.SWEETRPG_AUTH_KEY in request.cookies:
         userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
         session[constants.PROFILE_KEY] = userinfo
-    session[constants.SESSION_ACCESS_TOKEN] = request.headers.get('X-Forwarded-Access-Token')
-    session[constants.SESSION_EMAIL] = request.headers.get('X-Forwarded-Email')
-    session[constants.SESSION_USER_ID] = request.headers.get('X-Forwarded-User')
+    session[constants.SESSION_ACCESS_TOKEN] = request.headers.get("X-Forwarded-Access-Token")
+    session[constants.SESSION_EMAIL] = request.headers.get("X-Forwarded-Email")
+    session[constants.SESSION_USER_ID] = request.headers.get("X-Forwarded-User")
 
     print(f"(updated) session: {session}")
     print(f"userinfo: {userinfo}")
@@ -171,7 +171,7 @@ def main_page():
     }
 
     print(f"context: {context}")
-    return render_page("index.html", context)
+    return render_page("main/index.html", context)
 
 
 from sweetrpg_web_core.blueprints import health
