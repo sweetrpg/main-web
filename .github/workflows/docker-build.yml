@@ -43,6 +43,13 @@ jobs:
           semver_only: true
           initial_version: v0.0.0
           with_initial_version: true
+      - name: Get current date
+        id: getbuilddate
+        run: |
+             echo "::set-output name=date::$(date -u)"
+             echo "::set-output name=isodate::$(date -u '+%Y-%m-%dT%H:%M:%S')"
+             echo "::set-output name=tagdate::$(date -u '+%Y%m%d%H%M%S')"
+             echo "::set-output name=timestamp::$(date -u '+%s')"
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v3
@@ -52,6 +59,7 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ steps.previoustag.outputs.tag }}
+            type=raw,value=${{ steps.getbuilddate.outputs.tagdate }}
             type=ref,event=branch
             type=ref,event=tag
             type=semver,pattern={{version}}
@@ -80,7 +88,7 @@ jobs:
               BUILD_NUMBER=${{ github.run_number }}
               BUILD_JOB=${{ github.job }}
               BUILD_SHA=${{ github.sha }}
-              BUILD_DATE=${{ github.event.commits[0].timestamp }}
+              BUILD_DATE=${{ steps.getbuilddate.outputs.isodate }}
               BUILD_VERSION=${{ steps.previoustag.outputs.tag }}
       # - name: Scan image
       #   uses: sysdiglabs/scan-action@v1
