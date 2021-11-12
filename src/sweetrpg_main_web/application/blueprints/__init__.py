@@ -7,7 +7,6 @@ from functools import wraps
 import jinja2
 from flask import Blueprint, request, render_template, session, jsonify, current_app
 from werkzeug.exceptions import HTTPException
-import json
 import os
 from sweetrpg_main_web.application import constants
 import analytics
@@ -56,12 +55,19 @@ def error_page(message, code):
         "message": message,
     }
     try:
-        return render_page(f"errors/{code}.html")
+        return render_page(f"common/errors/{code}.html")
     except jinja2.TemplateNotFound:
-        return render_page("errors/error.html", context)
+        return render_page("common/errors/error.html", context)
 
 
 def render_page(page:str, context:dict={}):
+    """Call `render_template` for the specified page, and merge the
+    provided context into an initialized, common context.
+
+    :param str page:
+    :param dict context:
+    :returns:
+    """
     show_cookie_message = True
     if request.cookies.get("cookies-accepted"):
         show_cookie_message = False
