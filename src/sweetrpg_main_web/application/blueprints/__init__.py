@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 __author__ = "Paul Schifferer <dm@sweetrpg.com>"
-"""
+"""Main blueprint.
 """
 
 from functools import wraps
-from flask import redirect, session, render_template, request
-from sweetrpg_main_web.application import constants
 import jinja2
 from flask import Blueprint, request, render_template, session, jsonify, current_app
 from werkzeug.exceptions import HTTPException
@@ -20,10 +18,10 @@ from sweetrpg_web_core.helpers.context import get_context
 def tracked(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        print(f"args: {args}")
-        print(f"kwargs: {kwargs}")
-        print(f"session: {session}")
-        print(f"request: {request}")
+        current_app.logger.debug(f"args: {args}")
+        current_app.logger.debug(f"kwargs: {kwargs}")
+        current_app.logger.debug(f"session: {session}")
+        current_app.logger.debug(f"request: {request}")
 
         userinfo = None
         if constants.SWEETRPG_AUTH_KEY in session:
@@ -31,7 +29,7 @@ def tracked(f):
         elif constants.SWEETRPG_AUTH_KEY in request.cookies:
             userinfo = request.cookies[constants.SWEETRPG_AUTH_KEY]
 
-        print(f"userinfo: {userinfo}")
+        current_app.logger.debug(f"userinfo: {userinfo}")
         if userinfo:
             kwargs.update({
                 'userinfo': userinfo,
@@ -78,7 +76,7 @@ def render_page(page:str, context:dict={}):
             "segment_write_key": os.environ.get(constants.SEGMENT_WRITE_KEY, "")
         })
 
-    print(f"context: {context}")
+    current_app.logger.debug(f"context: {context}")
     return render_template(page, **context)
 
 
@@ -110,10 +108,10 @@ def _populate():
     # X-Forwarded-Proto: http
     # X-Forwarded-Server: traefik-m5tc5
     # X-Forwarded-User: github|419457
-    print(f"session: {session}")
-    print(f"headers: {request.headers}")
-    print(f"cookies: {request.cookies}")
-    print(f"args: {request.args}")
+    current_app.logger.debug(f"session: {session}")
+    current_app.logger.debug(f"headers: {request.headers}")
+    current_app.logger.debug(f"cookies: {request.cookies}")
+    current_app.logger.debug(f"args: {request.args}")
 
     userinfo = None
     if constants.PROFILE_KEY in session:
@@ -125,16 +123,16 @@ def _populate():
     session[constants.SESSION_EMAIL] = request.headers.get("X-Forwarded-Email")
     session[constants.SESSION_USER_ID] = request.headers.get("X-Forwarded-User")
 
-    print(f"(updated) session: {session}")
-    print(f"userinfo: {userinfo}")
+    current_app.logger.debug(f"(updated) session: {session}")
+    current_app.logger.debug(f"userinfo: {userinfo}")
 
 
 @blueprint.before_request
 def _store_user():
     email = session.get(constants.SESSION_EMAIL)
-    print(f"email: {email}")
+    current_app.logger.debug(f"email: {email}")
     user_id = session.get(constants.SESSION_USER_ID)
-    print(f"user_id: {user_id}")
+    current_app.logger.debug(f"user_id: {user_id}")
     if user_id and email:
         # TODO: store user
         pass
@@ -143,9 +141,9 @@ def _store_user():
 @blueprint.before_request
 def _track():
     email = session.get(constants.SESSION_EMAIL)
-    print(f"email: {email}")
+    current_app.logger.debug(f"email: {email}")
     user_id = session.get(constants.SESSION_USER_ID)
-    print(f"user_id: {user_id}")
+    current_app.logger.debug(f"user_id: {user_id}")
     if user_id and email:
         analytics.identify(user_id, {
             'email': email,
@@ -169,10 +167,11 @@ def error_handler(ex):
 def main_page():
     context = get_context()
     context.update({
-        # 'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
+        # 'user_info': session.get(constants.SWEETRPG_SESSION_USER_INFO)
+        'appname': "Main",
     })
 
-    print(f"context: {context}")
+    current_app.logger.debug(f"context: {context}")
     return render_page("main/index.html", context=context)
 
 
