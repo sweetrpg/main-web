@@ -14,6 +14,7 @@ import os
 from sweetrpg_main_web.application import constants
 import analytics
 import datetime
+from sweetrpg_web_core.helpers.context import get_context
 
 
 def tracked(f):
@@ -62,12 +63,12 @@ def error_page(message, code):
         return render_page("errors/error.html", context)
 
 
-def render_page(page, context={}):
+def render_page(page:str, context:dict={}):
     show_cookie_message = True
     if request.cookies.get("cookies-accepted"):
         show_cookie_message = False
     context.update({
-            "showCookieMessage": show_cookie_message,
+       "showCookieMessage": show_cookie_message,
     })
 
     userinfo = session.get(constants.PROFILE_KEY)
@@ -76,8 +77,8 @@ def render_page(page, context={}):
             "user_info": userinfo,
             "segment_write_key": os.environ.get(constants.SEGMENT_WRITE_KEY, "")
         })
-    print(f"context: {context}")
 
+    print(f"context: {context}")
     return render_template(page, **context)
 
 
@@ -166,12 +167,13 @@ def error_handler(ex):
 
 @blueprint.route("/")
 def main_page():
-    context = {
-        'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
-    }
+    context = get_context()
+    context.update({
+        # 'user_info': session.get(constants.SWEETRPG_AUTH_KEY)
+    })
 
     print(f"context: {context}")
-    return render_page("main/index.html", context)
+    return render_page("main/index.html", context=context)
 
 
 from sweetrpg_web_core.blueprints import health
