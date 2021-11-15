@@ -9,7 +9,7 @@ Flask==2.0.2
 sweetrpg-web-core
 kanka
 python-dateutil
-python-dotenv==0.19.1
+python-dotenv==0.19.2
 python-editor
 PyYAML==6.0
 redis
