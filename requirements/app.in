@@ -16,7 +16,7 @@ redis
 requests
 sentry-sdk==1.4.3
 greenlet==1.1.2
-SQLAlchemy==1.4.26
+SQLAlchemy==1.4.27
 urllib3==1.26.7
 python-logstash-async
 uwsgi

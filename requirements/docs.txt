@@ -143,7 +143,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sqlalchemy==1.4.26
+sqlalchemy==1.4.27
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.30
     # via -r requirements/app.in

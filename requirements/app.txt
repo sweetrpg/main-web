@@ -86,7 +86,7 @@ six==1.16.0
     #   flask-cors
     #   limits
     #   python-dateutil
-sqlalchemy==1.4.26
+sqlalchemy==1.4.27
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.30
     # via -r requirements/app.in
