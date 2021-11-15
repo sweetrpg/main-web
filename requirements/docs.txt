@@ -87,7 +87,7 @@ python-dateutil==2.8.2
     # via
     #   -r requirements/app.in
     #   analytics-python
-python-dotenv==0.19.1
+python-dotenv==0.19.2
     # via -r requirements/app.in
 python-editor==1.0.4
     # via -r requirements/app.in
