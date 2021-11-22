@@ -24,6 +24,8 @@ charset-normalizer==2.0.7
     # via requests
 click==8.0.3
     # via flask
+deprecated==1.2.13
+    # via redis
 dnspython==2.1.0
     # via -r requirements/app.in
 docutils==0.16
@@ -97,7 +99,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==3.5.3
+redis==4.0.1
     # via -r requirements/app.in
 requests==2.26.0
     # via
@@ -156,6 +158,8 @@ uwsgi==2.0.20
     # via -r requirements/app.in
 werkzeug==2.0.2
     # via flask
+wrapt==1.13.3
+    # via deprecated
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

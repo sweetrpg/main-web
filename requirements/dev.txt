@@ -43,6 +43,8 @@ coverage[toml]==5.5
     #   pytest-cov
 coverage-badge==1.1.0
     # via -r requirements/tests.in
+deprecated==1.2.13
+    # via redis
 distlib==0.3.3
     # via virtualenv
 dnspython==2.1.0
@@ -155,7 +157,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==3.5.3
+redis==4.0.1
     # via -r requirements/app.in
 regex==2021.11.10
     # via black
@@ -235,6 +237,8 @@ werkzeug==2.0.2
     # via flask
 wheel==0.37.0
     # via pip-tools
+wrapt==1.13.3
+    # via deprecated
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
