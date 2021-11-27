@@ -25,11 +25,11 @@ certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.7
+charset-normalizer==2.0.8
     # via requests
 click==8.0.3
     # via flask
-coverage[toml]==5.5
+coverage[toml]==6.2
     # via
     #   coverage-badge
     #   pytest-cov
@@ -41,7 +41,7 @@ distlib==0.3.3
     # via virtualenv
 dnspython==2.1.0
     # via -r requirements/app.in
-filelock==3.3.2
+filelock==3.4.0
     # via
     #   tox
     #   virtualenv
@@ -79,13 +79,13 @@ jinja2==3.0.3
     # via flask
 kanka==0.1.2
     # via -r requirements/app.in
-limits==1.5.1
+limits==2.0.0
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
 monotonic==1.6
     # via analytics-python
-packaging==21.2
+packaging==21.3
     # via
     #   pytest
     #   tox
@@ -101,7 +101,7 @@ py==1.11.0
     #   tox
 pylogbeat==2.0.0
     # via python-logstash-async
-pyparsing==2.4.7
+pyparsing==3.0.6
     # via packaging
 pytest==6.2.5
     # via
@@ -143,13 +143,14 @@ six==1.16.0
     #   virtualenv
 sqlalchemy==1.4.27
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.58
+sweetrpg-web-core==0.0.69
     # via -r requirements/app.in
 toml==0.10.2
     # via
-    #   coverage
     #   pytest
     #   tox
+tomli==1.2.2
+    # via coverage
 tox==3.24.4
     # via -r requirements/tests.in
 urllib3==1.26.7
