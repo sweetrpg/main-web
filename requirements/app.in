@@ -13,10 +13,10 @@ python-dotenv==0.19.2
 python-editor
 PyYAML==6.0
 redis
+hiredis
 requests
 sentry-sdk==1.5.0
 greenlet==1.1.2
 SQLAlchemy==1.4.27
 urllib3==1.26.7
 python-logstash-async
-uwsgi
