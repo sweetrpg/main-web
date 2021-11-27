@@ -18,6 +18,7 @@ blinker==1.4
     # via
     #   -r requirements/app.in
     #   -r requirements/tests.in
+    #   sentry-sdk
 cachelib==0.4.1
     # via flask-session
 certifi==2021.10.8
@@ -34,6 +35,8 @@ coverage[toml]==5.5
     #   pytest-cov
 coverage-badge==1.1.0
     # via -r requirements/tests.in
+deprecated==1.2.13
+    # via redis
 distlib==0.3.3
     # via virtualenv
 dnspython==2.1.0
@@ -49,6 +52,7 @@ flask==2.0.2
     #   flask-cors
     #   flask-dotenv
     #   flask-session
+    #   sentry-sdk
     #   sweetrpg-web-core
 flask-caching==1.10.1
     # via -r requirements/app.in
@@ -63,6 +67,8 @@ greenlet==1.1.2
     #   -r requirements/app.in
     #   -r requirements/tests.in
     #   sqlalchemy
+hiredis==2.0.0
+    # via -r requirements/app.in
 idna==3.3
     # via requests
 iniconfig==1.1.1
@@ -117,7 +123,7 @@ python-logstash-async==2.3.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
-redis==3.5.3
+redis==4.0.2
     # via -r requirements/app.in
 requests==2.26.0
     # via
@@ -125,7 +131,7 @@ requests==2.26.0
     #   analytics-python
     #   kanka
     #   python-logstash-async
-sentry-sdk==1.5.0
+sentry-sdk[flask]==1.5.0
     # via -r requirements/app.in
 six==1.16.0
     # via
@@ -151,9 +157,9 @@ urllib3==1.26.7
     #   -r requirements/app.in
     #   requests
     #   sentry-sdk
-uwsgi==2.0.20
-    # via -r requirements/app.in
 virtualenv==20.10.0
     # via tox
 werkzeug==2.0.2
     # via flask
+wrapt==1.13.3
+    # via deprecated
