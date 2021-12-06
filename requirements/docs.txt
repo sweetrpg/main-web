@@ -22,7 +22,7 @@ certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.8
+charset-normalizer==2.0.9
     # via requests
 click==8.0.3
     # via flask
@@ -70,7 +70,7 @@ jinja2==3.0.3
     #   sphinx
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.0.0
+limits==2.0.3
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -121,7 +121,6 @@ six==1.16.0
     # via
     #   analytics-python
     #   flask-cors
-    #   limits
     #   python-dateutil
 snowballstemmer==2.2.0
     # via sphinx
@@ -152,7 +151,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sqlalchemy==1.4.27
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.72
+sweetrpg-web-core==0.0.74
     # via -r requirements/app.in
 urllib3==1.26.7
     # via
