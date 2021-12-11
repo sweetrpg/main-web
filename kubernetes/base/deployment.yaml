@@ -17,31 +17,33 @@ spec:
             platform: sweetrpg
             app: main
             component: web
+            version: v1
     template:
         metadata:
             labels:
                 platform: sweetrpg
                 app: main
                 component: web
+                version: v1
         spec:
             serviceAccountName: web
             imagePullSecrets:
                 - name: sweetrpg-registry
             initContainers:
-            - name: init-templates
-              image: alpine/git
-              args:
-                  - clone
-                  - "--single-branch"
-                  - "--"
-                  - "https://$(GIT_USERNAME):$(GIT_PASSWORD)@github.com/$(GIT_REPO).git"
-                  - "/work/."
-              envFrom:
-                - secretRef:
-                    name: template-credentials
-              volumeMounts:
-              - mountPath: /work
-                name: templates
+                - name: init-templates
+                  image: alpine/git
+                  args:
+                      - clone
+                      - "--single-branch"
+                      - "--"
+                      - "https://$(GIT_USERNAME):$(GIT_PASSWORD)@github.com/$(GIT_REPO).git"
+                      - "/work/."
+                  envFrom:
+                      - secretRef:
+                            name: template-credentials
+                  volumeMounts:
+                      - mountPath: /work
+                        name: templates
             containers:
                 - name: web-app
                   image: registry.sweetrpg.com/sweetrpg-main-web:latest
