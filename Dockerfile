@@ -57,11 +57,14 @@ RUN apt-get update \
 
 COPY src /app
 ADD scripts/entrypoint.sh /
+RUN chown -R ${USER_UID}:${USER_GID} /app
 RUN echo "{\"number\":\"${BUILD_NUMBER}\",\"job\":\"${BUILD_JOB}\",\"sha\":\"${BUILD_SHA}\",\"date\":\"${BUILD_DATE}\",\"version\":\"${BUILD_VERSION}\"}" > /app/build-info.json
 WORKDIR /app
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
+
+USER ${USERNAME}
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 #CMD [ "newrelic-admin", "run-program", "gunicorn", "wsgi:app" ]
