@@ -15,15 +15,17 @@ spec:
     selector:
         matchLabels:
             platform: sweetrpg
-            app: main
+            app: sweetrpg-main-web-v1
             component: web
+            package: main
             version: v1
     template:
         metadata:
             labels:
                 platform: sweetrpg
-                app: main
+                app: sweetrpg-main-web-v1
                 component: web
+                package: main
                 version: v1
         spec:
             serviceAccountName: web
@@ -45,7 +47,7 @@ spec:
                       - mountPath: /work
                         name: templates
             containers:
-                - name: web-app
+                - name: app
                   image: registry.sweetrpg.com/sweetrpg-main-web:latest
                   imagePullPolicy: Always
                   envFrom:
