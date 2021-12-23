@@ -15,7 +15,7 @@ spec:
     selector:
         matchLabels:
             platform: sweetrpg
-            app: sweetrpg-main-web-v1
+            app: main-web
             component: web
             package: main
             version: v1
@@ -23,7 +23,7 @@ spec:
         metadata:
             labels:
                 platform: sweetrpg
-                app: sweetrpg-main-web-v1
+                app: main-web
                 component: web
                 package: main
                 version: v1

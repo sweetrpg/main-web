@@ -13,7 +13,7 @@ patchesStrategicMerge:
 
 commonLabels:
     platform: sweetrpg
-    app: sweetrpg-main-web-v1
+    app: main-web
     component: web
     package: main
     version: v1
