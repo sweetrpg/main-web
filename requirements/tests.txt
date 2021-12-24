@@ -79,7 +79,7 @@ jinja2==3.0.3
     # via flask
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.0.3
+limits==2.1.0
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -142,7 +142,7 @@ six==1.16.0
     #   virtualenv
 sqlalchemy==1.4.27
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.85
+sweetrpg-web-core==0.0.86
     # via -r requirements/app.in
 toml==0.10.2
     # via
