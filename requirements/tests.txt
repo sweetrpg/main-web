@@ -140,7 +140,7 @@ six==1.16.0
     #   python-dateutil
     #   tox
     #   virtualenv
-sqlalchemy==1.4.27
+sqlalchemy==1.4.29
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.90
     # via -r requirements/app.in
