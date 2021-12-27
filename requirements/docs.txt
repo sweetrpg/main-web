@@ -79,6 +79,7 @@ monotonic==1.6
 packaging==21.3
     # via
     #   pallets-sphinx-themes
+    #   redis
     #   sphinx
 pallets-sphinx-themes==2.0.2
     # via -r requirements/docs.in
@@ -104,7 +105,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.0.2
+redis==4.1.0
     # via -r requirements/app.in
 requests==2.26.0
     # via
@@ -124,7 +125,7 @@ six==1.16.0
     #   python-dateutil
 snowballstemmer==2.2.0
     # via sphinx
-sphinx==4.3.1
+sphinx==4.3.2
     # via
     #   -r requirements/docs.in
     #   pallets-sphinx-themes
@@ -149,9 +150,9 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sqlalchemy==1.4.27
+sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.90
+sweetrpg-web-core==0.0.91
     # via -r requirements/app.in
 urllib3==1.26.7
     # via
