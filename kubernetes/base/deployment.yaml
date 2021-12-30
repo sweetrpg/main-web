@@ -28,7 +28,7 @@ spec:
                 package: main
                 version: v1
         spec:
-            serviceAccountName: web
+            serviceAccountName: main-web
             imagePullSecrets:
                 - name: sweetrpg-registry
             initContainers:
