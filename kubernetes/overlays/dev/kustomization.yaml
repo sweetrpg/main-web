@@ -8,6 +8,7 @@ resources:
     - namespace.yaml
     - ../../base
     - configmaps.yaml
+    - destination-rules.yaml
 patchesStrategicMerge:
     - replicas.yaml
 
