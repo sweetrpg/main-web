@@ -141,7 +141,7 @@ six==1.16.0
     #   virtualenv
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.99
+sweetrpg-web-core==0.0.100
     # via -r requirements/app.in
 toml==0.10.2
     # via
