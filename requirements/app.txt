@@ -12,13 +12,13 @@ blinker==1.4
     # via
     #   -r requirements/app.in
     #   sentry-sdk
-cachelib==0.4.1
+cachelib==0.5.0
     # via flask-session
 certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.9
+charset-normalizer==2.0.10
     # via requests
 click==8.0.3
     # via flask
@@ -57,7 +57,7 @@ jinja2==3.0.3
     # via flask
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.1.0
+limits==2.2.0
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -83,7 +83,7 @@ pyyaml==6.0
     # via -r requirements/app.in
 redis==4.1.0
     # via -r requirements/app.in
-requests==2.26.0
+requests==2.27.1
     # via
     #   -r requirements/app.in
     #   analytics-python
@@ -98,7 +98,7 @@ six==1.16.0
     #   python-dateutil
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.94
+sweetrpg-web-core==0.0.96
     # via -r requirements/app.in
 urllib3==1.26.7
     # via

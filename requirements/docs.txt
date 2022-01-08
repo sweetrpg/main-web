@@ -16,13 +16,13 @@ blinker==1.4
     # via
     #   -r requirements/app.in
     #   sentry-sdk
-cachelib==0.4.1
+cachelib==0.5.0
     # via flask-session
 certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.9
+charset-normalizer==2.0.10
     # via requests
 click==8.0.3
     # via flask
@@ -70,7 +70,7 @@ jinja2==3.0.3
     #   sphinx
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.1.0
+limits==2.2.0
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -83,7 +83,7 @@ packaging==21.3
     #   sphinx
 pallets-sphinx-themes==2.0.2
     # via -r requirements/docs.in
-pygments==2.10.0
+pygments==2.11.2
     # via
     #   sphinx
     #   sphinx-tabs
@@ -107,7 +107,7 @@ pyyaml==6.0
     # via -r requirements/app.in
 redis==4.1.0
     # via -r requirements/app.in
-requests==2.26.0
+requests==2.27.1
     # via
     #   -r requirements/app.in
     #   analytics-python
@@ -132,7 +132,7 @@ sphinx==4.3.2
     #   sphinx-issues
     #   sphinx-tabs
     #   sphinxcontrib-log-cabinet
-sphinx-issues==1.2.0
+sphinx-issues==2.0.0
     # via -r requirements/docs.in
 sphinx-tabs==3.2.0
     # via -r requirements/docs.in
@@ -152,7 +152,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.94
+sweetrpg-web-core==0.0.96
     # via -r requirements/app.in
 urllib3==1.26.7
     # via

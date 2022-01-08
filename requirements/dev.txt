@@ -10,14 +10,12 @@ analytics-python==1.4.0
     # via -r requirements/app.in
 asgiref==3.4.1
     # via -r requirements/tests.in
-attrs==21.2.0
+attrs==21.4.0
     # via pytest
 babel==2.9.1
     # via sphinx
 backoff==1.10.0
     # via analytics-python
-backports.entry-points-selectable==1.1.1
-    # via virtualenv
 black==21.12b0
     # via -r requirements/dev.in
 blinker==1.4
@@ -25,13 +23,13 @@ blinker==1.4
     #   -r requirements/app.in
     #   -r requirements/tests.in
     #   sentry-sdk
-cachelib==0.4.1
+cachelib==0.5.0
     # via flask-session
 certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.9
+charset-normalizer==2.0.10
     # via requests
 click==8.0.3
     # via
@@ -97,7 +95,7 @@ jinja2==3.0.3
     #   sphinx
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.1.0
+limits==2.2.0
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -132,7 +130,7 @@ py==1.11.0
     # via
     #   pytest
     #   tox
-pygments==2.10.0
+pygments==2.11.2
     # via
     #   sphinx
     #   sphinx-tabs
@@ -164,7 +162,7 @@ pyyaml==6.0
     # via -r requirements/app.in
 redis==4.1.0
     # via -r requirements/app.in
-requests==2.26.0
+requests==2.27.1
     # via
     #   -r requirements/app.in
     #   analytics-python
@@ -191,7 +189,7 @@ sphinx==4.3.2
     #   sphinx-issues
     #   sphinx-tabs
     #   sphinxcontrib-log-cabinet
-sphinx-issues==1.2.0
+sphinx-issues==2.0.0
     # via -r requirements/docs.in
 sphinx-tabs==3.2.0
     # via -r requirements/docs.in
@@ -211,7 +209,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.94
+sweetrpg-web-core==0.0.96
     # via -r requirements/app.in
 toml==0.10.2
     # via
@@ -231,7 +229,7 @@ urllib3==1.26.7
     #   -r requirements/app.in
     #   requests
     #   sentry-sdk
-virtualenv==20.10.0
+virtualenv==20.13.0
     # via tox
 werkzeug==2.0.2
     # via flask
