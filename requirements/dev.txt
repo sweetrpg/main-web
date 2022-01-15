@@ -189,7 +189,7 @@ sphinx==4.3.2
     #   sphinx-issues
     #   sphinx-tabs
     #   sphinxcontrib-log-cabinet
-sphinx-issues==2.0.0
+sphinx-issues==3.0.1
     # via -r requirements/docs.in
 sphinx-tabs==3.2.0
     # via -r requirements/docs.in
@@ -209,7 +209,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.104
+sweetrpg-web-core==0.0.105
     # via -r requirements/app.in
 toml==0.10.2
     # via
