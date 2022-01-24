@@ -46,7 +46,7 @@ deprecated==1.2.13
     # via redis
 distlib==0.3.4
     # via virtualenv
-dnspython==2.1.0
+dnspython==2.2.0
     # via -r requirements/app.in
 docutils==0.16
     # via

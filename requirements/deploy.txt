@@ -24,7 +24,7 @@ click==8.0.3
     # via flask
 deprecated==1.2.13
     # via redis
-dnspython==2.1.0
+dnspython==2.2.0
     # via -r requirements/app.in
 flask==2.0.2
     # via
