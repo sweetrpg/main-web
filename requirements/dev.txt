@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via sphinx
 analytics-python==1.4.0
     # via -r requirements/app.in
-asgiref==3.4.1
+asgiref==3.5.0
     # via -r requirements/tests.in
 attrs==21.4.0
     # via pytest
