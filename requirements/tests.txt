@@ -6,7 +6,7 @@
 #
 analytics-python==1.4.0
     # via -r requirements/app.in
-asgiref==3.4.1
+asgiref==3.5.0
     # via -r requirements/tests.in
 attrs==21.4.0
     # via pytest
@@ -17,17 +17,17 @@ blinker==1.4
     #   -r requirements/app.in
     #   -r requirements/tests.in
     #   sentry-sdk
-cachelib==0.5.0
+cachelib==0.6.0
     # via flask-session
 certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.10
+charset-normalizer==2.0.11
     # via requests
 click==8.0.3
     # via flask
-coverage[toml]==6.2
+coverage[toml]==6.3
     # via
     #   coverage-badge
     #   pytest-cov
@@ -37,7 +37,7 @@ deprecated==1.2.13
     # via redis
 distlib==0.3.4
     # via virtualenv
-dnspython==2.1.0
+dnspython==2.2.0
     # via -r requirements/app.in
 filelock==3.4.2
     # via
@@ -77,7 +77,7 @@ jinja2==3.0.3
     # via flask
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.2.0
+limits==2.3.2
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -100,7 +100,7 @@ py==1.11.0
     #   tox
 pylogbeat==2.0.0
     # via python-logstash-async
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via packaging
 pytest==6.2.5
     # via
@@ -122,7 +122,7 @@ python-logstash-async==2.3.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.0
+redis==4.1.2
     # via -r requirements/app.in
 requests==2.27.1
     # via
@@ -141,7 +141,7 @@ six==1.16.0
     #   virtualenv
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.105
+sweetrpg-web-core==0.0.107
     # via -r requirements/app.in
 toml==0.10.2
     # via
@@ -162,3 +162,6 @@ werkzeug==2.0.2
     # via flask
 wrapt==1.13.3
     # via deprecated
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

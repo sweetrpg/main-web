@@ -12,19 +12,19 @@ blinker==1.4
     # via
     #   -r requirements/app.in
     #   sentry-sdk
-cachelib==0.5.0
+cachelib==0.6.0
     # via flask-session
 certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.10
+charset-normalizer==2.0.11
     # via requests
 click==8.0.3
     # via flask
 deprecated==1.2.13
     # via redis
-dnspython==2.1.0
+dnspython==2.2.0
     # via -r requirements/app.in
 flask==2.0.2
     # via
@@ -57,7 +57,7 @@ jinja2==3.0.3
     # via flask
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.2.0
+limits==2.3.2
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -67,7 +67,7 @@ packaging==21.3
     # via redis
 pylogbeat==2.0.0
     # via python-logstash-async
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via packaging
 python-dateutil==2.8.2
     # via
@@ -81,7 +81,7 @@ python-logstash-async==2.3.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.0
+redis==4.1.2
     # via -r requirements/app.in
 requests==2.27.1
     # via
@@ -98,7 +98,7 @@ six==1.16.0
     #   python-dateutil
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.105
+sweetrpg-web-core==0.0.107
     # via -r requirements/app.in
 urllib3==1.26.8
     # via
@@ -109,3 +109,6 @@ werkzeug==2.0.2
     # via flask
 wrapt==1.13.3
     # via deprecated
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via sphinx
 analytics-python==1.4.0
     # via -r requirements/app.in
-asgiref==3.4.1
+asgiref==3.5.0
     # via -r requirements/tests.in
 attrs==21.4.0
     # via pytest
@@ -16,27 +16,27 @@ babel==2.9.1
     # via sphinx
 backoff==1.10.0
     # via analytics-python
-black==21.12b0
+black==22.1.0
     # via -r requirements/dev.in
 blinker==1.4
     # via
     #   -r requirements/app.in
     #   -r requirements/tests.in
     #   sentry-sdk
-cachelib==0.5.0
+cachelib==0.6.0
     # via flask-session
 certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.10
+charset-normalizer==2.0.11
     # via requests
 click==8.0.3
     # via
     #   black
     #   flask
     #   pip-tools
-coverage[toml]==6.2
+coverage[toml]==6.3
     # via
     #   coverage-badge
     #   pytest-cov
@@ -46,7 +46,7 @@ deprecated==1.2.13
     # via redis
 distlib==0.3.4
     # via virtualenv
-dnspython==2.1.0
+dnspython==2.2.0
     # via -r requirements/app.in
 docutils==0.16
     # via
@@ -95,7 +95,7 @@ jinja2==3.0.3
     #   sphinx
 kanka==0.1.2
     # via -r requirements/app.in
-limits==2.2.0
+limits==2.3.2
     # via python-logstash-async
 markupsafe==2.0.1
     # via jinja2
@@ -136,7 +136,7 @@ pygments==2.11.2
     #   sphinx-tabs
 pylogbeat==2.0.0
     # via python-logstash-async
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via packaging
 pytest==6.2.5
     # via
@@ -160,7 +160,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.0
+redis==4.1.2
     # via -r requirements/app.in
 requests==2.27.1
     # via
@@ -209,13 +209,13 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.105
+sweetrpg-web-core==0.0.107
     # via -r requirements/app.in
 toml==0.10.2
     # via
     #   pytest
     #   tox
-tomli==1.2.3
+tomli==2.0.0
     # via
     #   black
     #   coverage
