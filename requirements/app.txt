@@ -98,7 +98,7 @@ six==1.16.0
     #   python-dateutil
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.113
+sweetrpg-web-core==0.0.115
     # via -r requirements/app.in
 urllib3==1.26.8
     # via
