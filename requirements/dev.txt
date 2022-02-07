@@ -207,7 +207,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sqlalchemy==1.4.29
+sqlalchemy==1.4.31
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.119
     # via -r requirements/app.in
@@ -221,8 +221,6 @@ tomli==2.0.0
     #   pytest
 tox==3.24.5
     # via -r requirements/tests.in
-typing-extensions==4.0.1
-    # via black
 urllib3==1.26.8
     # via
     #   -r requirements/app.in
