@@ -105,7 +105,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.2
+redis==4.1.4
     # via -r requirements/app.in
 requests==2.27.1
     # via
