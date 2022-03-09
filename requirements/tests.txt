@@ -23,11 +23,11 @@ certifi==2021.10.8
     # via
     #   requests
     #   sentry-sdk
-charset-normalizer==2.0.11
+charset-normalizer==2.0.12
     # via requests
-click==8.0.3
+click==8.0.4
     # via flask
-coverage[toml]==6.3.1
+coverage[toml]==6.3.2
     # via
     #   coverage-badge
     #   pytest-cov
@@ -37,9 +37,9 @@ deprecated==1.2.13
     # via redis
 distlib==0.3.4
     # via virtualenv
-dnspython==2.2.0
+dnspython==2.2.1
     # via -r requirements/app.in
-filelock==3.4.2
+filelock==3.6.0
     # via
     #   tox
     #   virtualenv
@@ -71,7 +71,7 @@ idna==3.3
     # via requests
 iniconfig==1.1.1
     # via pytest
-itsdangerous==2.0.1
+itsdangerous==2.1.0
     # via flask
 jinja2==3.0.3
     # via flask
@@ -79,7 +79,7 @@ kanka==0.1.2
     # via -r requirements/app.in
 limits==2.3.3
     # via python-logstash-async
-markupsafe==2.0.1
+markupsafe==2.1.0
     # via jinja2
 monotonic==1.6
     # via analytics-python
@@ -88,7 +88,7 @@ packaging==21.3
     #   pytest
     #   redis
     #   tox
-platformdirs==2.4.1
+platformdirs==2.5.1
     # via virtualenv
 pluggy==1.0.0
     # via
@@ -102,7 +102,7 @@ pylogbeat==2.0.0
     # via python-logstash-async
 pyparsing==3.0.7
     # via packaging
-pytest==7.0.0
+pytest==7.0.1
     # via
     #   -r requirements/tests.in
     #   pytest-cov
@@ -122,7 +122,7 @@ python-logstash-async==2.3.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.2
+redis==4.1.4
     # via -r requirements/app.in
 requests==2.27.1
     # via
@@ -141,11 +141,11 @@ six==1.16.0
     #   virtualenv
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.119
+sweetrpg-web-core==0.0.120
     # via -r requirements/app.in
 toml==0.10.2
     # via tox
-tomli==2.0.0
+tomli==2.0.1
     # via
     #   coverage
     #   pytest
@@ -156,9 +156,9 @@ urllib3==1.26.8
     #   -r requirements/app.in
     #   requests
     #   sentry-sdk
-virtualenv==20.13.1
+virtualenv==20.13.3
     # via tox
-werkzeug==2.0.2
+werkzeug==2.0.3
     # via flask
 wrapt==1.13.3
     # via deprecated
