@@ -51,7 +51,7 @@ hiredis==2.0.0
     # via -r requirements/app.in
 idna==3.3
     # via requests
-itsdangerous==2.1.0
+itsdangerous==2.1.1
     # via flask
 jinja2==3.0.3
     # via flask
@@ -98,7 +98,7 @@ six==1.16.0
     #   python-dateutil
 sqlalchemy==1.4.29
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.124
+sweetrpg-web-core==0.0.127
     # via -r requirements/app.in
 urllib3==1.26.8
     # via
