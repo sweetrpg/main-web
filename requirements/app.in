@@ -5,7 +5,7 @@ Flask-Caching
 Flask-CORS
 Flask-DotEnv
 Flask-Session
-Flask==2.0.2
+Flask==2.1.1
 sweetrpg-web-core
 kanka
 python-dateutil
