@@ -96,7 +96,7 @@ six==1.16.0
     #   analytics-python
     #   flask-cors
     #   python-dateutil
-sqlalchemy==1.4.29
+sqlalchemy==1.4.35
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.131
     # via -r requirements/app.in
