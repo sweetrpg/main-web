@@ -35,7 +35,7 @@ docutils==0.17.1
     #   rstcheck
     #   sphinx
     #   sphinx-tabs
-flask==2.0.2
+flask==2.1.2
     # via
     #   -r requirements/app.in
     #   flask-caching
