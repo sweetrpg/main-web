@@ -26,7 +26,7 @@ deprecated==1.2.13
     # via redis
 dnspython==2.2.1
     # via -r requirements/app.in
-flask==2.0.2
+flask==2.1.3
     # via
     #   -r requirements/app.in
     #   flask-caching
