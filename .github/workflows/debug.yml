@@ -51,7 +51,7 @@ jobs:
           with_initial_version: true
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: |
             registry.sweetrpg.com/sweetrpg-main-web
