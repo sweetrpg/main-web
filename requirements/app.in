@@ -5,7 +5,7 @@ Flask-Caching
 Flask-CORS
 Flask-DotEnv
 Flask-Session
-Flask==2.0.2
+Flask==2.1.3
 sweetrpg-web-core
 kanka
 python-dateutil
@@ -17,6 +17,6 @@ hiredis
 requests
 sentry-sdk[flask]==1.5.0
 greenlet==1.1.2
-SQLAlchemy==1.4.29
+SQLAlchemy==1.4.39
 urllib3==1.26.8
 python-logstash-async

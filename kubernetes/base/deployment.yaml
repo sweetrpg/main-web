@@ -48,7 +48,7 @@ spec:
                         name: templates
             containers:
                 - name: app
-                  image: registry.sweetrpg.com/sweetrpg-main-web:latest
+                  image: ghcr.io/sweetrpg/main-web:latest
                   imagePullPolicy: Always
                   envFrom:
                       - configMapRef:
