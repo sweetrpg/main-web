@@ -10,6 +10,8 @@ analytics-python==1.4.0
     # via -r requirements/app.in
 asgiref==3.5.0
     # via -r requirements/tests.in
+async-timeout==4.0.2
+    # via redis
 attrs==21.4.0
     # via pytest
 babel==2.9.1
@@ -160,7 +162,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.4
+redis==4.3.4
     # via -r requirements/app.in
 requests==2.27.1
     # via
@@ -182,7 +184,7 @@ six==1.16.0
     #   virtualenv
 snowballstemmer==2.2.0
     # via sphinx
-sphinx==4.3.2
+sphinx==4.5.0
     # via
     #   -r requirements/docs.in
     #   pallets-sphinx-themes
@@ -221,8 +223,6 @@ tomli==2.0.1
     #   pytest
 tox==3.24.5
     # via -r requirements/tests.in
-typing-extensions==4.1.1
-    # via black
 urllib3==1.26.8
     # via
     #   -r requirements/app.in

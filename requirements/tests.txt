@@ -8,6 +8,8 @@ analytics-python==1.4.0
     # via -r requirements/app.in
 asgiref==3.5.0
     # via -r requirements/tests.in
+async-timeout==4.0.2
+    # via redis
 attrs==21.4.0
     # via pytest
 backoff==1.10.0
@@ -122,7 +124,7 @@ python-logstash-async==2.3.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.4
+redis==4.3.4
     # via -r requirements/app.in
 requests==2.27.1
     # via
