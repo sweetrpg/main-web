@@ -8,6 +8,8 @@ alabaster==0.7.12
     # via sphinx
 analytics-python==1.4.0
     # via -r requirements/app.in
+async-timeout==4.0.2
+    # via redis
 babel==2.9.1
     # via sphinx
 backoff==1.10.0
@@ -105,7 +107,7 @@ pytz==2021.3
     # via babel
 pyyaml==6.0
     # via -r requirements/app.in
-redis==4.1.4
+redis==4.3.4
     # via -r requirements/app.in
 requests==2.28.1
     # via
