@@ -54,3 +54,4 @@ toy.py
 venv/
 htmlcov
 .flaskenv
+.DS_Store
