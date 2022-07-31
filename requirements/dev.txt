@@ -249,7 +249,7 @@ types-docutils==0.18.3
     #   rstcheck-core
 typing-extensions==4.3.0
     # via pydantic
-urllib3==1.26.8
+urllib3==1.26.11
     # via
     #   -r requirements/app.in
     #   requests
