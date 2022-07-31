@@ -14,7 +14,7 @@ attrs==21.4.0
     # via pytest
 backoff==1.10.0
     # via analytics-python
-blinker==1.4
+blinker==1.5
     # via
     #   -r requirements/app.in
     #   -r requirements/tests.in
@@ -122,7 +122,7 @@ python-dotenv==0.19.2
     #   -r requirements/tests.in
 python-editor==1.0.4
     # via -r requirements/app.in
-python-logstash-async==2.3.0
+python-logstash-async==2.5.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
