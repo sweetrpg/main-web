@@ -20,7 +20,7 @@ backoff==1.10.0
     # via analytics-python
 black==22.1.0
     # via -r requirements/dev.in
-blinker==1.4
+blinker==1.5
     # via
     #   -r requirements/app.in
     #   -r requirements/tests.in
