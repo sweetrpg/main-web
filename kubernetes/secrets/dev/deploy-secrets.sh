@@ -16,10 +16,14 @@ kubectl create -n "${ns}" secret generic template-credentials \
     --from-env-file=../git-templates.env
 
 echo "Docker registry config..."
+# kubectl create -n "${ns}" secret docker-registry sweetrpg-registry \
+#     --docker-server=registry.sweetrpg.com \
+#     --docker-username=docker \
+#     --docker-password=ESU7PnNtlt07zkvbnSyByrTdzllajxIQWqY7mswQR78
 kubectl create -n "${ns}" secret docker-registry sweetrpg-registry \
-    --docker-server=registry.sweetrpg.com \
-    --docker-username=docker \
-    --docker-password=ESU7PnNtlt07zkvbnSyByrTdzllajxIQWqY7mswQR78
+    --docker-server=ghcr.io \
+    --docker-username=paulyhedral \
+    --docker-password=$(cat ${scriptdir}/tokens.txt | grep '^sweetrpg-registry' | cut -f2 -d:)
 #kubectl create -n "${ns}" secret dockerconfigjson sweetrpg-registry \
 #    --from-file=.dockerconfigjson
 

@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: sweetrpg-main
 
 resources:
-    - namespace.yaml
     - ../../base
     - configmaps.yaml
     - destination-rules.yaml
