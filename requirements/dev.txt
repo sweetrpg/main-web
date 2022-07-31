@@ -20,7 +20,7 @@ backoff==1.10.0
     # via analytics-python
 black==22.1.0
     # via -r requirements/dev.in
-blinker==1.4
+blinker==1.5
     # via
     #   -r requirements/app.in
     #   -r requirements/tests.in
@@ -163,13 +163,13 @@ python-dateutil==2.8.2
     # via
     #   -r requirements/app.in
     #   analytics-python
-python-dotenv==0.19.2
+python-dotenv==0.20.0
     # via
     #   -r requirements/app.in
     #   -r requirements/tests.in
 python-editor==1.0.4
     # via -r requirements/app.in
-python-logstash-async==2.3.0
+python-logstash-async==2.5.0
     # via -r requirements/app.in
 pytz==2021.3
     # via babel

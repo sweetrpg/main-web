@@ -10,7 +10,7 @@ async-timeout==4.0.2
     # via redis
 backoff==1.10.0
     # via analytics-python
-blinker==1.4
+blinker==1.5
     # via
     #   -r requirements/app.in
     #   sentry-sdk
@@ -77,11 +77,11 @@ python-dateutil==2.8.2
     # via
     #   -r requirements/app.in
     #   analytics-python
-python-dotenv==0.19.2
+python-dotenv==0.20.0
     # via -r requirements/app.in
 python-editor==1.0.4
     # via -r requirements/app.in
-python-logstash-async==2.3.0
+python-logstash-async==2.5.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
