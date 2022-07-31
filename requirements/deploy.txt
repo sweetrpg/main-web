@@ -81,7 +81,7 @@ python-dotenv==0.19.2
     # via -r requirements/app.in
 python-editor==1.0.4
     # via -r requirements/app.in
-python-logstash-async==2.3.0
+python-logstash-async==2.5.0
     # via -r requirements/app.in
 pyyaml==6.0
     # via -r requirements/app.in
