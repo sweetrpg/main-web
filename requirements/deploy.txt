@@ -104,7 +104,7 @@ sqlalchemy==1.4.40
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.131
     # via -r requirements/app.in
-urllib3==1.26.11
+urllib3==1.26.12
     # via
     #   -r requirements/app.in
     #   requests
