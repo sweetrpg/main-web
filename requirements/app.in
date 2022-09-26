@@ -9,14 +9,14 @@ Flask==2.1.3
 sweetrpg-web-core
 kanka
 python-dateutil
-python-dotenv==0.20.0
+python-dotenv==0.21.0
 python-editor
 PyYAML==6.0
 redis
 hiredis
 requests
 sentry-sdk[flask]==1.5.0
-greenlet==1.1.2
+greenlet==1.1.3
 SQLAlchemy==1.4.40
-urllib3==1.26.11
+urllib3==1.26.12
 python-logstash-async
