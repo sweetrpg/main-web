@@ -147,13 +147,12 @@ sqlalchemy==1.4.40
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.131
     # via -r requirements/app.in
-toml==0.10.2
-    # via tox
 tomli==2.0.1
     # via
     #   coverage
     #   pytest
-tox==3.25.1
+    #   tox
+tox==3.26.0
     # via -r requirements/tests.in
 urllib3==1.26.12
     # via
