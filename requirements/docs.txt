@@ -180,7 +180,7 @@ types-docutils==0.18.3
     #   rstcheck-core
 typing-extensions==4.3.0
     # via pydantic
-urllib3==1.26.11
+urllib3==1.26.12
     # via
     #   -r requirements/app.in
     #   requests
