@@ -238,7 +238,7 @@ tomli==2.0.1
     #   coverage
     #   pytest
     #   tox
-tox==3.26.0
+tox==3.27.0
     # via -r requirements/tests.in
 typer[all]==0.4.2
     # via rstcheck
