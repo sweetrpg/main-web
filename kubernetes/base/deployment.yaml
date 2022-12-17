@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-    name: main-web-v1
+    name: web-v1
 
 spec:
     replicas: 1
@@ -15,7 +15,7 @@ spec:
     selector:
         matchLabels:
             platform: sweetrpg
-            app: main-web
+            app: web
             component: web
             package: main
             version: v1
@@ -23,12 +23,12 @@ spec:
         metadata:
             labels:
                 platform: sweetrpg
-                app: main-web
+                app: web
                 component: web
                 package: main
                 version: v1
         spec:
-            serviceAccountName: main-web
+            serviceAccountName: web
             imagePullSecrets:
                 - name: sweetrpg-registry
             initContainers:

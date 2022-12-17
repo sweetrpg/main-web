@@ -8,7 +8,7 @@ metadata:
 spec:
     selector:
         platform: sweetrpg
-        app: main-web
+        app: web
         component: web
         package: main
         version: v1
