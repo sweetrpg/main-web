@@ -1,11 +1,13 @@
 name: Update Requirements
 
 on:
+    workflow_dispatch:
     repository_dispatch:
         types:
             - web-core-published
     schedule:
-        - cron: '0 1 * * 2'
+        - cron: "0 1 * * 2"
+
 jobs:
     update-reqs:
         runs-on: ubuntu-latest
