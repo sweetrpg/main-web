@@ -7,6 +7,9 @@ on:
             - web-core-published
     schedule:
         - cron: "0 1 * * 2"
+    push:
+        paths:
+            - "requirements/*.in"
 
 jobs:
     update-reqs:
@@ -15,15 +18,13 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-python@v4
               with:
-                  python-version: "3.9"
+                  python-version: "3.10"
             - name: update-reqs
               run: |
-                  pip install -U wheel
-                  pip install -U setuptools
-                  python -m pip install -U pip-tools
+                  pip install -U wheel setuptools pip-tools
                   git config --global user.email "ci@sweetrpg.com"
                   git config --global user.name "SweetRPG Requirement Updater"
-                  git checkout develop
+                  git checkout ${{ github.head_ref || github.ref_name }}
                   scripts/update-requirements.sh
                   git add requirements/*.txt
                   git commit -m "Update requirements"
