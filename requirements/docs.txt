@@ -168,7 +168,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sqlalchemy==1.4.41
+sqlalchemy==2.0.5.post1
     # via -r requirements/app.in
 sweetrpg-web-core==0.0.131
     # via -r requirements/app.in
@@ -179,7 +179,9 @@ types-docutils==0.18.3
     #   rstcheck
     #   rstcheck-core
 typing-extensions==4.3.0
-    # via pydantic
+    # via
+    #   pydantic
+    #   sqlalchemy
 urllib3==1.26.12
     # via
     #   -r requirements/app.in
