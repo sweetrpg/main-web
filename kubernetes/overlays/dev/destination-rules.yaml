@@ -1,12 +1,12 @@
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: DestinationRule
 
-metadata:
-    name: web
+# metadata:
+#     name: web
 
-spec:
-    host: web-v1.sweetrpg-main.svc.cluster.local
-    trafficPolicy:
-        loadBalancer:
-            simple: LEAST_CONN
+# spec:
+#     host: web-v1.sweetrpg-main.svc.cluster.local
+#     trafficPolicy:
+#         loadBalancer:
+#             simple: LEAST_CONN
