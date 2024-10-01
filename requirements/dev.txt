@@ -150,7 +150,7 @@ pygments==2.18.0
     #   rich
     #   sphinx
     #   sphinx-tabs
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via build
 pytest==8.3.3
     # via
