@@ -223,7 +223,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlalchemy==1.4.54
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.688
+sweetrpg-web-core==0.0.689
     # via -r requirements/app.in
 tomli==2.0.2
     # via
