@@ -135,7 +135,7 @@ six==1.16.0
     #   tox
 sqlalchemy==1.4.54
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.682
+sweetrpg-web-core==0.0.683
     # via -r requirements/app.in
 tomli==2.0.2
     # via
