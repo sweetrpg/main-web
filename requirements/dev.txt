@@ -65,7 +65,7 @@ filelock==3.16.1
     # via
     #   tox
     #   virtualenv
-flask==2.3.3
+flask==3.0.3
     # via
     #   -r requirements/app.in
     #   flask-caching
@@ -223,7 +223,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlalchemy==1.4.54
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.687
+sweetrpg-web-core==0.0.131
     # via -r requirements/app.in
 tomli==2.0.2
     # via

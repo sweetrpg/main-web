@@ -29,7 +29,7 @@ click==8.1.7
     # via flask
 dnspython==2.7.0
     # via -r requirements/app.in
-flask==2.3.3
+flask==3.0.3
     # via
     #   -r requirements/app.in
     #   flask-caching
@@ -93,7 +93,7 @@ six==1.16.0
     #   python-dateutil
 sqlalchemy==1.4.54
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.687
+sweetrpg-web-core==0.0.131
     # via -r requirements/app.in
 urllib3==1.26.20
     # via
