@@ -35,7 +35,7 @@ click==8.1.7
     # via
     #   flask
     #   typer
-dnspython==2.6.1
+dnspython==2.7.0
     # via -r requirements/app.in
 docutils==0.19
     # via
@@ -121,7 +121,7 @@ requests==2.32.3
     #   analytics-python
     #   kanka
     #   sphinx
-rich==13.8.1
+rich==13.9.2
     # via typer
 rstcheck==6.2.4
     # via -r requirements/docs.in
@@ -165,7 +165,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlalchemy==1.4.54
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.681
+sweetrpg-web-core==0.0.682
     # via -r requirements/app.in
 typer==0.12.5
     # via rstcheck
@@ -173,6 +173,7 @@ typing-extensions==4.12.2
     # via
     #   pydantic
     #   pydantic-core
+    #   rich
     #   typer
 urllib3==1.26.20
     # via
