@@ -26,7 +26,7 @@ blinker==1.8.2
     #   -r requirements/tests.in
     #   flask
     #   sentry-sdk
-build==1.2.2
+build==1.2.2.post1
     # via pip-tools
 cachelib==0.13.0
     # via
@@ -223,7 +223,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlalchemy==1.4.54
     # via -r requirements/app.in
-sweetrpg-web-core==0.0.692
+sweetrpg-web-core==0.0.693
     # via -r requirements/app.in
 tomli==2.0.2
     # via
