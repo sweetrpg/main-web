@@ -67,7 +67,7 @@ greenlet==1.1.3
     # via
     #   -r requirements/tests.in
     #   sqlalchemy
-hiredis==2.4.0
+hiredis~=3.0
     # via -r requirements/app.in
 idna==3.10
     # via requests
