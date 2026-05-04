@@ -34,7 +34,7 @@ jobs:
                     #   }
                     # - { name: Mac, python: "3.9", os: macos-latest, tox: py311 }
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - uses: actions/setup-python@v5
               with:
                   python-version: ${{ matrix.python }}
