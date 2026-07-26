@@ -1,13 +1,9 @@
-node_modules/
+target/
 .git/
 .gitignore
 .editorconfig
 README.md
-tests/
 .devcontainer/
 .github/
 kubernetes/
-docs/
 LICENSE
-tox.ini
-*.pyc

@@ -1,0 +1,129 @@
+/* Hub page layout, adapted from the "SweetRPG Hub" Claude Design prototype's inline <style>
+ * block and top-level element styles. Broadsheet (broadsheet.css) supplies the design tokens
+ * and component classes (.card, .tag, .btn, --color-*); this file only adds the page's own
+ * layout and the dark-theme token overrides the prototype defined locally.
+ */
+
+a { color: var(--color-accent-700); text-decoration: none; }
+a:hover { color: var(--color-accent); text-decoration: underline; }
+
+[data-theme="dark"] {
+  --color-bg: #1a1918;
+  --color-surface: #26241f;
+  --color-text: #f0efee;
+  --color-neutral-300: #3a3836;
+  --color-divider: #423f3b;
+}
+
+.hub {
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background 0.2s, color 0.2s;
+}
+
+.hub-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px) 100px;
+}
+
+.hub-hero {
+  padding: min(14vh, 140px) 0 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hub-logo {
+  width: min(220px, 32vw);
+  height: auto;
+  display: block;
+  margin-bottom: 8px;
+}
+
+[data-theme="light"] .hub-logo-dark { display: none; }
+[data-theme="dark"] .hub-logo-light { display: none; }
+
+.hub-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(56px, 9vw, 110px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.hub-title-sweet { color: var(--color-text); }
+.hub-title-rpg { color: #0a9845; }
+
+.hub-tagline {
+  font-size: 19px;
+  font-style: italic;
+  max-width: 52ch;
+  margin: 20px 0 0;
+  opacity: 0.8;
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+  column-gap: 28px;
+  row-gap: clamp(28px, 6vw, 56px);
+  padding-top: 20px;
+}
+
+.hub-card-link { text-decoration: none; color: inherit; }
+
+.hub-card {
+  height: calc(100% + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.hub-card-title { font-size: 30px; color: #0a9845; }
+.hub-card-body { margin-top: 8px; }
+.hub-card-spacer { flex: 1; }
+.hub-card-tag { align-self: flex-start; }
+
+.hub-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+.hub-footer-line {
+  font-size: 12px;
+  opacity: 0.55;
+  pointer-events: auto;
+}
+
+.hub-theme-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+.hub-theme-button { color: #0a9845; position: relative; }
+.hub-theme-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  min-width: 130px;
+}
+.hub-theme-option { justify-content: flex-start; gap: 8px; color: var(--color-text); }

@@ -1,7 +1,0 @@
--r app.in
-Pallets-Sphinx-Themes
-Sphinx==5.1.1
-sphinx-issues
-sphinxcontrib-log-cabinet
-sphinx-tabs
-rstcheck
