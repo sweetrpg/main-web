@@ -1,0 +1,9 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [develop, master]
+
+jobs:
+  ci:
+    uses: sweetrpg/github-actions/.github/workflows/rust-ci.yaml@master
