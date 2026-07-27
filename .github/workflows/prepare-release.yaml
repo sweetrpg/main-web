@@ -1,0 +1,20 @@
+name: Prepare Release
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prepare:
+    uses: sweetrpg/github-actions/.github/workflows/rust-prepare-release.yaml@master
+    with:
+      # TODO: no Projects v2 project exists yet for main-web (suite-wide, not scoped to a
+      # single service project like catalog-api's "Catalog Service" / project 8) - confirm
+      # which project release PRs should land in, or create a dedicated one, before this
+      # workflow can run.
+      project-number: 0
+      commit-files: "Cargo.toml Cargo.lock CHANGELOG.md"
+    secrets: inherit
