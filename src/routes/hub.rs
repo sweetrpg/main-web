@@ -62,7 +62,7 @@ fn apps() -> Vec<AppCard> {
 }
 
 #[derive(Template)]
-#[template(path = "hub.html")]
+#[template(path = "main.html")]
 struct HubTemplate {
     shared_assets_url: String,
     apps: Vec<AppCard>,
