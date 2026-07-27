@@ -3,16 +3,16 @@ kind: Service
 apiVersion: v1
 
 metadata:
-    name: web-v1
+    name: main-web-v1
 
 spec:
     selector:
+        app: main-web
         platform: sweetrpg
-        app: web
-        component: web
         package: main
+        component: web
         version: v1
-    type: LoadBalancer
+    type: ClusterIP
     ports:
         - name: http
           port: 8080

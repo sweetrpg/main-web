@@ -9,17 +9,10 @@ resources:
     - configmaps.yaml
     - hpa.yaml
     - pdb.yaml
-    - destination-rules.yaml
-    - secrets.yaml
-patchesStrategicMerge:
-    - replicas.yaml
-
-commonLabels:
-    platform: sweetrpg
-    app: web
-    component: web
-    package: main
-    version: v1
+    - podmonitor.yaml
+    - ingress.yaml
+patches:
+    - path: replicas.yaml
 
 generatorOptions:
     disableNameSuffixHash: true
