@@ -3,11 +3,11 @@ kind: Service
 apiVersion: v1
 
 metadata:
-    name: main-web-v1
+    name: web-v1
 
 spec:
     selector:
-        app: main-web
+        app: web
         platform: sweetrpg
         package: main
         component: web
