@@ -1,0 +1,39 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+    name: main-web-v1
+    annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        kubernetes.io/ingress.class: traefik
+        cert-manager.io/cluster-issuer: letsencrypt-prd
+        # This Ingress is the designated owner of dev.sweetrpg.com's ExternalDNS annotations
+        # (per the main-web-owns-dev-domain-ingress OpenSpec change) - no other frontend's
+        # Ingress on this host should set these. Do not remove until another Ingress is
+        # confirmed to have taken over ownership first (see that change's migration plan).
+        external-dns.alpha.kubernetes.io/hostname: dev.sweetrpg.com
+        external-dns.alpha.kubernetes.io/target: "45.79.225.222"
+
+spec:
+    ingressClassName: traefik
+    rules:
+        - host: dev.sweetrpg.com
+          http:
+              paths:
+                  # Root path, no Middleware: there's no prefix to strip here, unlike every
+                  # other frontend's own `/<name>` path.
+                  - pathType: Prefix
+                    path: /
+                    backend:
+                        service:
+                            name: main-web-v1
+                            port:
+                                name: http
+    tls:
+        - hosts:
+              - dev.sweetrpg.com
+          # Shared secretName across every frontend's Ingress for this host - see catalog-web's
+          # Ingress comment for why this must match exactly.
+          secretName: sweetrpg-dev-tls
