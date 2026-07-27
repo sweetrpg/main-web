@@ -2,6 +2,11 @@ name: Release
 
 permissions:
   contents: write
+  # rust-release.yaml declares id-token: write at its top level (needed for crates.io trusted
+  # publishing) - a reusable workflow's permissions can't exceed what the caller grants, so this
+  # must be present even though publish-to-crates-io: false means it's never actually used here.
+  # Omitting it causes a hard startup_failure with zero jobs, not a runtime permission error.
+  id-token: write
 
 on:
   push:

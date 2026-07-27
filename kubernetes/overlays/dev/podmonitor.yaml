@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+
+metadata:
+    name: sweetrpg-main-web
+    labels:
+        release: prometheus
+
+spec:
+    namespaceSelector:
+        matchNames:
+            - sweetrpg-main
+    podMetricsEndpoints:
+        - port: http
+    selector:
+        matchLabels:
+            app: main-web
+            platform: sweetrpg
+            package: main
+            component: web

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-    name: web-v1
+    name: main-web-v1
 
 spec:
     strategy:
@@ -13,93 +13,58 @@ spec:
         type: RollingUpdate
     selector:
         matchLabels:
+            app: main-web
             platform: sweetrpg
-            app: web
-            component: web
             package: main
+            component: web
             version: v1
     template:
         metadata:
             labels:
+                app: main-web
                 platform: sweetrpg
-                app: web
-                component: web
                 package: main
+                component: web
                 version: v1
         spec:
-            serviceAccountName: web
+            serviceAccountName: main-web
+            # No dependency of this service's own is at risk of the classic <SERVICE_NAME>_PORT
+            # collision (docs/service-conventions.md) today, but this has no DNS-based service
+            # discovery of its own to opt out of the legacy env-var injection either - cheap to
+            # disable defensively regardless.
+            enableServiceLinks: false
             imagePullSecrets:
                 - name: sweetrpg-registry
-            initContainers:
-                - name: init-templates
-                  image: alpine/git
-                  args:
-                      - clone
-                      - "--single-branch"
-                      - "--"
-                      - "https://$(GIT_USERNAME):$(GIT_PASSWORD)@github.com/$(GIT_REPO).git"
-                      - "/work/."
-                  envFrom:
-                      - secretRef:
-                            name: template-credentials
-                  volumeMounts:
-                      - mountPath: /work
-                        name: templates
             containers:
                 - name: app
                   image: ghcr.io/sweetrpg/main-web:latest
                   imagePullPolicy: Always
                   envFrom:
                       - configMapRef:
-                            name: web-common
+                            name: main-web-common
                       - configMapRef:
-                            name: web-env
-                      - secretRef:
-                            name: web-auth
-                      - secretRef:
-                            name: web-misc
-                      - secretRef:
-                            name: web-cache
+                            name: main-web-env
                   env: []
                   ports:
                       - containerPort: 8080
                         name: http
                   resources:
                       requests:
-                          cpu: "20m"
-                          memory: "55m"
+                          cpu: "10m"
+                          memory: "20m"
                       limits:
-                          cpu: "1.0"
-                          memory: "1Gi"
-                  #   livenessProbe:
-                  #       httpGet:
-                  #           path: /health/ping
-                  #           port: 8080
-                  #       initialDelaySeconds: 90
-                  #       timeoutSeconds: 10
-                  #   readinessProbe:
-                  #       httpGet:
-                  #           path: /health/ping
-                  #           port: 8080
-                  #       initialDelaySeconds: 30
-                  #       timeoutSeconds: 10
-                  volumeMounts:
-                      - mountPath: /data
-                        name: data
-                      - mountPath: /config
-                        name: config
-                      - mountPath: /app/templates
-                        name: templates
-                        subPath: templates
-            volumes:
-                - name: config
-                  secret:
-                      secretName: web-files
-                      items:
-                          - key: newrelic.ini
-                            path: newrelic.ini
-                - name: data
-                  emptyDir: {}
-                - name: templates
-                  emptyDir: {}
+                          cpu: "0.5"
+                          memory: "256m"
+                  livenessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: http
+                      initialDelaySeconds: 10
+                      timeoutSeconds: 5
+                  readinessProbe:
+                      httpGet:
+                          path: /readyz
+                          port: http
+                      initialDelaySeconds: 5
+                      timeoutSeconds: 5
             restartPolicy: Always

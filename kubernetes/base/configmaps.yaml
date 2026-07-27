@@ -3,10 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 
 metadata:
-  name: web-common
+    name: main-web-common
 
 data:
-  FLASK_PORT: "8282"
-  FLASK_APP: sweetrpg_main_web.application.main:create_app
-  FLASK_ENV: production
-  NEW_RELIC_CONFIG_FILE: /config/newrelic.ini
+    PORT: "8080"
