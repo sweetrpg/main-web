@@ -7,12 +7,20 @@ namespace: sweetrpg-main
 resources:
     - ../../base
     - configmaps.yaml
-    - hpa.yaml
-    - pdb.yaml
+    # - hpa.yaml
+    # - pdb.yaml
     - podmonitor.yaml
     - ingress.yaml
-patches:
-    - path: replicas.yaml
+    - destination-rules.yaml
+    - secrets.yaml
+
+labels:
+  - pairs:
+      platform: sweetrpg
+      app: web
+      component: web
+      package: main
+      version: v1
 
 generatorOptions:
     disableNameSuffixHash: true
