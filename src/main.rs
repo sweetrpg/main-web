@@ -41,7 +41,7 @@ async fn main() {
     let (prometheus_layer, metric_handle) = PrometheusMetricLayer::pair();
 
     let app = Router::new()
-        .merge(routes::hub::router())
+        .merge(routes::main::router())
         .with_state(state)
         .merge(routes::health::router())
         .route("/metrics", get(|| async move { metric_handle.render() }))
