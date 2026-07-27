@@ -19,6 +19,7 @@ struct AppCard {
     href: &'static str,
     has_status: bool,
     status: &'static str,
+    background: &'static str,
 }
 
 fn apps() -> Vec<AppCard> {
@@ -29,6 +30,7 @@ fn apps() -> Vec<AppCard> {
             href: "/catalog",
             has_status: false,
             status: "",
+            background: "catalog-card-back.png",
         },
         AppCard {
             name: "Shelf",
@@ -36,6 +38,7 @@ fn apps() -> Vec<AppCard> {
             href: "#",
             has_status: true,
             status: "Coming soon",
+            background: "shelf-card-back.jpg",
         },
         AppCard {
             name: "Systems",
@@ -43,6 +46,7 @@ fn apps() -> Vec<AppCard> {
             href: "#",
             has_status: true,
             status: "Coming soon",
+            background: "systems-card-back.jpg",
         },
         AppCard {
             name: "Profile",
@@ -50,6 +54,7 @@ fn apps() -> Vec<AppCard> {
             href: "#",
             has_status: true,
             status: "Coming soon",
+            background: "profile-card-back.jpg",
         },
         AppCard {
             name: "Initiative!",
@@ -57,6 +62,7 @@ fn apps() -> Vec<AppCard> {
             href: "#",
             has_status: true,
             status: "Coming soon",
+            background: "initiative-card-back.png",
         },
     ]
 }

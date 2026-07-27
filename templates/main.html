@@ -35,6 +35,9 @@
       {% for app in apps %}
       <a href="{{ app.href }}" class="hub-card-link">
         <div class="card elev-sm hub-card">
+            <div style="position:absolute;inset:0;opacity:0.1;pointer-events:none">
+                         <image-slot id="{{ app.iconId }}" shape="rect" placeholder="Illustrated icon" src="/static/img/{{ app.background }}"></image-slot>
+                       </div>
           <div class="hub-card-body">
             <div class="card-title hub-card-title">{{ app.name }}</div>
             <div class="card-body">{{ app.description }}</div>
