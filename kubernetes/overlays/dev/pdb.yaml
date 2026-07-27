@@ -3,13 +3,13 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 
 metadata:
-    name: main-web-v1
+    name: web-v1
 
 spec:
     minAvailable: 1
     selector:
         matchLabels:
-            app: main-web
+            app: web
             platform: sweetrpg
             package: main
             component: web

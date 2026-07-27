@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-    name: main-web-v1
+    name: web-v1
 
 spec:
     strategy:
@@ -13,7 +13,7 @@ spec:
         type: RollingUpdate
     selector:
         matchLabels:
-            app: main-web
+            app: web
             platform: sweetrpg
             package: main
             component: web
@@ -21,13 +21,13 @@ spec:
     template:
         metadata:
             labels:
-                app: main-web
+                app: web
                 platform: sweetrpg
                 package: main
                 component: web
                 version: v1
         spec:
-            serviceAccountName: main-web
+            serviceAccountName: web
             # No dependency of this service's own is at risk of the classic <SERVICE_NAME>_PORT
             # collision (docs/service-conventions.md) today, but this has no DNS-based service
             # discovery of its own to opt out of the legacy env-var injection either - cheap to
@@ -41,9 +41,9 @@ spec:
                   imagePullPolicy: Always
                   envFrom:
                       - configMapRef:
-                            name: main-web-common
+                            name: web-common
                       - configMapRef:
-                            name: main-web-env
+                            name: web-env
                   env: []
                   ports:
                       - containerPort: 8080

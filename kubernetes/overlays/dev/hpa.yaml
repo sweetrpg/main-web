@@ -3,7 +3,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 
 metadata:
-    name: main-web-v1
+    name: web-v1
 
 spec:
     scaleTargetRef:
