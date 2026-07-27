@@ -1,3 +1,15 @@
+
+## 0.1.0 - 2026-07-27
+
+### Added
+- Rewrite main-web as an Axum/Askama Rust service
+
+
+### Fixed
+- Secret version
+- Point prepare-release at the new Main Web project
+
+
 # Changelog
 
 ## Unreleased
