@@ -9,8 +9,6 @@ resources:
     - configmaps.yaml
     - podmonitor.yaml
     - ingress.yaml
-    - destination-rules.yaml
-    - secrets.yaml
 
 labels:
   - pairs:

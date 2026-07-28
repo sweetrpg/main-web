@@ -1,4 +1,11 @@
 
+## 0.1.2 - 2026-07-28
+
+### Fixed
+- Remove HPA and PDB from dev overlay
+
+
+
 ## 0.1.1 - 2026-07-27
 
 ### Fixed
