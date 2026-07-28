@@ -10,3 +10,5 @@ permissions:
 jobs:
   ci:
     uses: sweetrpg/github-actions/.github/workflows/rust-ci.yaml@master
+    with:
+      publish-coverage: false
