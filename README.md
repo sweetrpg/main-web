@@ -1,6 +1,7 @@
 # Main web
 
 [![CI](https://github.com/sweetrpg/main-web/actions/workflows/ci.yaml/badge.svg)](https://github.com/sweetrpg/main-web/actions/workflows/ci.yaml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/sweetrpg/main-web/develop/.github/badges/coverage.json)](https://github.com/sweetrpg/main-web/actions/workflows/ci.yaml)
 [![License](https://img.shields.io/github/license/sweetrpg/main-web.svg)](https://img.shields.io/github/license/sweetrpg/main-web.svg)
 [![Issues](https://img.shields.io/github/issues/sweetrpg/main-web.svg)](https://img.shields.io/github/issues/sweetrpg/main-web.svg)
 [![PRs](https://img.shields.io/github/issues-pr/sweetrpg/main-web.svg)](https://img.shields.io/github/issues-pr/sweetrpg/main-web.svg)
