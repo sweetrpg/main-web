@@ -7,6 +7,7 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use axum::Router;
 
+use crate::admin_client::Banner;
 use crate::AppState;
 
 /// The suite's app list is a compile-time data structure, not a config file — see
@@ -81,6 +82,7 @@ struct HubTemplate {
     version: String,
     build_date: String,
     build_hash: String,
+    banners: Vec<Banner>,
 }
 
 impl IntoResponse for HubTemplate {
@@ -100,11 +102,17 @@ pub fn router() -> Router<Arc<AppState>> {
 }
 
 async fn index(State(state): State<Arc<AppState>>) -> HubTemplate {
+    let banners = state
+        .admin_client
+        .fetch_banners(&["platform", "service:main"])
+        .await;
+
     HubTemplate {
         shared_assets_url: state.config.shared_assets_url.clone(),
         apps: apps(),
         version: state.build_info.version.clone(),
         build_date: state.build_info.date.clone(),
         build_hash: state.build_info.sha.clone(),
+        banners,
     }
 }

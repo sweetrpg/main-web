@@ -1,3 +1,4 @@
+mod admin_client;
 mod build_info;
 mod config;
 mod routes;
@@ -5,6 +6,7 @@ mod telemetry;
 
 use std::sync::Arc;
 
+use admin_client::AdminClient;
 use axum::routing::get;
 use axum::Router;
 use axum_prometheus::PrometheusMetricLayer;
@@ -16,6 +18,7 @@ use tower_http::trace::TraceLayer;
 pub struct AppState {
     config: Config,
     build_info: BuildInfo,
+    admin_client: AdminClient,
 }
 
 #[tokio::main]
@@ -36,7 +39,12 @@ async fn main() {
         "starting sweetrpg-main-web"
     );
 
-    let state = Arc::new(AppState { config, build_info });
+    let admin_client = AdminClient::new(config.admin_api_url.clone());
+    let state = Arc::new(AppState {
+        config,
+        build_info,
+        admin_client,
+    });
 
     let (prometheus_layer, metric_handle) = PrometheusMetricLayer::pair();
 

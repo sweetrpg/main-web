@@ -49,6 +49,16 @@ Hub page's own layout CSS (`hub.css`).
 Falls back to placeholder values (`version: "dev"`) when the file doesn't exist, e.g. local
 `cargo run` outside a container.
 
+### Banner messages (`admin_client.rs`)
+
+`AdminClient` fetches platform-wide banner messages from `admin-api` (`sweetrpg/admin-api`) for
+the `platform` and `service:main` scopes, per the `add-banner-messages` OpenSpec change
+(`sweetrpg/platform`). Disabled by default - `base_url` is `None` unless `ADMIN_API_URL` is set,
+so a deploy with the var unset makes zero network calls. When enabled: a 90s in-memory cache
+(one `Mutex<Option<CacheEntry>>`, not per-scope-key - fine at this service's read volume) and a
+2s request timeout. Fails open on every error path (timeout, connection error, non-200, bad
+JSON) by returning an empty `Vec<Banner>` - a banner outage must never break the hub page.
+
 ## Observability
 
 - **Logging**: `tracing` + `tracing-subscriber`'s JSON formatter, one object per line to stdout.
