@@ -7,8 +7,6 @@ namespace: sweetrpg-main
 resources:
     - ../../base
     - configmaps.yaml
-    # - hpa.yaml
-    # - pdb.yaml
     - podmonitor.yaml
     - ingress.yaml
     - destination-rules.yaml
