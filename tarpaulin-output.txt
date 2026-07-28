@@ -1,0 +1,26 @@
+[2m2026-07-28T05:35:35.451048Z[0m [32m INFO[0m [2mcargo_tarpaulin::config[0m[2m:[0m Creating config
+[2m2026-07-28T05:35:35.972346Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Running Tarpaulin
+[2m2026-07-28T05:35:35.972363Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Building project
+[2m2026-07-28T05:35:35.985946Z[0m [32m INFO[0m [2mcargo_tarpaulin::cargo[0m[2m:[0m Cleaning project
+[2m2026-07-28T05:36:14.507515Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/sweetrpg_main_web-9d2920c88338d000
+[2m2026-07-28T05:36:14.507630Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[2m2026-07-28T05:36:14.509151Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/sweetrpg_main_web-9d2920c88338d000
+[2m2026-07-28T05:36:14.509167Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/sweetrpg_main_web-9d2920c88338d000_18412663003278635659_0-4908.profraw
+[2m2026-07-28T05:36:14.509172Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
+[2m2026-07-28T05:36:14.510247Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
+[2m2026-07-28T05:36:14.512941Z[0m [32m INFO[0m [2mcargo_tarpaulin::report[0m[2m:[0m Coverage Results:
+[2m2026-07-28T05:36:14.513347Z[0m [32m INFO[0m [2mcargo_tarpaulin::report::html[0m[2m:[0m HTML report written to /home/runner/work/main-web/main-web/coverage/tarpaulin-report.html
+|| Tested/Total Lines:
+|| src/build_info.rs: 0/15
+|| src/config.rs: 0/5
+|| src/main.rs: 0/29
+|| src/routes/health.rs: 0/6
+|| src/routes/main.rs: 0/56
+|| src/telemetry.rs: 0/20
+|| 
+0.00% coverage, 0/131 lines covered
