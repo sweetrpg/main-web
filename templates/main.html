@@ -23,6 +23,14 @@
 <div class="hub">
   <nav class="nav"><div style="flex:1"></div></nav>
 
+  {% if !banners.is_empty() %}
+  <div class="banner-region">
+    {% for banner in banners %}
+    <div class="banner banner-{{ banner.severity }}" role="status">{{ banner.message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <div class="hub-container">
     <section class="hub-hero">
       <img class="hub-logo hub-logo-light" src="{{ shared_assets_url }}/static/sweetrpg-logo.png" alt="SweetRPG">

@@ -8,6 +8,10 @@ pub struct Config {
     pub shared_assets_url: String,
     pub otlp_endpoint: Option<String>,
     pub log_level: String,
+    /// Base URL for `admin-api` (banner messages). Unset by default - the `AdminClient`
+    /// stays disabled (no network calls, always returns no banners) until this is
+    /// explicitly set, so the deploy is inert until rollout enables it.
+    pub admin_api_url: Option<String>,
 }
 
 impl Config {
@@ -21,6 +25,7 @@ impl Config {
                 .unwrap_or_else(|_| "http://localhost:8081".to_string()),
             otlp_endpoint: env::var("OTEL_EXPORTER_OTLP_ENDPOINT").ok(),
             log_level: env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string()),
+            admin_api_url: env::var("ADMIN_API_URL").ok(),
         }
     }
 }
