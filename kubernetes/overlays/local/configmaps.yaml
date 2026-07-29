@@ -6,9 +6,10 @@ metadata:
     name: web-env
 
 data:
-    # assets-web has no path prefix to strip on its own Tailscale Ingress (unlike dev.sweetrpg.com's
-    # shared-host /assets prefix) - its routes are already unprefixed, so no /assets suffix here.
-    SHARED_ASSETS_URL: https://assets-web.curlew-smoot.ts.net
+    # Shared host behind the single traefik-tailscale front door (see
+    # support/config/K8s/traefik/overlays/minikube) - Traefik strips /assets before it reaches
+    # assets-web, same as the dev overlay's dev.sweetrpg.com/assets convention.
+    SHARED_ASSETS_URL: https://sweetrpg-local.curlew-smoot.ts.net/assets
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).

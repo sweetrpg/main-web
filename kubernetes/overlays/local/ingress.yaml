@@ -4,18 +4,25 @@ kind: Ingress
 
 metadata:
     name: web-v1
+    annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: web
+        kubernetes.io/ingress.class: traefik
+        # TLS is terminated once, upstream, by the Tailscale Kubernetes operator's Ingress in
+        # support/config/K8s/traefik/overlays/minikube (traefik-tailscale) - this hop is plain
+        # HTTP inside the cluster, no cert-manager/websecure annotations needed here.
 
 spec:
-    # Tailscale Kubernetes operator manages this Ingress: no ExternalDNS entry to make (MagicDNS
-    # names it main-web.<tailnet>.ts.net) and no cert-manager issuer to configure (it provisions
-    # a Let's Encrypt cert on first connection). Requires MagicDNS and HTTPS enabled on the
-    # tailnet - see https://tailscale.com/docs/kubernetes-operator/reference/limitations.
-    ingressClassName: tailscale
-    defaultBackend:
-        service:
-            name: main-web-v1
-            port:
-                name: http
-    tls:
-        - hosts:
-              - main-web
+    ingressClassName: traefik
+    rules:
+        - host: sweetrpg-local.curlew-smoot.ts.net
+          http:
+              paths:
+                  # Root path, no Middleware: there's no prefix to strip here, unlike every
+                  # other frontend's own `/<name>` path.
+                  - pathType: Prefix
+                    path: /
+                    backend:
+                        service:
+                            name: main-web-v1
+                            port:
+                                name: http
