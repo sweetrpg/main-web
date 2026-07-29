@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+    name: web-v1
+
+spec:
+    # Tailscale Kubernetes operator manages this Ingress: no ExternalDNS entry to make (MagicDNS
+    # names it main-web.<tailnet>.ts.net) and no cert-manager issuer to configure (it provisions
+    # a Let's Encrypt cert on first connection). Requires MagicDNS and HTTPS enabled on the
+    # tailnet - see https://tailscale.com/docs/kubernetes-operator/reference/limitations.
+    ingressClassName: tailscale
+    defaultBackend:
+        service:
+            name: main-web-v1
+            port:
+                name: http
+    tls:
+        - hosts:
+              - main-web

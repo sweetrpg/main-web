@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+    name: web-env
+
+data:
+    # assets-web has no path prefix to strip on its own Tailscale Ingress (unlike dev.sweetrpg.com's
+    # shared-host /assets prefix) - its routes are already unprefixed, so no /assets suffix here.
+    SHARED_ASSETS_URL: https://assets-web.curlew-smoot.ts.net
+    BUILD_INFO_PATH: /app/config/build-info.json
+    LOG_LEVEL: info
+    # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318
