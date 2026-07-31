@@ -9,11 +9,13 @@ data:
     SHARED_ASSETS_URL: https://dev.sweetrpg.com/assets
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
-    # auth-web's own dedicated Redis instance (see sweetrpg/auth-web's kubernetes/base) - this
-    # app only ever reads the shared session it writes, never writes to it. Unset means every
-    # visitor reads as logged-out (see session_client.rs's fail-open default), not a startup
-    # failure.
-    REDIS_HOST: auth-redis.sweetrpg-support.svc.cluster.local
+    # Shared "redis" instance in sweetrpg-support, not dedicated to any one service - see
+    # docs/frontend-conventions.md's "Shared sweetrpg-support Redis instance" section
+    # (sweetrpg/platform) for the full DB-index registry. DB 2 is auth-web's shared session
+    # store; this app only ever reads it, never writes. Unset means every visitor reads as
+    # logged-out (see session_client.rs's fail-open default), not a startup failure.
+    REDIS_HOST: redis.sweetrpg-support.svc.cluster.local
     REDIS_PORT: "6379"
+    REDIS_DB: "2"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
     OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318

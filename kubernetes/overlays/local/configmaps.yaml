@@ -6,14 +6,15 @@ metadata:
     name: web-env
 
 data:
-    # Shared host behind the single traefik-tailscale front door (see
-    # support/config/K8s/traefik/overlays/minikube) - Traefik strips /assets before it reaches
-    # assets-web, same as the dev overlay's dev.sweetrpg.com/assets convention.
+    # Shared host behind the single traefik-tailscale front door - Traefik strips /assets
+    # before it reaches assets-web, same as the dev overlay's dev.sweetrpg.com/assets convention.
     SHARED_ASSETS_URL: https://sweetrpg.local/assets
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
-    # auth-web's own dedicated Redis instance - see dev overlay's comment for the same reasoning.
-    REDIS_HOST: auth-redis.sweetrpg-support.svc.cluster.local
+    # Shared "redis" instance in sweetrpg-support - see dev overlay's comment for the DB-index
+    # registry pointer.
+    REDIS_HOST: redis.sweetrpg-support.svc.cluster.local
     REDIS_PORT: "6379"
+    REDIS_DB: "2"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
     OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318

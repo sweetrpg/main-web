@@ -12,10 +12,15 @@ pub struct Config {
     /// stays disabled (no network calls, always returns no banners) until this is
     /// explicitly set, so the deploy is inert until rollout enables it.
     pub admin_api_url: Option<String>,
-    /// Host of the shared session Redis instance `auth-web` owns. Unset by default - the
-    /// `SessionClient` stays disabled (every visitor reads as logged-out) until this is set.
+    /// Host of the shared `redis.sweetrpg-support` instance (not dedicated to this app - see
+    /// `docs/frontend-conventions.md`'s "Shared sweetrpg-support Redis instance" section for
+    /// the DB-index registry). Unset by default - the `SessionClient` stays disabled (every
+    /// visitor reads as logged-out) until this is set.
     pub redis_host: Option<String>,
     pub redis_port: u16,
+    /// Logical DB index within that shared instance - must match `auth-web`'s own, since this
+    /// app reads the exact session keys `auth-web` writes.
+    pub redis_db: u8,
 }
 
 impl Config {
@@ -35,6 +40,10 @@ impl Config {
                 .ok()
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(6379),
+            redis_db: env::var("REDIS_DB")
+                .ok()
+                .and_then(|v| v.parse().ok())
+                .unwrap_or(0),
         }
     }
 }
