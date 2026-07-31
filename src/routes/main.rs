@@ -15,7 +15,6 @@ use crate::AppState;
 /// YAML/JSON config was rejected (YAGNI: adding a new app already requires a code change and
 /// redeploy to update its `href`).
 struct AppCard {
-    icon_id: &'static str,
     name: &'static str,
     description: &'static str,
     href: &'static str,
@@ -27,7 +26,6 @@ struct AppCard {
 fn apps() -> Vec<AppCard> {
     vec![
         AppCard {
-            icon_id: "catalogue",
             name: "Catalogue",
             description: "Browse, rate and review every RPG book in print.",
             href: "/catalog",
@@ -36,7 +34,6 @@ fn apps() -> Vec<AppCard> {
             background: "catalog-card-back.png",
         },
         AppCard {
-            icon_id: "shelf",
             name: "Shelf",
             description: "Track what you own, want, and are playing right now.",
             href: "#",
@@ -45,7 +42,6 @@ fn apps() -> Vec<AppCard> {
             background: "shelf-card-back.jpg",
         },
         AppCard {
-            icon_id: "systems",
             name: "Systems",
             description: "Deep-dive reference on the game systems behind the books.",
             href: "#",
@@ -54,7 +50,6 @@ fn apps() -> Vec<AppCard> {
             background: "systems-card-back.jpg",
         },
         AppCard {
-            icon_id: "profile",
             name: "Profile",
             description: "Your account, your table, your reading history.",
             href: "#",
@@ -63,7 +58,6 @@ fn apps() -> Vec<AppCard> {
             background: "profile-card-back.jpg",
         },
         AppCard {
-            icon_id: "initiative",
             name: "Initiative!",
             description: "Track turn order and initiative live at the table.",
             href: "#",
