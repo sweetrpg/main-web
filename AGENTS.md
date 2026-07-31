@@ -24,9 +24,9 @@ data migration, a clean rewrite rather than an incremental port.
 
 - **Axum**, chosen over Actix-web/Rocket for being Tokio-native and having first-class `tower`
   middleware compatibility (tracing, metrics).
-- **Askama** for templates (`templates/hub.html`) - compile-time-checked: a template referencing
+- **Askama** for templates (`templates/main.html`) - compile-time-checked: a template referencing
   a field the context struct doesn't have fails the build, not a request.
-- The app card list (`src/routes/hub.rs`) is a compile-time `Vec<AppCard>`, not a config file -
+- The app card list (`src/routes/main.rs`) is a compile-time `Vec<AppCard>`, not a config file -
   adding a new app already requires a code change (its `href` moving off `#`) and redeploy
   either way, so a config file would add indirection without removing a deploy step.
 
@@ -39,7 +39,7 @@ a local `assets-web` instance's own address for local development.
 
 This app's own `static/` directory holds only what's genuinely local to this page: the
 extracted theme-toggle JS (`theme.js`), the adapted Broadsheet CSS (`broadsheet.css`), and the
-Hub page's own layout CSS (`hub.css`).
+landing page's own layout CSS (`main.css`).
 
 ### Build info / version footer
 
@@ -57,7 +57,7 @@ the `platform` and `service:main` scopes, per the `add-banner-messages` OpenSpec
 so a deploy with the var unset makes zero network calls. When enabled: a 90s in-memory cache
 (one `Mutex<Option<CacheEntry>>`, not per-scope-key - fine at this service's read volume) and a
 2s request timeout. Fails open on every error path (timeout, connection error, non-200, bad
-JSON) by returning an empty `Vec<Banner>` - a banner outage must never break the hub page.
+JSON) by returning an empty `Vec<Banner>` - a banner outage must never break the landing page.
 
 ## Observability
 

@@ -11,7 +11,7 @@ pub struct BuildInfo {
     pub number: String,
     #[serde(default = "unset")]
     pub job: String,
-    #[serde(default = "unset")]
+    #[serde(default = "unset_sha")]
     pub sha: String,
     #[serde(default = "unset")]
     pub date: String,
@@ -21,6 +21,12 @@ pub struct BuildInfo {
 
 fn unset() -> String {
     "unset".to_string()
+}
+
+/// 8 hex chars, so it needs no truncation guard where a real short commit SHA would - and
+/// reads unmistakably as a placeholder rather than a real hash.
+fn unset_sha() -> String {
+    "deadbeef".to_string()
 }
 
 fn dev() -> String {
@@ -37,7 +43,7 @@ impl BuildInfo {
             .unwrap_or(BuildInfo {
                 number: unset(),
                 job: unset(),
-                sha: unset(),
+                sha: unset_sha(),
                 date: unset(),
                 version: dev(),
             })

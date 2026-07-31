@@ -1,7 +1,7 @@
 /* Theme picker: light / dark / system, persisted to localStorage. Extracted from the
  * "SweetRPG Hub" Claude Design prototype's <script type="text/x-dc"> reactive-state block —
  * that block ran client-side only and had no server dependency, so it translates directly to
- * plain JS. The anti-flash initial theme application lives in hub.html's inline <head> script,
+ * plain JS. The anti-flash initial theme application lives in main.html's inline <head> script,
  * since it must run before first paint; this file only owns the toggle menu after load.
  */
 (function () {
@@ -36,8 +36,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('hub-theme-button');
-    const menu = document.getElementById('hub-theme-menu');
+    const button = document.getElementById('landing-theme-button');
+    const menu = document.getElementById('landing-theme-menu');
     const options = menu.querySelectorAll('[data-theme-choice]');
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
 
