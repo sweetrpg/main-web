@@ -17,9 +17,9 @@ spec:
                   # Root path, no Middleware: there's no prefix to strip here, unlike every
                   # other frontend's own `/<name>` path.
                   - pathType: Prefix
-                    path: /main
+                    path: /
                     backend:
                         service:
-                            name: main-web-v1
+                            name: web-v1
                             port:
                                 name: http
