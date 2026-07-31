@@ -12,5 +12,8 @@ data:
     SHARED_ASSETS_URL: https://sweetrpg.local/assets
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
+    # auth-web's own dedicated Redis instance - see dev overlay's comment for the same reasoning.
+    REDIS_HOST: auth-redis.sweetrpg-support.svc.cluster.local
+    REDIS_PORT: "6379"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
     OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318

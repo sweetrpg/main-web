@@ -20,8 +20,18 @@
 </script>
 </head>
 <body>
-<div class="hub">
-  <nav class="nav"><div style="flex:1"></div></nav>
+<div class="landing">
+  <nav class="nav">
+    <div style="flex:1"></div>
+    {% if let Some(name) = current_user_name %}
+    <span class="nav-user">{{ name }}</span>
+    <form method="post" action="{{ logout_url }}" class="nav-logout-form">
+      <button type="submit" class="btn btn-ghost">Log out</button>
+    </form>
+    {% else %}
+    <a href="{{ login_url }}" class="btn btn-ghost">Log in</a>
+    {% endif %}
+  </nav>
 
   {% if !banners.is_empty() %}
   <div class="banner-region">
@@ -31,26 +41,26 @@
   </div>
   {% endif %}
 
-  <div class="hub-container">
-    <section class="hub-hero">
-      <img class="hub-logo hub-logo-light" src="{{ shared_assets_url }}/static/sweetrpg-logo.png" alt="SweetRPG">
-      <img class="hub-logo hub-logo-dark" src="{{ shared_assets_url }}/static/sweetrpg-logo-dark.png" alt="SweetRPG">
-      <div class="hub-title"><span class="hub-title-sweet">Sweet</span><span class="hub-title-rpg">RPG</span></div>
-      <p class="hub-tagline">A suite of tools and services for managing your tabletop role-playing games</p>
+  <div class="landing-container">
+    <section class="landing-hero">
+      <img class="landing-logo landing-logo-light" src="{{ shared_assets_url }}/static/sweetrpg-logo.png" alt="SweetRPG">
+      <img class="landing-logo landing-logo-dark" src="{{ shared_assets_url }}/static/sweetrpg-logo-dark.png" alt="SweetRPG">
+      <div class="landing-title"><span class="landing-title-sweet">Sweet</span><span class="landing-title-rpg">RPG</span></div>
+      <p class="landing-tagline">A suite of tools and services for managing your tabletop role-playing games</p>
     </section>
 
-    <section class="hub-grid">
+    <section class="landing-grid">
       {% for app in apps %}
-      <a href="{{ app.href }}" class="hub-card-link">
-        <div class="card elev-sm hub-card">
+      <a href="{{ app.href }}" class="landing-card-link">
+        <div class="card elev-sm landing-card">
             <div style="position:absolute;inset:0;opacity:0.1;pointer-events:none;background-image: url('/static/img/{{ app.background }}'); background-size: cover; background-position: center;"></div>
-          <div class="hub-card-body">
-            <div class="card-title hub-card-title">{{ app.name }}</div>
+          <div class="landing-card-body">
+            <div class="card-title landing-card-title">{{ app.name }}</div>
             <div class="card-body">{{ app.description }}</div>
           </div>
-          <div class="hub-card-spacer"></div>
+          <div class="landing-card-spacer"></div>
           {% if app.has_status %}
-          <span class="tag tag-outline hub-card-tag">{{ app.status }}</span>
+          <span class="tag tag-outline landing-card-tag">{{ app.status }}</span>
           {% endif %}
         </div>
       </a>
@@ -58,17 +68,17 @@
     </section>
   </div>
 
-  <div class="hub-footer">
-    <span class="hub-footer-line">&copy; 2026 Pilgrimage Software &middot; <a href="https://github.com/sweetrpg" target="_blank" rel="noopener">GitHub</a></span>
-    <span class="hub-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash[..8] }}</span>
+  <div class="landing-footer">
+    <span class="landing-footer-line">&copy; 2026 Pilgrimage Software &middot; <a href="https://github.com/sweetrpg" target="_blank" rel="noopener">GitHub</a></span>
+    <span class="landing-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash }}</span>
   </div>
 
-  <div class="hub-theme-toggle">
-    <button type="button" id="hub-theme-button" class="btn btn-ghost btn-icon hub-theme-button" aria-label="Theme"></button>
-    <div id="hub-theme-menu" class="hub-theme-menu" hidden>
-      <button type="button" class="btn btn-ghost hub-theme-option" data-theme-choice="light"></button>
-      <button type="button" class="btn btn-ghost hub-theme-option" data-theme-choice="dark"></button>
-      <button type="button" class="btn btn-ghost hub-theme-option" data-theme-choice="system"></button>
+  <div class="landing-theme-toggle">
+    <button type="button" id="landing-theme-button" class="btn btn-ghost btn-icon landing-theme-button" aria-label="Theme"></button>
+    <div id="landing-theme-menu" class="landing-theme-menu" hidden>
+      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="light"></button>
+      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="dark"></button>
+      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="system"></button>
     </div>
   </div>
 </div>
