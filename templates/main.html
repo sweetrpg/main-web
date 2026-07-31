@@ -43,9 +43,7 @@
       {% for app in apps %}
       <a href="{{ app.href }}" class="hub-card-link">
         <div class="card elev-sm hub-card">
-            <div style="position:absolute;inset:0;opacity:0.1;pointer-events:none">
-                         <image-slot id="{{ app.icon_id }}" shape="rect" placeholder="Illustrated icon" src="/static/img/{{ app.background }}"></image-slot>
-                       </div>
+            <div style="position:absolute;inset:0;opacity:0.1;pointer-events:none;background-image: url('/static/img/{{ app.background }}'); background-size: cover; background-position: center;"></div>
           <div class="hub-card-body">
             <div class="card-title hub-card-title">{{ app.name }}</div>
             <div class="card-body">{{ app.description }}</div>
@@ -62,7 +60,7 @@
 
   <div class="hub-footer">
     <span class="hub-footer-line">&copy; 2026 Pilgrimage Software &middot; <a href="https://github.com/sweetrpg" target="_blank" rel="noopener">GitHub</a></span>
-    <span class="hub-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash }}</span>
+    <span class="hub-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash[..8] }}</span>
   </div>
 
   <div class="hub-theme-toggle">

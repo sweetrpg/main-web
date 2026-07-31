@@ -75,6 +75,7 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
 }
 
 .hub-card-link { text-decoration: none; color: inherit; }
+.hub-card-link:hover { text-decoration: none; color: inherit; }
 
 .hub-card {
   height: calc(100% + 20px);
