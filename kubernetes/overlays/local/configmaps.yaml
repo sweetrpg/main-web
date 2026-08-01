@@ -16,4 +16,4 @@ data:
     REDIS_HOST: auth-redis.sweetrpg-support.svc.cluster.local
     REDIS_PORT: "6379"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
-    OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318
+    # OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318
