@@ -25,6 +25,10 @@ pub struct Config {
     /// the wrong DB index silently degrades to "every visitor reads as logged-out" the same
     /// way an unreachable host does.
     pub shared_session_redis_db: u16,
+    /// Sentry error-reporting DSN. Unset by default - reporting stays a no-op (not a startup
+    /// failure) until this is set, e.g. local dev, where Sentry isn't used at all.
+    pub sentry_dsn: Option<String>,
+    pub env: String,
 }
 
 impl Config {
@@ -50,6 +54,8 @@ impl Config {
                 .ok()
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(0),
+            sentry_dsn: env::var("SENTRY_DSN").ok().filter(|v| !v.is_empty()),
+            env: env::var("ENV").unwrap_or_else(|_| "dev".to_string()),
         }
     }
 }
