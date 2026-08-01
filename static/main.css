@@ -124,9 +124,14 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   padding: 4px;
-  display: flex;
   flex-direction: column;
   min-width: 130px;
+}
+.landing-theme-menu[hidden] {
+  display: none;
+}
+.landing-theme-menu:not([hidden]) {
+  display: flex;
 }
 .landing-theme-option { justify-content: flex-start; gap: 8px; color: var(--color-text); }
 
