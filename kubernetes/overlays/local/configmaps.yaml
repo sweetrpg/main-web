@@ -6,13 +6,13 @@ metadata:
     name: web-env
 
 data:
-    SHARED_ASSETS_URL: https://dev.sweetrpg.com/assets
+    # Shared host behind the single traefik-tailscale front door (see
+    # support/config/K8s/traefik/overlays/minikube) - Traefik strips /assets before it reaches
+    # assets-web, same as the dev overlay's dev.sweetrpg.com/assets convention.
+    SHARED_ASSETS_URL: https://sweetrpg.local/assets
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
-    # auth-web's own dedicated Redis instance (see sweetrpg/auth-web's kubernetes/base) - this
-    # app only ever reads the shared session it writes, never writes to it. Unset means every
-    # visitor reads as logged-out (see session_client.rs's fail-open default), not a startup
-    # failure.
+    # auth-web's own dedicated Redis instance - see dev overlay's comment for the same reasoning.
     REDIS_HOST: auth-redis.sweetrpg-support.svc.cluster.local
     REDIS_PORT: "6379"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).

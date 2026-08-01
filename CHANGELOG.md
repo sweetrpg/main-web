@@ -1,4 +1,40 @@
 
+## 0.2.0 - 2026-08-01
+
+### Added
+- Add AdminClient for banner message integration (#155)
+- Truncate build hash to 8 characters in footer
+- Fix card backgrounds and improve UI (#159)
+- Read-only shared session, rename hub to landing, fix build hash panic (#160)
+
+
+### Documentation
+- Add coverage badge, ci: build arm64 image alongside amd64
+
+
+### Fixed
+- Correct memory quantity suffix from milli to mebibytes (#156)
+- Ingress config
+- Card backgrounds not loading
+- Remove hover underline from card links
+
+
+
+## Unreleased
+
+### Added
+- Read-only shared session support: shows a "log in"/"log out" link in the nav, reading the
+  session `auth-web` establishes (Redis-backed, fail-open on a Redis outage). No Auth0 code of
+  its own - `auth-web` is the suite's sole login owner.
+
+### Fixed
+- `build_hash` no longer panics on the local-dev placeholder value (shorter than the template's
+  8-character slice); the placeholder itself is now `deadbeef` instead of `unset`.
+
+### Changed
+- Renamed the `hub`/`Hub` CSS classes, template IDs, and `HubTemplate` struct to
+  `landing`/`Landing` - this app is a landing page, not a hub.
+
 ## 0.1.2 - 2026-07-28
 
 ### Fixed

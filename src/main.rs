@@ -1,21 +1,27 @@
+mod admin_client;
 mod build_info;
 mod config;
 mod routes;
+mod session_client;
 mod telemetry;
 
 use std::sync::Arc;
 
+use admin_client::AdminClient;
 use axum::routing::get;
 use axum::Router;
 use axum_prometheus::PrometheusMetricLayer;
 use build_info::BuildInfo;
 use config::Config;
+use session_client::SessionClient;
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
 
 pub struct AppState {
     config: Config,
     build_info: BuildInfo,
+    admin_client: AdminClient,
+    session_client: SessionClient,
 }
 
 #[tokio::main]
@@ -36,7 +42,14 @@ async fn main() {
         "starting sweetrpg-main-web"
     );
 
-    let state = Arc::new(AppState { config, build_info });
+    let admin_client = AdminClient::new(config.admin_api_url.clone());
+    let session_client = SessionClient::new(config.redis_host.clone(), config.redis_port).await;
+    let state = Arc::new(AppState {
+        config,
+        build_info,
+        admin_client,
+        session_client,
+    });
 
     let (prometheus_layer, metric_handle) = PrometheusMetricLayer::pair();
 

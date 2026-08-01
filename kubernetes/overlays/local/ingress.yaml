@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+    name: web-v1
+    annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+        kubernetes.io/ingress.class: traefik
+
+spec:
+    ingressClassName: traefik
+    rules:
+        - host: sweetrpg.local
+          http:
+              paths:
+                  # Root path, no Middleware: there's no prefix to strip here, unlike every
+                  # other frontend's own `/<name>` path.
+                  - pathType: Prefix
+                    path: /
+                    backend:
+                        service:
+                            name: web-v1
+                            port:
+                                name: http

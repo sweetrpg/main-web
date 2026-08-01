@@ -6,4 +6,12 @@ README.md
 .devcontainer/
 .github/
 kubernetes/
-LICENSE
+LICENSE.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
+CLAUDE.md
+AGENTS.md
+cliff.toml
+.claude/
