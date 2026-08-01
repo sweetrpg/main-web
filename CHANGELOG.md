@@ -1,4 +1,12 @@
 
+## 0.2.1 - 2026-08-01
+
+### Fixed
+- Scope card background image to its own card
+- Point shared session Redis at the correct host/DB (#163)
+
+
+
 ## 0.2.0 - 2026-08-01
 
 ### Added
