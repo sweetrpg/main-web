@@ -33,15 +33,15 @@ pub struct SessionClient {
 }
 
 impl SessionClient {
-    /// `host` is `None` when `REDIS_HOST` is unset - the client is then permanently disabled
-    /// (every lookup immediately returns `None`, no network calls at all).
-    pub async fn new(host: Option<String>, port: u16) -> Self {
+    /// `host` is `None` when `SHARED_SESSION_REDIS_HOST` is unset - the client is then
+    /// permanently disabled (every lookup immediately returns `None`, no network calls at all).
+    pub async fn new(host: Option<String>, port: u16, db: u16) -> Self {
         let Some(host) = host else {
-            tracing::warn!("REDIS_HOST not set - shared session reads disabled, every visitor treated as logged-out");
+            tracing::warn!("SHARED_SESSION_REDIS_HOST not set - shared session reads disabled, every visitor treated as logged-out");
             return Self { manager: None };
         };
 
-        let url = format!("redis://{host}:{port}");
+        let url = format!("redis://{host}:{port}/{db}");
         let manager = match redis::Client::open(url) {
             Ok(client) => match ConnectionManager::new(client).await {
                 Ok(manager) => Some(manager),
@@ -51,7 +51,7 @@ impl SessionClient {
                 }
             },
             Err(err) => {
-                tracing::warn!(error = %err, "invalid REDIS_HOST, sessions will read as logged-out");
+                tracing::warn!(error = %err, "invalid SHARED_SESSION_REDIS_HOST, sessions will read as logged-out");
                 None
             }
         };
@@ -100,7 +100,7 @@ mod tests {
 
     #[tokio::test]
     async fn disabled_client_returns_no_user_without_making_a_request() {
-        let client = SessionClient::new(None, 6379).await;
+        let client = SessionClient::new(None, 6379, 0).await;
         assert!(client.current_user("any-session-id").await.is_none());
     }
 
@@ -109,7 +109,7 @@ mod tests {
         // Port 1 is a reserved/unassigned port that refuses connections immediately on any
         // platform this runs on - exercises the connection-failure branch without a mock
         // server or real timeout wait.
-        let client = SessionClient::new(Some("127.0.0.1".to_string()), 1).await;
+        let client = SessionClient::new(Some("127.0.0.1".to_string()), 1, 0).await;
         assert!(client.current_user("any-session-id").await.is_none());
     }
 }
