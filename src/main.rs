@@ -43,7 +43,12 @@ async fn main() {
     );
 
     let admin_client = AdminClient::new(config.admin_api_url.clone());
-    let session_client = SessionClient::new(config.redis_host.clone(), config.redis_port).await;
+    let session_client = SessionClient::new(
+        config.shared_session_redis_host.clone(),
+        config.shared_session_redis_port,
+        config.shared_session_redis_db,
+    )
+    .await;
     let state = Arc::new(AppState {
         config,
         build_info,
