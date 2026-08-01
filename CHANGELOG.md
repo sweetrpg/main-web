@@ -1,4 +1,25 @@
 
+## 0.2.0 - 2026-08-01
+
+### Added
+- Add AdminClient for banner message integration (#155)
+- Truncate build hash to 8 characters in footer
+- Fix card backgrounds and improve UI (#159)
+- Read-only shared session, rename hub to landing, fix build hash panic (#160)
+
+
+### Documentation
+- Add coverage badge, ci: build arm64 image alongside amd64
+
+
+### Fixed
+- Correct memory quantity suffix from milli to mebibytes (#156)
+- Ingress config
+- Card backgrounds not loading
+- Remove hover underline from card links
+
+
+
 ## Unreleased
 
 ### Added
