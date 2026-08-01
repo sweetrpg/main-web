@@ -78,6 +78,7 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
 .landing-card-link:hover { text-decoration: none; color: inherit; }
 
 .landing-card {
+  position: relative;
   height: calc(100% + 20px);
   display: flex;
   flex-direction: column;
