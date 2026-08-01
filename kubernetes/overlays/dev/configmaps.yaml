@@ -10,10 +10,16 @@ data:
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
     # auth-web's own dedicated Redis instance (see sweetrpg/auth-web's kubernetes/base) - this
-    # app only ever reads the shared session it writes, never writes to it. Unset means every
-    # visitor reads as logged-out (see session_client.rs's fail-open default), not a startup
-    # failure.
-    REDIS_HOST: auth-redis.sweetrpg-support.svc.cluster.local
-    REDIS_PORT: "6379"
+    # app only ever reads the shared session it writes, never writes to it. Named
+    # SHARED_SESSION_REDIS_* (matching catalog-web's convention) rather than plain REDIS_*, so
+    # this app's own cache/rate-limit Redis (if one is ever added) gets its own env vars instead
+    # of colliding with this one. Unset means every visitor reads as logged-out (see
+    # session_client.rs's fail-open default), not a startup failure. Host/DB must match
+    # auth-web's own REDIS_HOST/REDIS_DB exactly (fullnameOverride "redis" in
+    # support/common/cache's Helm chart, DB index 2) - a mismatch here fails open the same way
+    # an unreachable host does, silently, with no startup error.
+    SHARED_SESSION_REDIS_HOST: redis.sweetrpg-support.svc.cluster.local
+    SHARED_SESSION_REDIS_PORT: "6379"
+    SHARED_SESSION_REDIS_DB: "2"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
     OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318
