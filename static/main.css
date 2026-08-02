@@ -140,6 +140,8 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
   flex-direction: column;
   gap: 4px;
   padding: 8px 16px 0;
+  max-width: 80%;
+  margin-inline: auto;
 }
 .banner {
   border-radius: var(--radius-md);
