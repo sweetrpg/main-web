@@ -59,6 +59,9 @@
             <div class="card-body">{{ app.description }}</div>
           </div>
           <div class="landing-card-spacer"></div>
+          {% if let Some(m) = app.maintenance %}
+          <span class="tag tag-danger landing-card-tag" title="{{ m.label }}: {{ m.description }} ({{ m.starts_at }}{% if let Some(ends_at) = m.ends_at %} - {{ ends_at }}{% endif %})">Maintenance</span>
+          {% endif %}
           {% if app.has_status %}
           <span class="tag tag-outline landing-card-tag">{{ app.status }}</span>
           {% endif %}
