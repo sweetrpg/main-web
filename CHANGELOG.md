@@ -1,4 +1,12 @@
 
+## 0.2.2 - 2026-08-02
+
+### Fixed
+- Keep theme menu closed until toggled (#165)
+- Surface auth-web's login_error redirect as a banner
+
+
+
 ## 0.2.1 - 2026-08-01
 
 ### Fixed
