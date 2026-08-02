@@ -13,8 +13,8 @@ data:
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
     # auth-web's own dedicated Redis instance - see dev overlay's comment for the same reasoning.
-    SHARED_SESSION_REDIS_HOST: redis.sweetrpg-support.svc.cluster.local
+    SHARED_SESSION_REDIS_HOST: redis.sweetrpg-auth.svc.cluster.local
     SHARED_SESSION_REDIS_PORT: "6379"
-    SHARED_SESSION_REDIS_DB: "2"
+    SHARED_SESSION_REDIS_DB: "0"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
     # OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318
