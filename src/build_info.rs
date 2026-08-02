@@ -37,7 +37,7 @@ impl BuildInfo {
     pub fn load() -> Self {
         let path =
             env::var("BUILD_INFO_PATH").unwrap_or_else(|_| "/app/config/build-info.json".into());
-        fs::read_to_string(&path)
+        let mut info: BuildInfo = fs::read_to_string(&path)
             .ok()
             .and_then(|contents| serde_json::from_str(&contents).ok())
             .unwrap_or(BuildInfo {
@@ -46,6 +46,37 @@ impl BuildInfo {
                 sha: unset_sha(),
                 date: unset(),
                 version: dev(),
-            })
+            });
+        // BUILD_VERSION comes from a git tag (e.g. "v1.2.3") but the footer template already
+        // prefixes a literal "v", so strip one here to avoid rendering "vv1.2.3".
+        info.version = strip_v_prefix(info.version);
+        info
+    }
+}
+
+fn strip_v_prefix(version: String) -> String {
+    version
+        .strip_prefix('v')
+        .map(str::to_string)
+        .unwrap_or(version)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::strip_v_prefix;
+
+    #[test]
+    fn strips_leading_v_from_tag_version() {
+        assert_eq!(strip_v_prefix("v1.2.3".to_string()), "1.2.3");
+    }
+
+    #[test]
+    fn leaves_bare_version_unchanged() {
+        assert_eq!(strip_v_prefix("1.2.3".to_string()), "1.2.3");
+    }
+
+    #[test]
+    fn leaves_dev_placeholder_unchanged() {
+        assert_eq!(strip_v_prefix("dev".to_string()), "dev");
     }
 }
