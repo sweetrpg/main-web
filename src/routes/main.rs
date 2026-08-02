@@ -84,8 +84,19 @@ struct LandingTemplate {
     /// logged-in visitor; `None` otherwise. `auth-web` is the only writer of this session -
     /// this app only ever reads it.
     current_user_name: Option<String>,
+    /// First character of `current_user_name`, uppercased - the avatar trigger's label.
+    /// Precomputed here rather than in the template (matching `build_hash`'s existing
+    /// precedent above) since Askama's expression syntax doesn't reliably support chained
+    /// method calls. Empty when logged out; unused in that branch of the template.
+    avatar_initial: String,
+    /// `true` when the session's `roles` (verified by `users-api`, see `session_client`)
+    /// includes `admin` - gates the avatar menu's "Admin" item, mirroring `admin-web`'s own
+    /// `AuthRequiredMiddleware` role check.
+    is_admin: bool,
     login_url: String,
     logout_url: String,
+    admin_url: String,
+    user_settings_url: String,
 }
 
 impl IntoResponse for LandingTemplate {
@@ -134,14 +145,19 @@ async fn index(
         );
     }
 
-    let current_user_name = match jar.get(SESSION_COOKIE_NAME) {
-        Some(cookie) => state
-            .session_client
-            .current_user(cookie.value())
-            .await
-            .map(|user| user.name),
+    let current_user = match jar.get(SESSION_COOKIE_NAME) {
+        Some(cookie) => state.session_client.current_user(cookie.value()).await,
         None => None,
     };
+    let is_admin = current_user
+        .as_ref()
+        .is_some_and(|user| user.roles.iter().any(|role| role == "admin"));
+    let avatar_initial = current_user
+        .as_ref()
+        .and_then(|user| user.name.chars().next())
+        .map(|c| c.to_uppercase().to_string())
+        .unwrap_or_default();
+    let current_user_name = current_user.map(|user| user.name);
 
     // No INGRESS_BASE_PATH prefix needed, unlike catalog-web/admin-web: auth-web sits at
     // /auth on this same host, and main-web itself serves the host's root - see
@@ -162,8 +178,15 @@ async fn index(
             .to_string(),
         banners,
         current_user_name,
+        avatar_initial,
+        is_admin,
         login_url: "/auth/login?return_to=/".to_string(),
         logout_url: "/auth/logout".to_string(),
+        // Fixed paths on the shared `dev.sweetrpg.com` host, matching `/catalog`'s convention -
+        // see design.md's "User Settings links to a fixed, currently-unbuilt path" decision.
+        // `/users` 404s until `users-web` ships; that's a separate, already-tracked gap.
+        admin_url: "/admin".to_string(),
+        user_settings_url: "/users".to_string(),
     }
 }
 
@@ -171,7 +194,7 @@ async fn index(
 mod tests {
     use super::*;
 
-    fn template(current_user_name: Option<String>) -> LandingTemplate {
+    fn template(current_user_name: Option<String>, is_admin: bool) -> LandingTemplate {
         LandingTemplate {
             shared_assets_url: "http://localhost:8081".to_string(),
             apps: apps(),
@@ -179,18 +202,27 @@ mod tests {
             build_date: "unset".to_string(),
             build_hash: "unset".to_string(),
             banners: Vec::new(),
+            avatar_initial: current_user_name
+                .as_deref()
+                .and_then(|n| n.chars().next())
+                .map(|c| c.to_uppercase().to_string())
+                .unwrap_or_default(),
             current_user_name,
+            is_admin,
             login_url: "/auth/login?return_to=/".to_string(),
             logout_url: "/auth/logout".to_string(),
+            admin_url: "/admin".to_string(),
+            user_settings_url: "/users".to_string(),
         }
     }
 
     #[test]
     fn logged_out_shows_log_in_link() {
-        let html = template(None).render().expect("template renders");
+        let html = template(None, false).render().expect("template renders");
         assert!(html.contains(r#"href="/auth/login?return_to=/""#));
         assert!(html.contains("Log in"));
         assert!(!html.contains("Log out"));
+        assert!(!html.contains("avatar-menu-trigger"));
     }
 
     #[test]
@@ -204,7 +236,7 @@ mod tests {
 
     #[test]
     fn login_error_banner_renders_as_critical() {
-        let mut tpl = template(None);
+        let mut tpl = template(None, false);
         tpl.banners.push(Banner {
             severity: "critical".to_string(),
             message: "Login failed. Please try again.".to_string(),
@@ -215,13 +247,32 @@ mod tests {
     }
 
     #[test]
-    fn logged_in_shows_name_and_log_out_form() {
-        let html = template(Some("Alice".to_string()))
+    fn logged_in_shows_avatar_menu_with_name_and_log_out_form() {
+        let html = template(Some("Alice".to_string()), false)
             .render()
             .expect("template renders");
         assert!(html.contains("Alice"));
         assert!(html.contains(r#"action="/auth/logout""#));
         assert!(html.contains("Log out"));
         assert!(!html.contains(">Log in<"));
+        assert!(html.contains("avatar-menu-trigger"));
+    }
+
+    #[test]
+    fn logged_in_shows_user_settings_but_not_admin_when_not_admin() {
+        let html = template(Some("Alice".to_string()), false)
+            .render()
+            .expect("template renders");
+        assert!(html.contains(r#"href="/users""#));
+        assert!(!html.contains(r#"href="/admin""#));
+    }
+
+    #[test]
+    fn admin_session_shows_admin_link() {
+        let html = template(Some("Alice".to_string()), true)
+            .render()
+            .expect("template renders");
+        assert!(html.contains(r#"href="/admin""#));
+        assert!(html.contains(r#"href="/users""#));
     }
 }
