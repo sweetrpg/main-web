@@ -7,7 +7,7 @@ namespace: sweetrpg-main
 resources:
     - ../../base
     - configmaps.yaml
-    - podmonitor.yaml
+    - pod-monitor.yaml
     - ingress.yaml
 
 labels:
