@@ -1,12 +1,13 @@
 use std::sync::Arc;
 
 use askama::Template;
-use axum::extract::State;
+use axum::extract::{Query, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use axum::Router;
 use axum_extra::extract::CookieJar;
+use serde::Deserialize;
 
 use crate::admin_client::Banner;
 use crate::session_client::SESSION_COOKIE_NAME;
@@ -99,15 +100,39 @@ impl IntoResponse for LandingTemplate {
     }
 }
 
+#[derive(Deserialize)]
+struct IndexQuery {
+    login_error: Option<String>,
+}
+
 pub fn router() -> Router<Arc<AppState>> {
     Router::new().route("/", get(index))
 }
 
-async fn index(State(state): State<Arc<AppState>>, jar: CookieJar) -> LandingTemplate {
-    let banners = state
+async fn index(
+    State(state): State<Arc<AppState>>,
+    Query(query): Query<IndexQuery>,
+    jar: CookieJar,
+) -> LandingTemplate {
+    let mut banners = state
         .admin_client
         .fetch_banners(&["platform", "service:main"])
         .await;
+
+    // auth-web (the suite's sole Auth0 callback handler) redirects back here with
+    // ?login_error=1 on any login failure - render it via the same banner markup admin-api's
+    // banners use, rather than a bespoke alert element, so it gets the existing styling/theming
+    // for free. Synthesized client-side, not from admin-api, so it's never cached or shared
+    // with other visitors.
+    if query.login_error.is_some() {
+        banners.insert(
+            0,
+            Banner {
+                severity: "critical".to_string(),
+                message: "Login failed. Please try again.".to_string(),
+            },
+        );
+    }
 
     let current_user_name = match jar.get(SESSION_COOKIE_NAME) {
         Some(cookie) => state
@@ -166,6 +191,27 @@ mod tests {
         assert!(html.contains(r#"href="/auth/login?return_to=/""#));
         assert!(html.contains("Log in"));
         assert!(!html.contains("Log out"));
+    }
+
+    #[test]
+    fn login_error_query_parses_from_form_encoded_flag() {
+        let query: IndexQuery = serde_urlencoded::from_str("login_error=1").unwrap();
+        assert_eq!(query.login_error.as_deref(), Some("1"));
+
+        let query: IndexQuery = serde_urlencoded::from_str("").unwrap();
+        assert_eq!(query.login_error, None);
+    }
+
+    #[test]
+    fn login_error_banner_renders_as_critical() {
+        let mut tpl = template(None);
+        tpl.banners.push(Banner {
+            severity: "critical".to_string(),
+            message: "Login failed. Please try again.".to_string(),
+        });
+        let html = tpl.render().expect("template renders");
+        assert!(html.contains("banner-critical"));
+        assert!(html.contains("Login failed. Please try again."));
     }
 
     #[test]

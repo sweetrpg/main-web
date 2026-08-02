@@ -23,4 +23,5 @@ tracing-opentelemetry = "0.33"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
 [dev-dependencies]
+serde_urlencoded = "0.7"
 tower = { version = "0.5", features = ["util"] }
