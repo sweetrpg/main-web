@@ -194,6 +194,10 @@ textarea.input { min-height: 90px; resize: vertical; }
 .tag-accent-2 { background: var(--color-accent-2-100); color: var(--color-accent-2-800); }
 .tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
 .tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+/* Distinct from .tag-outline: red border reads as "currently down", not "forthcoming" -
+   matches .banner-critical's palette (main.css) so both severity cues stay consistent. */
+.tag-danger { border: 1px solid #f0a3a3; color: #7a1212; cursor: help; }
+[data-theme="dark"] .tag-danger { border-color: #7a2e2e; color: #f5a3a3; }
 
 .nav {
   display: flex; align-items: center; gap: var(--space-4);
