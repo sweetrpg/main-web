@@ -27,7 +27,7 @@ pub struct AppState {
 #[tokio::main]
 async fn main() {
     let config = Config::from_env();
-    let tracer_provider = telemetry::init(&config);
+    let (tracer_provider, _sentry_guard) = telemetry::init(&config);
 
     let build_info = BuildInfo::load();
     let port = config.port;

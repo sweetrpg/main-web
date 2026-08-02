@@ -11,8 +11,14 @@ use crate::config::Config;
 /// spans (`assets-web`'s `application/tracing.py` has a comment about the exact same failure
 /// mode hitting catalog-api via a misplaced `defer`). Returns `None` when
 /// `OTEL_EXPORTER_OTLP_ENDPOINT` is unset, so tracing is a no-op rather than a startup failure in
-/// local dev.
-pub fn init(config: &Config) -> Option<opentelemetry_sdk::trace::SdkTracerProvider> {
+/// local dev. The Sentry client guard is returned alongside for the same reason - dropping it
+/// early shuts down error reporting silently.
+pub fn init(
+    config: &Config,
+) -> (
+    Option<opentelemetry_sdk::trace::SdkTracerProvider>,
+    Option<sentry::ClientInitGuard>,
+) {
     let env_filter =
         EnvFilter::try_new(&config.log_level).unwrap_or_else(|_| EnvFilter::new("info"));
 
@@ -33,11 +39,22 @@ pub fn init(config: &Config) -> Option<opentelemetry_sdk::trace::SdkTracerProvid
         tracing_opentelemetry::layer().with_tracer(tracer)
     });
 
+    // Guarded on SENTRY_DSN being set - unset means this stays uninitialized and the
+    // sentry-tracing layer's captured events simply have nowhere to go, a silent no-op rather
+    // than a startup failure (matches every other frontend's own guarded Sentry setup).
+    let sentry_guard = config.sentry_dsn.as_ref().map(|dsn| {
+        let mut options = sentry::ClientOptions::default();
+        options.environment = Some(config.env.clone().into());
+        options.release = sentry::release_name!();
+        sentry::init((dsn.as_str(), options))
+    });
+
     tracing_subscriber::registry()
         .with(env_filter)
         .with(tracing_subscriber::fmt::layer().json())
         .with(otel_layer)
+        .with(sentry_tracing::layer())
         .init();
 
-    provider
+    (provider, sentry_guard)
 }
