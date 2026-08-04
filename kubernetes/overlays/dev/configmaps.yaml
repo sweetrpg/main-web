@@ -9,6 +9,10 @@ data:
     SHARED_ASSETS_URL: https://dev.sweetrpg.com/assets
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
+    # Server-to-server, no ingress in the path - same value admin-web's own dev overlay uses.
+    # Unset means AdminClient stays permanently disabled (banners/maintenance-mode badges never
+    # render, no error) - see config.rs's admin_api_url doc comment.
+    ADMIN_API_URL: http://api-v1.sweetrpg-admin.svc.cluster.local:8000
     # auth-web's own dedicated Redis instance in sweetrpg-auth (see sweetrpg/auth-web's
     # kubernetes/base) - this app only ever reads the shared session it writes, never writes to
     # it. Named SHARED_SESSION_REDIS_* (matching catalog-web's convention) rather than plain
