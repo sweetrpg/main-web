@@ -47,6 +47,7 @@ async fn main() {
         config.shared_session_redis_host.clone(),
         config.shared_session_redis_port,
         config.shared_session_redis_db,
+        config.shared_session_redis_pass.clone(),
     )
     .await;
     let state = Arc::new(AppState {
