@@ -7,6 +7,7 @@
 <link rel="icon" href="{{ shared_assets_url }}/static/favicon.png">
 <link rel="stylesheet" href="/static/broadsheet.css">
 <link rel="stylesheet" href="/static/main.css">
+<link rel="stylesheet" href="{{ shared_assets_url }}/static/avatar-menu.css">
 <script>
 /* Applied synchronously, before first paint, so the page never flashes the wrong theme
    while theme.js (deferred) loads. */
@@ -24,10 +25,21 @@
   <nav class="nav">
     <div style="flex:1"></div>
     {% if let Some(name) = current_user_name %}
-    <span class="nav-user">{{ name }}</span>
-    <form method="post" action="{{ logout_url }}" class="nav-logout-form">
-      <button type="submit" class="btn btn-ghost">Log out</button>
-    </form>
+    <div class="avatar-menu">
+      <button type="button" class="avatar-menu-trigger">{{ avatar_initial }}</button>
+      <div class="avatar-menu-panel" hidden>
+        <span class="avatar-menu-name">{{ name }}</span>
+        <hr class="avatar-menu-divider">
+        <a class="avatar-menu-item" href="{{ user_settings_url }}">User Settings</a>
+        {% if is_admin %}
+        <a class="avatar-menu-item" href="{{ admin_url }}">Administration</a>
+        {% endif %}
+        <hr class="avatar-menu-divider">
+        <form method="post" action="{{ logout_url }}" class="avatar-menu-item-form">
+          <button type="submit" class="avatar-menu-item">Log out</button>
+        </form>
+      </div>
+    </div>
     {% else %}
     <a href="{{ login_url }}" class="btn btn-ghost">Log in</a>
     {% endif %}
@@ -59,6 +71,9 @@
             <div class="card-body">{{ app.description }}</div>
           </div>
           <div class="landing-card-spacer"></div>
+          {% if let Some(m) = app.maintenance %}
+          <span class="tag tag-danger landing-card-tag" title="{{ m.label }}: {{ m.description }} ({{ m.starts_at }}{% if let Some(ends_at) = m.ends_at %} - {{ ends_at }}{% endif %})">Maintenance</span>
+          {% endif %}
           {% if app.has_status %}
           <span class="tag tag-outline landing-card-tag">{{ app.status }}</span>
           {% endif %}
@@ -83,6 +98,7 @@
   </div>
 </div>
 
+<script src="{{ shared_assets_url }}/static/avatar-menu.js" defer></script>
 <script src="/static/theme.js" defer></script>
 </body>
 </html>

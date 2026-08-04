@@ -19,7 +19,6 @@ pub struct SessionUser {
     pub name: String,
     #[allow(dead_code)]
     pub email: Option<String>,
-    #[allow(dead_code)]
     pub roles: Vec<String>,
 }
 
@@ -35,13 +34,21 @@ pub struct SessionClient {
 impl SessionClient {
     /// `host` is `None` when `SHARED_SESSION_REDIS_HOST` is unset - the client is then
     /// permanently disabled (every lookup immediately returns `None`, no network calls at all).
-    pub async fn new(host: Option<String>, port: u16, db: u16) -> Self {
+    /// `password` is `None` when `SHARED_SESSION_REDIS_PASS` is unset, matching an
+    /// unauthenticated Redis instance (e.g. some local setups) - matches `catalog-web`'s
+    /// `SHARED_SESSION_REDIS_PASS` convention (`configure.swift`), which this app previously
+    /// had no equivalent of at all.
+    pub async fn new(host: Option<String>, port: u16, db: u16, password: Option<String>) -> Self {
         let Some(host) = host else {
             tracing::warn!("SHARED_SESSION_REDIS_HOST not set - shared session reads disabled, every visitor treated as logged-out");
             return Self { manager: None };
         };
 
-        let url = format!("redis://{host}:{port}/{db}");
+        let credentials = password
+            .as_deref()
+            .map(|pass| format!(":{pass}@"))
+            .unwrap_or_default();
+        let url = format!("redis://{credentials}{host}:{port}/{db}");
         let manager = match redis::Client::open(url) {
             Ok(client) => match ConnectionManager::new(client).await {
                 Ok(manager) => Some(manager),
@@ -100,7 +107,7 @@ mod tests {
 
     #[tokio::test]
     async fn disabled_client_returns_no_user_without_making_a_request() {
-        let client = SessionClient::new(None, 6379, 0).await;
+        let client = SessionClient::new(None, 6379, 0, None).await;
         assert!(client.current_user("any-session-id").await.is_none());
     }
 
@@ -109,7 +116,21 @@ mod tests {
         // Port 1 is a reserved/unassigned port that refuses connections immediately on any
         // platform this runs on - exercises the connection-failure branch without a mock
         // server or real timeout wait.
-        let client = SessionClient::new(Some("127.0.0.1".to_string()), 1, 0).await;
+        let client = SessionClient::new(Some("127.0.0.1".to_string()), 1, 0, None).await;
+        assert!(client.current_user("any-session-id").await.is_none());
+    }
+
+    #[tokio::test]
+    async fn unreachable_redis_fails_open_with_a_password_configured() {
+        // Exercises the credentialed URL construction path (unreachable, so no real auth
+        // happens) without needing a real authenticated Redis instance in tests.
+        let client = SessionClient::new(
+            Some("127.0.0.1".to_string()),
+            1,
+            0,
+            Some("s3cret".to_string()),
+        )
+        .await;
         assert!(client.current_user("any-session-id").await.is_none());
     }
 }

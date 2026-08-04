@@ -9,7 +9,7 @@ use axum::Router;
 use axum_extra::extract::CookieJar;
 use serde::Deserialize;
 
-use crate::admin_client::Banner;
+use crate::admin_client::{Banner, MaintenanceMode};
 use crate::session_client::SESSION_COOKIE_NAME;
 use crate::AppState;
 
@@ -24,6 +24,34 @@ struct AppCard {
     has_status: bool,
     status: &'static str,
     background: &'static str,
+    /// The `service:<name>` scope this card's app registers with `admin-api`, or `None` for
+    /// a card with no backing service yet (e.g. "Systems") - such a card never shows a
+    /// maintenance badge since no scope exists to query.
+    service_scope: Option<&'static str>,
+    /// Populated after `apps()` returns, from the platform + this card's own service scope's
+    /// active maintenance-mode records - not compile-time data like the fields above.
+    maintenance: Option<MaintenanceBadge>,
+}
+
+/// The maintenance-mode content an app card's badge tooltip renders, resolved from whichever
+/// active record applies (the card's own service scope takes precedence over the platform
+/// scope when both are active, since it's the more specific message).
+struct MaintenanceBadge {
+    label: String,
+    description: String,
+    starts_at: String,
+    ends_at: Option<String>,
+}
+
+impl From<&MaintenanceMode> for MaintenanceBadge {
+    fn from(mode: &MaintenanceMode) -> Self {
+        Self {
+            label: mode.label.clone(),
+            description: mode.description.clone(),
+            starts_at: mode.starts_at.clone(),
+            ends_at: mode.ends_at.clone(),
+        }
+    }
 }
 
 fn apps() -> Vec<AppCard> {
@@ -35,6 +63,8 @@ fn apps() -> Vec<AppCard> {
             has_status: false,
             status: "",
             background: "catalog-card-back.png",
+            service_scope: Some("service:catalog"),
+            maintenance: None,
         },
         AppCard {
             name: "Shelf",
@@ -43,6 +73,8 @@ fn apps() -> Vec<AppCard> {
             has_status: true,
             status: "Coming soon",
             background: "shelf-card-back.jpg",
+            service_scope: Some("service:shelf"),
+            maintenance: None,
         },
         AppCard {
             name: "Systems",
@@ -51,6 +83,8 @@ fn apps() -> Vec<AppCard> {
             has_status: true,
             status: "Coming soon",
             background: "systems-card-back.jpg",
+            service_scope: None,
+            maintenance: None,
         },
         AppCard {
             name: "Profile",
@@ -59,6 +93,8 @@ fn apps() -> Vec<AppCard> {
             has_status: true,
             status: "Coming soon",
             background: "profile-card-back.jpg",
+            service_scope: Some("service:users"),
+            maintenance: None,
         },
         AppCard {
             name: "Initiative!",
@@ -67,8 +103,29 @@ fn apps() -> Vec<AppCard> {
             has_status: true,
             status: "Coming soon",
             background: "initiative-card-back.png",
+            service_scope: Some("service:initiative"),
+            maintenance: None,
         },
     ]
+}
+
+/// Resolves each card's `maintenance` field from the active maintenance-mode records
+/// fetched for `["platform", <card's own service scope>, ...]`. A card's own service-scoped
+/// record takes precedence over a platform-wide one when both are active.
+fn apply_maintenance(apps: &mut [AppCard], records: &[MaintenanceMode]) {
+    let platform_record = records.iter().find(|m| m.scope_type == "platform");
+    for app in apps.iter_mut() {
+        let Some(scope) = app.service_scope else {
+            continue;
+        };
+        let service_value = scope.trim_start_matches("service:");
+        let service_record = records
+            .iter()
+            .find(|m| m.scope_type == "service" && m.scope_value == service_value);
+        app.maintenance = service_record
+            .or(platform_record)
+            .map(MaintenanceBadge::from);
+    }
 }
 
 #[derive(Template)]
@@ -84,8 +141,19 @@ struct LandingTemplate {
     /// logged-in visitor; `None` otherwise. `auth-web` is the only writer of this session -
     /// this app only ever reads it.
     current_user_name: Option<String>,
+    /// First character of `current_user_name`, uppercased - the avatar trigger's label.
+    /// Precomputed here rather than in the template (matching `build_hash`'s existing
+    /// precedent above) since Askama's expression syntax doesn't reliably support chained
+    /// method calls. Empty when logged out; unused in that branch of the template.
+    avatar_initial: String,
+    /// `true` when the session's `roles` (verified by `users-api`, see `session_client`)
+    /// includes `admin` - gates the avatar menu's "Admin" item, mirroring `admin-web`'s own
+    /// `AuthRequiredMiddleware` role check.
+    is_admin: bool,
     login_url: String,
     logout_url: String,
+    admin_url: String,
+    user_settings_url: String,
 }
 
 impl IntoResponse for LandingTemplate {
@@ -105,6 +173,20 @@ struct IndexQuery {
     login_error: Option<String>,
 }
 
+/// Maps auth-web's closed set of `login_error` reason codes (`AuthController.swift`'s
+/// `LoginErrorReason`) to user-facing copy. Never echoes the raw query value - an unrecognized
+/// reason (including the old bare `1` flag this replaces) falls back to the generic message,
+/// so there's nothing here an attacker could use to inject arbitrary text into the page.
+fn login_error_message(reason: &str) -> &'static str {
+    match reason {
+        "denied" => "Login was cancelled.",
+        "expired" => "Your login attempt expired. Please try again.",
+        "unavailable" => "Login is temporarily unavailable. Please try again in a moment.",
+        "forbidden" => "Your account doesn't have access to this application.",
+        _ => "Login failed. Please try again.",
+    }
+}
+
 pub fn router() -> Router<Arc<AppState>> {
     Router::new().route("/", get(index))
 }
@@ -119,36 +201,53 @@ async fn index(
         .fetch_banners(&["platform", "service:main"])
         .await;
 
+    let mut apps = apps();
+    let mut maintenance_scopes = vec!["platform"];
+    maintenance_scopes.extend(apps.iter().filter_map(|app| app.service_scope));
+    let maintenance_records = state
+        .admin_client
+        .fetch_maintenance_modes(&maintenance_scopes)
+        .await;
+    apply_maintenance(&mut apps, &maintenance_records);
+
     // auth-web (the suite's sole Auth0 callback handler) redirects back here with
-    // ?login_error=1 on any login failure - render it via the same banner markup admin-api's
-    // banners use, rather than a bespoke alert element, so it gets the existing styling/theming
-    // for free. Synthesized client-side, not from admin-api, so it's never cached or shared
-    // with other visitors.
-    if query.login_error.is_some() {
+    // ?login_error=<reason> on any login failure - render it via the same banner markup
+    // admin-api's banners use, rather than a bespoke alert element, so it gets the existing
+    // styling/theming for free. Synthesized client-side, not from admin-api, so it's never
+    // cached or shared with other visitors. `reason` is one of a small closed set auth-web
+    // defines (AuthController.swift's LoginErrorReason) - never raw Auth0/users-api error
+    // text, so there's nothing here that could leak internal detail even for an unrecognized
+    // value.
+    if let Some(reason) = query.login_error.as_deref() {
         banners.insert(
             0,
             Banner {
                 severity: "critical".to_string(),
-                message: "Login failed. Please try again.".to_string(),
+                message: login_error_message(reason).to_string(),
             },
         );
     }
 
-    let current_user_name = match jar.get(SESSION_COOKIE_NAME) {
-        Some(cookie) => state
-            .session_client
-            .current_user(cookie.value())
-            .await
-            .map(|user| user.name),
+    let current_user = match jar.get(SESSION_COOKIE_NAME) {
+        Some(cookie) => state.session_client.current_user(cookie.value()).await,
         None => None,
     };
+    let is_admin = current_user
+        .as_ref()
+        .is_some_and(|user| user.roles.iter().any(|role| role == "admin"));
+    let avatar_initial = current_user
+        .as_ref()
+        .and_then(|user| user.name.chars().next())
+        .map(|c| c.to_uppercase().to_string())
+        .unwrap_or_default();
+    let current_user_name = current_user.map(|user| user.name);
 
     // No INGRESS_BASE_PATH prefix needed, unlike catalog-web/admin-web: auth-web sits at
     // /auth on this same host, and main-web itself serves the host's root - see
     // design.md's "auth-web is the sole owner of the Authorization Code exchange" decision.
     LandingTemplate {
         shared_assets_url: state.config.shared_assets_url.clone(),
-        apps: apps(),
+        apps,
         version: state.build_info.version.clone(),
         build_date: state.build_info.date.clone(),
         // Pre-truncated here rather than sliced in the template: a real commit SHA can be
@@ -162,8 +261,15 @@ async fn index(
             .to_string(),
         banners,
         current_user_name,
+        avatar_initial,
+        is_admin,
         login_url: "/auth/login?return_to=/".to_string(),
         logout_url: "/auth/logout".to_string(),
+        // Fixed paths on the shared `dev.sweetrpg.com` host, matching `/catalog`'s convention -
+        // see design.md's "User Settings links to a fixed, currently-unbuilt path" decision.
+        // `/users` 404s until `users-web` ships; that's a separate, already-tracked gap.
+        admin_url: "/admin".to_string(),
+        user_settings_url: "/users".to_string(),
     }
 }
 
@@ -171,7 +277,7 @@ async fn index(
 mod tests {
     use super::*;
 
-    fn template(current_user_name: Option<String>) -> LandingTemplate {
+    fn template(current_user_name: Option<String>, is_admin: bool) -> LandingTemplate {
         LandingTemplate {
             shared_assets_url: "http://localhost:8081".to_string(),
             apps: apps(),
@@ -179,32 +285,63 @@ mod tests {
             build_date: "unset".to_string(),
             build_hash: "unset".to_string(),
             banners: Vec::new(),
+            avatar_initial: current_user_name
+                .as_deref()
+                .and_then(|n| n.chars().next())
+                .map(|c| c.to_uppercase().to_string())
+                .unwrap_or_default(),
             current_user_name,
+            is_admin,
             login_url: "/auth/login?return_to=/".to_string(),
             logout_url: "/auth/logout".to_string(),
+            admin_url: "/admin".to_string(),
+            user_settings_url: "/users".to_string(),
         }
     }
 
     #[test]
     fn logged_out_shows_log_in_link() {
-        let html = template(None).render().expect("template renders");
+        let html = template(None, false).render().expect("template renders");
         assert!(html.contains(r#"href="/auth/login?return_to=/""#));
         assert!(html.contains("Log in"));
         assert!(!html.contains("Log out"));
+        assert!(!html.contains("avatar-menu-trigger"));
     }
 
     #[test]
     fn login_error_query_parses_from_form_encoded_flag() {
-        let query: IndexQuery = serde_urlencoded::from_str("login_error=1").unwrap();
-        assert_eq!(query.login_error.as_deref(), Some("1"));
+        let query: IndexQuery = serde_urlencoded::from_str("login_error=expired").unwrap();
+        assert_eq!(query.login_error.as_deref(), Some("expired"));
 
         let query: IndexQuery = serde_urlencoded::from_str("").unwrap();
         assert_eq!(query.login_error, None);
     }
 
     #[test]
+    fn login_error_message_covers_every_known_reason_distinctly() {
+        let known = ["denied", "expired", "unavailable", "forbidden"];
+        let messages: Vec<&str> = known.iter().map(|r| login_error_message(r)).collect();
+        // Every known reason gets its own distinct copy - no two collapse to the same message.
+        let mut unique = messages.clone();
+        unique.sort_unstable();
+        unique.dedup();
+        assert_eq!(unique.len(), known.len());
+    }
+
+    #[test]
+    fn login_error_message_falls_back_for_unrecognized_reason() {
+        // Covers the legacy bare `1` flag this replaced, and any unrecognized value - never
+        // echoes the input back into the message.
+        assert_eq!(login_error_message("1"), "Login failed. Please try again.");
+        assert_eq!(
+            login_error_message("<script>alert(1)</script>"),
+            "Login failed. Please try again."
+        );
+    }
+
+    #[test]
     fn login_error_banner_renders_as_critical() {
-        let mut tpl = template(None);
+        let mut tpl = template(None, false);
         tpl.banners.push(Banner {
             severity: "critical".to_string(),
             message: "Login failed. Please try again.".to_string(),
@@ -215,13 +352,82 @@ mod tests {
     }
 
     #[test]
-    fn logged_in_shows_name_and_log_out_form() {
-        let html = template(Some("Alice".to_string()))
+    fn logged_in_shows_avatar_menu_with_name_and_log_out_form() {
+        let html = template(Some("Alice".to_string()), false)
             .render()
             .expect("template renders");
         assert!(html.contains("Alice"));
         assert!(html.contains(r#"action="/auth/logout""#));
         assert!(html.contains("Log out"));
         assert!(!html.contains(">Log in<"));
+        assert!(html.contains("avatar-menu-trigger"));
+    }
+
+    #[test]
+    fn logged_in_shows_user_settings_but_not_admin_when_not_admin() {
+        let html = template(Some("Alice".to_string()), false)
+            .render()
+            .expect("template renders");
+        assert!(html.contains(r#"href="/users""#));
+        assert!(!html.contains(r#"href="/admin""#));
+    }
+
+    #[test]
+    fn admin_session_shows_admin_link() {
+        let html = template(Some("Alice".to_string()), true)
+            .render()
+            .expect("template renders");
+        assert!(html.contains(r#"href="/admin""#));
+        assert!(html.contains(r#"href="/users""#));
+    }
+
+    fn maintenance_mode(scope_type: &str, scope_value: &str) -> MaintenanceMode {
+        MaintenanceMode {
+            scope_type: scope_type.to_string(),
+            scope_value: scope_value.to_string(),
+            label: "Scheduled downtime".to_string(),
+            description: "Upgrading the database.".to_string(),
+            starts_at: "2026-08-01T00:00:00Z".to_string(),
+            ends_at: Some("2026-08-01T04:00:00Z".to_string()),
+        }
+    }
+
+    #[test]
+    fn service_scoped_maintenance_affects_only_that_card() {
+        let mut apps = apps();
+        apply_maintenance(&mut apps, &[maintenance_mode("service", "catalog")]);
+
+        let catalog = apps.iter().find(|a| a.name == "Catalogue").unwrap();
+        assert!(catalog.maintenance.is_some());
+        let others_unaffected = apps
+            .iter()
+            .filter(|a| a.name != "Catalogue")
+            .all(|a| a.maintenance.is_none());
+        assert!(others_unaffected);
+    }
+
+    #[test]
+    fn platform_scoped_maintenance_affects_every_card_with_a_service_scope() {
+        let mut apps = apps();
+        apply_maintenance(&mut apps, &[maintenance_mode("platform", "")]);
+
+        for app in &apps {
+            assert_eq!(app.maintenance.is_some(), app.service_scope.is_some());
+        }
+    }
+
+    #[test]
+    fn maintenance_badge_renders_with_tooltip() {
+        let mut tpl = template(None, false);
+        tpl.apps[0].maintenance = Some(MaintenanceBadge {
+            label: "Scheduled downtime".to_string(),
+            description: "Upgrading the database.".to_string(),
+            starts_at: "2026-08-01T00:00:00Z".to_string(),
+            ends_at: Some("2026-08-01T04:00:00Z".to_string()),
+        });
+        let html = tpl.render().expect("template renders");
+        assert!(html.contains("tag-danger"));
+        assert!(html.contains("Scheduled downtime: Upgrading the database."));
+        assert!(html.contains("2026-08-01T00:00:00Z - 2026-08-01T04:00:00Z"));
     }
 }
