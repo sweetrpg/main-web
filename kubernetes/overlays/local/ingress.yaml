@@ -23,3 +23,6 @@ spec:
                             name: web-v1
                             port:
                                 name: http
+    tls:
+        - hosts:
+              - sweetrpg.local
