@@ -1,4 +1,23 @@
 
+## 0.3.0 - 2026-08-04
+
+### Added
+- Replace plain-text user identity with the shared avatar menu
+- Add guarded Sentry error reporting
+- Add maintenance badge to app cards
+- Add TLS for local ingress
+
+
+### Fixed
+- Cap banner width to 80% of viewport on landing page
+- Strip leading v from tagged build version to avoid double-v footer
+- Render a specific message per login-error reason
+- Authenticate to the shared session Redis
+- Rename avatar menu's Admin link to Administration
+- Set ADMIN_API_URL so banners/maintenance-mode badges render
+
+
+
 ## 0.2.2 - 2026-08-02
 
 ### Fixed
