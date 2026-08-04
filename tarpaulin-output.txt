@@ -1,25 +1,27 @@
-[2m2026-08-02T16:43:34.566806Z[0m [32m INFO[0m [2mcargo_tarpaulin::config[0m[2m:[0m Creating config
-[2m2026-08-02T16:43:35.452942Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Running Tarpaulin
-[2m2026-08-02T16:43:35.452957Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Building project
-[2m2026-08-02T16:43:35.466957Z[0m [32m INFO[0m [2mcargo_tarpaulin::cargo[0m[2m:[0m Cleaning project
-[2m2026-08-02T16:44:54.616352Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/card_backgrounds-de208d94893ea6e0
-[2m2026-08-02T16:44:54.616433Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
+[2m2026-08-04T14:26:24.186992Z[0m [32m INFO[0m [2mcargo_tarpaulin::config[0m[2m:[0m Creating config
+[2m2026-08-04T14:26:25.026813Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Running Tarpaulin
+[2m2026-08-04T14:26:25.026828Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Building project
+[2m2026-08-04T14:26:25.041333Z[0m [32m INFO[0m [2mcargo_tarpaulin::cargo[0m[2m:[0m Cleaning project
+[2m2026-08-04T14:27:46.409246Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/card_backgrounds-de208d94893ea6e0
+[2m2026-08-04T14:27:46.409331Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
 
 running 1 test
 test card_backgrounds_render ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-[2m2026-08-02T16:44:54.618116Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/card_backgrounds-de208d94893ea6e0
-[2m2026-08-02T16:44:54.618126Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/card_backgrounds-de208d94893ea6e0_13361356001709262834_0-14087.profraw
-[2m2026-08-02T16:44:54.618129Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
-[2m2026-08-02T16:44:54.618333Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
-[2m2026-08-02T16:44:55.143958Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/sweetrpg_main_web-d81f1781a7a3d736
-[2m2026-08-02T16:44:55.144038Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
+[2m2026-08-04T14:27:46.411165Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/card_backgrounds-de208d94893ea6e0
+[2m2026-08-04T14:27:46.411176Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/card_backgrounds-de208d94893ea6e0_13361356001709262834_0-14109.profraw
+[2m2026-08-04T14:27:46.411179Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
+[2m2026-08-04T14:27:46.411334Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
+[2m2026-08-04T14:27:46.949047Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/sweetrpg_main_web-d81f1781a7a3d736
+[2m2026-08-04T14:27:46.949182Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
 
-running 13 tests
+running 20 tests
 test admin_client::tests::disabled_client_returns_no_banners_without_making_a_request ... ok
+test admin_client::tests::disabled_client_returns_no_maintenance_modes_without_making_a_request ... ok
 test admin_client::tests::unreachable_admin_api_fails_open ... ok
+test admin_client::tests::unreachable_admin_api_fails_open_for_maintenance_modes ... ok
 test build_info::tests::leaves_bare_version_unchanged ... ok
 test build_info::tests::leaves_dev_placeholder_unchanged ... ok
 test build_info::tests::strips_leading_v_from_tag_version ... ok
@@ -28,26 +30,31 @@ test routes::main::tests::logged_in_shows_avatar_menu_with_name_and_log_out_form
 test routes::main::tests::logged_in_shows_user_settings_but_not_admin_when_not_admin ... ok
 test routes::main::tests::logged_out_shows_log_in_link ... ok
 test routes::main::tests::login_error_banner_renders_as_critical ... ok
+test routes::main::tests::login_error_message_covers_every_known_reason_distinctly ... ok
+test routes::main::tests::login_error_message_falls_back_for_unrecognized_reason ... ok
 test routes::main::tests::login_error_query_parses_from_form_encoded_flag ... ok
+test routes::main::tests::maintenance_badge_renders_with_tooltip ... ok
+test routes::main::tests::platform_scoped_maintenance_affects_every_card_with_a_service_scope ... ok
+test routes::main::tests::service_scoped_maintenance_affects_only_that_card ... ok
 test session_client::tests::disabled_client_returns_no_user_without_making_a_request ... ok
 test session_client::tests::unreachable_redis_fails_open ... ok
 
-test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.45s
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.46s
 
-[2m2026-08-02T16:45:04.602008Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/sweetrpg_main_web-d81f1781a7a3d736
-[2m2026-08-02T16:45:04.602022Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/sweetrpg_main_web-d81f1781a7a3d736_12761146158232959615_0-14089.profraw
-[2m2026-08-02T16:45:04.602025Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
-[2m2026-08-02T16:45:04.707641Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
-[2m2026-08-02T16:45:05.591730Z[0m [32m INFO[0m [2mcargo_tarpaulin::report[0m[2m:[0m Coverage Results:
-[2m2026-08-02T16:45:05.592295Z[0m [32m INFO[0m [2mcargo_tarpaulin::report::html[0m[2m:[0m HTML report written to /home/runner/work/main-web/main-web/coverage/tarpaulin-report.html
+[2m2026-08-04T14:27:56.411027Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/sweetrpg_main_web-d81f1781a7a3d736
+[2m2026-08-04T14:27:56.411049Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/sweetrpg_main_web-d81f1781a7a3d736_17147286073949263522_0-14111.profraw
+[2m2026-08-04T14:27:56.411055Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
+[2m2026-08-04T14:27:56.518953Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
+[2m2026-08-04T14:27:57.431803Z[0m [32m INFO[0m [2mcargo_tarpaulin::report[0m[2m:[0m Coverage Results:
+[2m2026-08-04T14:27:57.432645Z[0m [32m INFO[0m [2mcargo_tarpaulin::report::html[0m[2m:[0m HTML report written to /home/runner/work/main-web/main-web/coverage/tarpaulin-report.html
 || Tested/Total Lines:
-|| src/admin_client.rs: 27/42
+|| src/admin_client.rs: 40/56
 || src/build_info.rs: 4/23
 || src/config.rs: 0/11
 || src/main.rs: 0/38
 || src/routes/health.rs: 0/6
-|| src/routes/main.rs: 37/73
+|| src/routes/main.rs: 70/113
 || src/session_client.rs: 12/34
 || src/telemetry.rs: 0/26
 || 
-31.62% coverage, 80/253 lines covered
+41.04% coverage, 126/307 lines covered
