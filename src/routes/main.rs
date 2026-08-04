@@ -173,6 +173,20 @@ struct IndexQuery {
     login_error: Option<String>,
 }
 
+/// Maps auth-web's closed set of `login_error` reason codes (`AuthController.swift`'s
+/// `LoginErrorReason`) to user-facing copy. Never echoes the raw query value - an unrecognized
+/// reason (including the old bare `1` flag this replaces) falls back to the generic message,
+/// so there's nothing here an attacker could use to inject arbitrary text into the page.
+fn login_error_message(reason: &str) -> &'static str {
+    match reason {
+        "denied" => "Login was cancelled.",
+        "expired" => "Your login attempt expired. Please try again.",
+        "unavailable" => "Login is temporarily unavailable. Please try again in a moment.",
+        "forbidden" => "Your account doesn't have access to this application.",
+        _ => "Login failed. Please try again.",
+    }
+}
+
 pub fn router() -> Router<Arc<AppState>> {
     Router::new().route("/", get(index))
 }
@@ -197,16 +211,19 @@ async fn index(
     apply_maintenance(&mut apps, &maintenance_records);
 
     // auth-web (the suite's sole Auth0 callback handler) redirects back here with
-    // ?login_error=1 on any login failure - render it via the same banner markup admin-api's
-    // banners use, rather than a bespoke alert element, so it gets the existing styling/theming
-    // for free. Synthesized client-side, not from admin-api, so it's never cached or shared
-    // with other visitors.
-    if query.login_error.is_some() {
+    // ?login_error=<reason> on any login failure - render it via the same banner markup
+    // admin-api's banners use, rather than a bespoke alert element, so it gets the existing
+    // styling/theming for free. Synthesized client-side, not from admin-api, so it's never
+    // cached or shared with other visitors. `reason` is one of a small closed set auth-web
+    // defines (AuthController.swift's LoginErrorReason) - never raw Auth0/users-api error
+    // text, so there's nothing here that could leak internal detail even for an unrecognized
+    // value.
+    if let Some(reason) = query.login_error.as_deref() {
         banners.insert(
             0,
             Banner {
                 severity: "critical".to_string(),
-                message: "Login failed. Please try again.".to_string(),
+                message: login_error_message(reason).to_string(),
             },
         );
     }
@@ -293,11 +310,33 @@ mod tests {
 
     #[test]
     fn login_error_query_parses_from_form_encoded_flag() {
-        let query: IndexQuery = serde_urlencoded::from_str("login_error=1").unwrap();
-        assert_eq!(query.login_error.as_deref(), Some("1"));
+        let query: IndexQuery = serde_urlencoded::from_str("login_error=expired").unwrap();
+        assert_eq!(query.login_error.as_deref(), Some("expired"));
 
         let query: IndexQuery = serde_urlencoded::from_str("").unwrap();
         assert_eq!(query.login_error, None);
+    }
+
+    #[test]
+    fn login_error_message_covers_every_known_reason_distinctly() {
+        let known = ["denied", "expired", "unavailable", "forbidden"];
+        let messages: Vec<&str> = known.iter().map(|r| login_error_message(r)).collect();
+        // Every known reason gets its own distinct copy - no two collapse to the same message.
+        let mut unique = messages.clone();
+        unique.sort_unstable();
+        unique.dedup();
+        assert_eq!(unique.len(), known.len());
+    }
+
+    #[test]
+    fn login_error_message_falls_back_for_unrecognized_reason() {
+        // Covers the legacy bare `1` flag this replaced, and any unrecognized value - never
+        // echoes the input back into the message.
+        assert_eq!(login_error_message("1"), "Login failed. Please try again.");
+        assert_eq!(
+            login_error_message("<script>alert(1)</script>"),
+            "Login failed. Please try again."
+        );
     }
 
     #[test]
@@ -379,7 +418,7 @@ mod tests {
 
     #[test]
     fn maintenance_badge_renders_with_tooltip() {
-        let mut tpl = template(None);
+        let mut tpl = template(None, false);
         tpl.apps[0].maintenance = Some(MaintenanceBadge {
             label: "Scheduled downtime".to_string(),
             description: "Upgrading the database.".to_string(),
