@@ -25,6 +25,11 @@ pub struct Config {
     /// the wrong DB index silently degrades to "every visitor reads as logged-out" the same
     /// way an unreachable host does.
     pub shared_session_redis_db: u16,
+    /// Password for the shared session Redis instance. Unset by default, matching an
+    /// unauthenticated Redis (fine for some local setups); every deployed environment's
+    /// shared Redis requires auth, so this must be set there or reads fail with `NOAUTH` and
+    /// degrade to "every visitor reads as logged-out" the same way an unreachable host does.
+    pub shared_session_redis_pass: Option<String>,
     /// Sentry error-reporting DSN. Unset by default - reporting stays a no-op (not a startup
     /// failure) until this is set, e.g. local dev, where Sentry isn't used at all.
     pub sentry_dsn: Option<String>,
@@ -54,6 +59,9 @@ impl Config {
                 .ok()
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(0),
+            shared_session_redis_pass: env::var("SHARED_SESSION_REDIS_PASS")
+                .ok()
+                .filter(|v| !v.is_empty()),
             sentry_dsn: env::var("SENTRY_DSN").ok().filter(|v| !v.is_empty()),
             env: env::var("ENV").unwrap_or_else(|_| "dev".to_string()),
         }
