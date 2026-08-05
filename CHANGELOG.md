@@ -1,4 +1,11 @@
 
+## 0.4.0 - 2026-08-05
+
+### Added
+- Serve SVG logo variants on the landing hero
+
+
+
 ## 0.3.0 - 2026-08-04
 
 ### Added
