@@ -36,11 +36,16 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
   align-items: center;
 }
 
+.landing-hero > a {
+  display: block;
+  text-decoration: none !important;
+  margin-bottom: 8px;
+}
+
 .landing-logo {
   width: min(220px, 32vw);
   height: auto;
   display: block;
-  margin-bottom: 8px;
 }
 
 [data-theme="light"] .landing-logo-dark { display: none; }
