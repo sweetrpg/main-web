@@ -98,6 +98,10 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
 .landing-card-spacer { flex: 1; }
 .landing-card-tag { align-self: flex-start; }
 
+.landing-footer-sentinel {
+  height: 1px;
+}
+
 .landing-footer {
   position: fixed;
   left: 0;
@@ -108,6 +112,11 @@ a:hover { color: var(--color-accent); text-decoration: underline; }
   align-items: center;
   gap: 2px;
   pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.landing-footer--faded {
+  opacity: 0;
 }
 .landing-footer-line {
   font-size: 12px;
