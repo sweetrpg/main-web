@@ -1,4 +1,11 @@
 
+## 0.6.0 - 2026-08-07
+
+### Added
+- Fade version footer while scrolling over content
+
+
+
 ## 0.5.0 - 2026-08-05
 
 ### Added
