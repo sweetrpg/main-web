@@ -141,6 +141,9 @@ struct LandingTemplate {
     /// logged-in visitor; `None` otherwise. `auth-web` is the only writer of this session -
     /// this app only ever reads it.
     current_user_name: Option<String>,
+    /// Shown as a smaller, muted subtitle line under the name in the avatar menu. `None` when
+    /// logged out or the session has no email (same source as `avatar_gravatar_url`).
+    current_user_email: Option<String>,
     /// First character of `current_user_name`, uppercased - the avatar trigger's label.
     /// Precomputed here rather than in the template (matching `build_hash`'s existing
     /// precedent above) since Askama's expression syntax doesn't reliably support chained
@@ -258,6 +261,7 @@ async fn index(
     let avatar_gravatar_url = current_user
         .as_ref()
         .and_then(|user| gravatar_url(user.email.as_deref()));
+    let current_user_email = current_user.as_ref().and_then(|user| user.email.clone());
     let current_user_name = current_user.map(|user| user.name);
 
     // No INGRESS_BASE_PATH prefix needed, unlike catalog-web/admin-web: auth-web sits at
@@ -279,6 +283,7 @@ async fn index(
             .to_string(),
         banners,
         current_user_name,
+        current_user_email,
         avatar_initial,
         avatar_gravatar_url,
         is_admin,
@@ -310,6 +315,7 @@ mod tests {
                 .map(|c| c.to_uppercase().to_string())
                 .unwrap_or_default(),
             current_user_name,
+            current_user_email: None,
             avatar_gravatar_url: None,
             is_admin,
             login_url: "/auth/login?return_to=/".to_string(),
@@ -320,12 +326,14 @@ mod tests {
     }
 
     #[test]
-    fn logged_out_shows_log_in_link() {
+    fn logged_out_shows_avatar_menu_with_mystery_man_and_log_in_item() {
         let html = template(None, false).render().expect("template renders");
         assert!(html.contains(r#"href="/auth/login?return_to=/""#));
         assert!(html.contains("Log in"));
         assert!(!html.contains("Log out"));
-        assert!(!html.contains("avatar-menu-trigger"));
+        assert!(html.contains("avatar-menu-trigger"));
+        assert!(html.contains("mystery-man.svg"));
+        assert!(html.contains("avatar-menu-theme-row"));
     }
 
     #[test]
@@ -381,6 +389,26 @@ mod tests {
         assert!(html.contains("Log out"));
         assert!(!html.contains(">Log in<"));
         assert!(html.contains("avatar-menu-trigger"));
+        assert!(html.contains("avatar-menu-item-danger"));
+        assert!(!html.contains("mystery-man.svg"));
+        assert!(html.contains("avatar-menu-theme-row"));
+    }
+
+    #[test]
+    fn logged_in_with_email_shows_it_as_a_subtitle() {
+        let mut tpl = template(Some("Alice".to_string()), false);
+        tpl.current_user_email = Some("alice@example.com".to_string());
+        let html = tpl.render().expect("template renders");
+        assert!(html.contains("avatar-menu-email"));
+        assert!(html.contains("alice@example.com"));
+    }
+
+    #[test]
+    fn logged_in_without_email_shows_no_subtitle() {
+        let html = template(Some("Alice".to_string()), false)
+            .render()
+            .expect("template renders");
+        assert!(!html.contains("avatar-menu-email"));
     }
 
     #[test]
