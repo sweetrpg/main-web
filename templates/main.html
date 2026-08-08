@@ -28,7 +28,7 @@
     <div class="avatar-menu">
       <button type="button" class="avatar-menu-trigger">
         {% if let Some(gravatar_url) = avatar_gravatar_url %}
-        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onerror="this.style.display='none'">
+        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'">
         {% endif %}
         <span class="avatar-menu-fallback">{{ avatar_initial }}</span>
       </button>
