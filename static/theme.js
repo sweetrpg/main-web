@@ -1,8 +1,10 @@
-/* Theme picker: light / dark / system, persisted to localStorage. Extracted from the
- * "SweetRPG Hub" Claude Design prototype's <script type="text/x-dc"> reactive-state block —
- * that block ran client-side only and had no server dependency, so it translates directly to
- * plain JS. The anti-flash initial theme application lives in main.html's inline <head> script,
- * since it must run before first paint; this file only owns the toggle menu after load.
+/* Theme picker: light / dark / system, persisted to localStorage. Lives inside the avatar
+ * menu's always-visible 3-way segmented row (#avatar-menu-theme-row) - signed-in visitors only,
+ * since the row is part of the avatar menu markup, which doesn't render when logged out.
+ * Logged-out visitors get the system-preference theme from the anti-flash <head> script in
+ * main.html with no override UI - this file has nothing to do if that row isn't present.
+ * The anti-flash initial theme application lives in that inline script, since it must run
+ * before first paint; this file only owns applying a choice after load.
  */
 (function () {
   const THEME_KEY = 'sweetrpg_theme_v1';
@@ -12,7 +14,6 @@
     dark: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"></path></svg>',
     system: '<svg width="16" height="16" viewBox="0 0 256 256"><path fill="currentColor" d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40Zm8,136a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V64a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8ZM160,224a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,224Z"></path></svg>',
   };
-  const labels = { light: 'Light', dark: 'Dark', system: 'System' };
 
   function getStoredTheme() {
     try {
@@ -36,34 +37,33 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('landing-theme-button');
-    const menu = document.getElementById('landing-theme-menu');
-    const options = menu.querySelectorAll('[data-theme-choice]');
+    const row = document.getElementById('avatar-menu-theme-row');
+    if (!row) {
+      return;
+    }
+    const options = row.querySelectorAll('[data-theme-choice]');
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
 
     let theme = getStoredTheme();
 
+    function setActive(choice) {
+      options.forEach(function (option) {
+        option.setAttribute('aria-pressed', String(option.dataset.themeChoice === choice));
+      });
+    }
+
     options.forEach(function (option) {
       const choice = option.dataset.themeChoice;
-      option.innerHTML = icons[choice] + '<span style="margin-left:8px">' + labels[choice] + '</span>';
+      option.innerHTML = icons[choice];
       option.addEventListener('click', function () {
         theme = choice;
         setStoredTheme(theme);
         applyTheme(theme, mq.matches);
-        button.innerHTML = icons[theme] || icons.system;
-        menu.hidden = true;
+        setActive(theme);
       });
     });
 
-    button.innerHTML = icons[theme] || icons.system;
-    button.addEventListener('click', function () {
-      menu.hidden = !menu.hidden;
-    });
-    document.addEventListener('click', function (event) {
-      if (!menu.hidden && !menu.contains(event.target) && event.target !== button) {
-        menu.hidden = true;
-      }
-    });
+    setActive(theme);
 
     mq.addEventListener('change', function (event) {
       if (theme === 'system') {

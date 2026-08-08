@@ -41,8 +41,14 @@
         {% endif %}
         <hr class="avatar-menu-divider">
         <form method="post" action="{{ logout_url }}" class="avatar-menu-item-form">
-          <button type="submit" class="avatar-menu-item">Log out</button>
+          <button type="submit" class="avatar-menu-item avatar-menu-item-danger">Log out</button>
         </form>
+        <hr class="avatar-menu-divider">
+        <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="Theme">
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="Light"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="dark" aria-label="Dark"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="system" aria-label="System"></button>
+        </div>
       </div>
     </div>
     {% else %}
@@ -95,15 +101,6 @@
   <div class="landing-footer">
     <span class="landing-footer-line">&copy; 2026 Pilgrimage Software &middot; <a href="https://github.com/sweetrpg" target="_blank" rel="noopener">GitHub</a></span>
     <span class="landing-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash }}</span>
-  </div>
-
-  <div class="landing-theme-toggle">
-    <button type="button" id="landing-theme-button" class="btn btn-ghost btn-icon landing-theme-button" aria-label="Theme"></button>
-    <div id="landing-theme-menu" class="landing-theme-menu" hidden>
-      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="light"></button>
-      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="dark"></button>
-      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="system"></button>
-    </div>
   </div>
 </div>
 

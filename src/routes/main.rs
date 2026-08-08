@@ -381,6 +381,24 @@ mod tests {
         assert!(html.contains("Log out"));
         assert!(!html.contains(">Log in<"));
         assert!(html.contains("avatar-menu-trigger"));
+        assert!(html.contains("avatar-menu-item-danger"));
+    }
+
+    #[test]
+    fn logged_in_shows_theme_row_in_the_avatar_menu() {
+        let html = template(Some("Alice".to_string()), false)
+            .render()
+            .expect("template renders");
+        assert!(html.contains(r#"id="avatar-menu-theme-row""#));
+        assert!(html.contains(r#"data-theme-choice="light""#));
+        assert!(html.contains(r#"data-theme-choice="dark""#));
+        assert!(html.contains(r#"data-theme-choice="system""#));
+    }
+
+    #[test]
+    fn logged_out_has_no_theme_row() {
+        let html = template(None, false).render().expect("template renders");
+        assert!(!html.contains("avatar-menu-theme-row"));
     }
 
     #[test]
