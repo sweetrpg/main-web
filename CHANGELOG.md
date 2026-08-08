@@ -1,4 +1,16 @@
 
+## 0.8.0 - 2026-08-08
+
+### Added
+- Always-present menu with mystery-man icon, email subtitle
+
+
+### Fixed
+- Hide the fallback letter once the Gravatar image loads
+- Match catalog-web's nav horizontal padding
+
+
+
 ## 0.7.0 - 2026-08-08
 
 ### Added
