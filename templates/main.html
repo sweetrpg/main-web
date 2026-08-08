@@ -24,16 +24,25 @@
 <div class="landing">
   <nav class="nav">
     <div style="flex:1"></div>
-    {% if let Some(name) = current_user_name %}
     <div class="avatar-menu">
       <button type="button" class="avatar-menu-trigger">
+        {% if let Some(name) = current_user_name %}
         {% if let Some(gravatar_url) = avatar_gravatar_url %}
-        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onerror="this.style.display='none'">
+        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'">
         {% endif %}
         <span class="avatar-menu-fallback">{{ avatar_initial }}</span>
+        {% else %}
+        <img class="avatar-menu-avatar" src="{{ shared_assets_url }}/static/mystery-man.svg" alt="">
+        {% endif %}
       </button>
       <div class="avatar-menu-panel" hidden>
-        <span class="avatar-menu-name">{{ name }}</span>
+        {% if let Some(name) = current_user_name %}
+        <div class="avatar-menu-identity">
+          <span class="avatar-menu-name">{{ name }}</span>
+          {% if let Some(email) = current_user_email %}
+          <span class="avatar-menu-email">{{ email }}</span>
+          {% endif %}
+        </div>
         <hr class="avatar-menu-divider">
         <a class="avatar-menu-item" href="{{ user_settings_url }}">User Settings</a>
         {% if is_admin %}
@@ -41,13 +50,19 @@
         {% endif %}
         <hr class="avatar-menu-divider">
         <form method="post" action="{{ logout_url }}" class="avatar-menu-item-form">
-          <button type="submit" class="avatar-menu-item">Log out</button>
+          <button type="submit" class="avatar-menu-item avatar-menu-item-danger">Log out</button>
         </form>
+        {% else %}
+        <a class="avatar-menu-item" href="{{ login_url }}">Log in</a>
+        {% endif %}
+        <hr class="avatar-menu-divider">
+        <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="Theme">
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="Light"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="dark" aria-label="Dark"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="system" aria-label="System"></button>
+        </div>
       </div>
     </div>
-    {% else %}
-    <a href="{{ login_url }}" class="btn btn-ghost">Log in</a>
-    {% endif %}
   </nav>
 
   {% if !banners.is_empty() %}
@@ -96,19 +111,10 @@
     <span class="landing-footer-line">&copy; 2026 Pilgrimage Software &middot; <a href="https://github.com/sweetrpg" target="_blank" rel="noopener">GitHub</a></span>
     <span class="landing-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash }}</span>
   </div>
-
-  <div class="landing-theme-toggle">
-    <button type="button" id="landing-theme-button" class="btn btn-ghost btn-icon landing-theme-button" aria-label="Theme"></button>
-    <div id="landing-theme-menu" class="landing-theme-menu" hidden>
-      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="light"></button>
-      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="dark"></button>
-      <button type="button" class="btn btn-ghost landing-theme-option" data-theme-choice="system"></button>
-    </div>
-  </div>
 </div>
 
 <script src="{{ shared_assets_url }}/static/avatar-menu.js" defer></script>
-<script src="/static/theme.js" defer></script>
+<script src="{{ shared_assets_url }}/static/theme.js" defer></script>
 <script src="/static/footer-fade.js" defer></script>
 </body>
 </html>
