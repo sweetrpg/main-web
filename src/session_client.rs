@@ -17,7 +17,6 @@ pub struct SessionUser {
     #[allow(dead_code)]
     pub sub: String,
     pub name: String,
-    #[allow(dead_code)]
     pub email: Option<String>,
     pub roles: Vec<String>,
 }
