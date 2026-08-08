@@ -26,7 +26,12 @@
     <div style="flex:1"></div>
     {% if let Some(name) = current_user_name %}
     <div class="avatar-menu">
-      <button type="button" class="avatar-menu-trigger">{{ avatar_initial }}</button>
+      <button type="button" class="avatar-menu-trigger">
+        {% if let Some(gravatar_url) = avatar_gravatar_url %}
+        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onerror="this.style.display='none'">
+        {% endif %}
+        <span class="avatar-menu-fallback">{{ avatar_initial }}</span>
+      </button>
       <div class="avatar-menu-panel" hidden>
         <span class="avatar-menu-name">{{ name }}</span>
         <hr class="avatar-menu-divider">

@@ -146,6 +146,11 @@ struct LandingTemplate {
     /// precedent above) since Askama's expression syntax doesn't reliably support chained
     /// method calls. Empty when logged out; unused in that branch of the template.
     avatar_initial: String,
+    /// Gravatar image URL derived from the session's email (`d=404` so a visitor with no
+    /// Gravatar gets a real 404 rather than Gravatar's generic mystery-person image) - the
+    /// template's `onerror` falls back to the `avatar_initial` letter circle on load failure.
+    /// `None` when logged out or the session has no email.
+    avatar_gravatar_url: Option<String>,
     /// `true` when the session's `roles` (verified by `users-api`, see `session_client`)
     /// includes `admin` - gates the avatar menu's "Admin" item, mirroring `admin-web`'s own
     /// `AuthRequiredMiddleware` role check.
@@ -171,6 +176,16 @@ impl IntoResponse for LandingTemplate {
 #[derive(Deserialize)]
 struct IndexQuery {
     login_error: Option<String>,
+}
+
+/// Builds a Gravatar image URL from a session email, or `None` if no email is present.
+/// `d=404` makes Gravatar return a real 404 for an email with no registered image, instead of
+/// its generic mystery-person placeholder - the template's `onerror` handler catches that and
+/// falls back to the initial-letter circle.
+fn gravatar_url(email: Option<&str>) -> Option<String> {
+    let email = email?;
+    let hash = format!("{:x}", md5::compute(email.trim().to_lowercase().as_bytes()));
+    Some(format!("https://www.gravatar.com/avatar/{hash}?s=64&d=404"))
 }
 
 /// Maps auth-web's closed set of `login_error` reason codes (`AuthController.swift`'s
@@ -240,6 +255,9 @@ async fn index(
         .and_then(|user| user.name.chars().next())
         .map(|c| c.to_uppercase().to_string())
         .unwrap_or_default();
+    let avatar_gravatar_url = current_user
+        .as_ref()
+        .and_then(|user| gravatar_url(user.email.as_deref()));
     let current_user_name = current_user.map(|user| user.name);
 
     // No INGRESS_BASE_PATH prefix needed, unlike catalog-web/admin-web: auth-web sits at
@@ -262,6 +280,7 @@ async fn index(
         banners,
         current_user_name,
         avatar_initial,
+        avatar_gravatar_url,
         is_admin,
         login_url: "/auth/login?return_to=/".to_string(),
         logout_url: "/auth/logout".to_string(),
@@ -291,6 +310,7 @@ mod tests {
                 .map(|c| c.to_uppercase().to_string())
                 .unwrap_or_default(),
             current_user_name,
+            avatar_gravatar_url: None,
             is_admin,
             login_url: "/auth/login?return_to=/".to_string(),
             logout_url: "/auth/logout".to_string(),
@@ -379,6 +399,39 @@ mod tests {
             .expect("template renders");
         assert!(html.contains(r#"href="/admin""#));
         assert!(html.contains(r#"href="/users""#));
+    }
+
+    #[test]
+    fn gravatar_url_is_none_without_an_email() {
+        assert_eq!(gravatar_url(None), None);
+    }
+
+    #[test]
+    fn gravatar_url_hashes_a_trimmed_lowercased_email_with_a_404_fallback() {
+        let mixed_case = gravatar_url(Some(" Alice@Example.com ")).unwrap();
+        let canonical = gravatar_url(Some("alice@example.com")).unwrap();
+        assert_eq!(mixed_case, canonical);
+        assert!(canonical.starts_with("https://www.gravatar.com/avatar/"));
+        assert!(canonical.contains("d=404"));
+    }
+
+    #[test]
+    fn logged_in_with_email_renders_gravatar_img_with_onerror_fallback() {
+        let mut tpl = template(Some("Alice".to_string()), false);
+        tpl.avatar_gravatar_url = gravatar_url(Some("alice@example.com"));
+        let html = tpl.render().expect("template renders");
+        assert!(html.contains("avatar-menu-avatar"));
+        assert!(html.contains("onerror=\"this.style.display='none'\""));
+        assert!(html.contains("avatar-menu-fallback"));
+    }
+
+    #[test]
+    fn logged_in_without_email_renders_only_the_fallback_letter() {
+        let html = template(Some("Alice".to_string()), false)
+            .render()
+            .expect("template renders");
+        assert!(!html.contains("avatar-menu-avatar"));
+        assert!(html.contains("avatar-menu-fallback"));
     }
 
     fn maintenance_mode(scope_type: &str, scope_value: &str) -> MaintenanceMode {
