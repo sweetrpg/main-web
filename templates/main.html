@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SweetRPG</title>
-<link rel="icon" href="{{ shared_assets_url }}/static/favicon.png">
+<link rel="icon" href="{{ shared_assets_url }}/static/img/favicon.png">
 <link rel="stylesheet" href="/static/broadsheet.css">
 <link rel="stylesheet" href="/static/main.css">
-<link rel="stylesheet" href="{{ shared_assets_url }}/static/avatar-menu.css">
+<link rel="stylesheet" href="{{ shared_assets_url }}/static/css/avatar-menu.css">
 <script>
 /* Applied synchronously, before first paint, so the page never flashes the wrong theme
    while theme.js (deferred) loads. */
@@ -32,7 +32,7 @@
         {% endif %}
         <span class="avatar-menu-fallback">{{ avatar_initial }}</span>
         {% else %}
-        <img class="avatar-menu-avatar" src="{{ shared_assets_url }}/static/mystery-man.svg" alt="">
+        <img class="avatar-menu-avatar" src="{{ shared_assets_url }}/static/img/mystery-man.svg" alt="">
         {% endif %}
       </button>
       <div class="avatar-menu-panel" hidden>
@@ -76,8 +76,8 @@
   <div class="landing-container">
     <section class="landing-hero">
       <a href="/" aria-label="SweetRPG home">
-        <img class="landing-logo landing-logo-light" src="{{ shared_assets_url }}/static/sweetrpg-logo-black.svg" alt="SweetRPG">
-        <img class="landing-logo landing-logo-dark" src="{{ shared_assets_url }}/static/sweetrpg-logo-white.svg" alt="SweetRPG">
+        <img class="landing-logo landing-logo-light" src="{{ shared_assets_url }}/static/img/sweetrpg-logo-black.svg" alt="SweetRPG">
+        <img class="landing-logo landing-logo-dark" src="{{ shared_assets_url }}/static/img/sweetrpg-logo-white.svg" alt="SweetRPG">
       </a>
       <div class="landing-title"><span class="landing-title-sweet">Sweet</span><span class="landing-title-rpg">RPG</span></div>
       <p class="landing-tagline">A suite of tools and services for managing your tabletop role-playing games</p>
@@ -113,8 +113,8 @@
   </div>
 </div>
 
-<script src="{{ shared_assets_url }}/static/avatar-menu.js" defer></script>
-<script src="{{ shared_assets_url }}/static/theme.js" defer></script>
+<script src="{{ shared_assets_url }}/static/js/avatar-menu.js" defer></script>
+<script src="{{ shared_assets_url }}/static/js/theme.js" defer></script>
 <script src="/static/footer-fade.js" defer></script>
 </body>
 </html>
