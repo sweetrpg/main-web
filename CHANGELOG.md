@@ -1,5 +1,13 @@
 
-## 0.8.1 - 2026-08-11
+## 0.9.0 - 2026-08-11
+
+### Added
+- Honor shared session expiry field
+
+
+### Changed
+- Migrate static assets to shared_assets_url
+
 
 
 ## 0.8.1 - 2026-08-09
