@@ -77,6 +77,16 @@ fn apps() -> Vec<AppCard> {
             maintenance: None,
         },
         AppCard {
+            name: "Initiative!",
+            description: "Track turn order and initiative live at the table.",
+            href: "#",
+            has_status: true,
+            status: "Coming soon",
+            background: "initiative-card-back.png",
+            service_scope: Some("service:initiative"),
+            maintenance: None,
+        },
+        AppCard {
             name: "Systems",
             description: "Deep-dive reference on the game systems behind the books.",
             href: "#",
@@ -94,16 +104,6 @@ fn apps() -> Vec<AppCard> {
             status: "Coming soon",
             background: "profile-card-back.jpg",
             service_scope: Some("service:users"),
-            maintenance: None,
-        },
-        AppCard {
-            name: "Initiative!",
-            description: "Track turn order and initiative live at the table.",
-            href: "#",
-            has_status: true,
-            status: "Coming soon",
-            background: "initiative-card-back.png",
-            service_scope: Some("service:initiative"),
             maintenance: None,
         },
     ]
