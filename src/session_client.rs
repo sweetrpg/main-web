@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use chrono::{DateTime, Utc};
 use redis::aio::ConnectionManager;
 use redis::AsyncCommands;
 use serde::Deserialize;
@@ -19,6 +20,13 @@ pub struct SessionUser {
     pub name: String,
     pub email: Option<String>,
     pub roles: Vec<String>,
+    /// When this session becomes invalid, set by `auth-web` at write time. A session at or
+    /// past this timestamp must be treated as absent, not stale data - see
+    /// `sweetrpg/platform`'s `docs/frontend-conventions.md` ("Shared session schema").
+    /// Enforced independently at the Redis key level by `ResilientRedisSessionDriver`'s TTL;
+    /// this check is defense in depth since this app's read-only client never goes through
+    /// that driver.
+    pub expiry: DateTime<Utc>,
 }
 
 /// Reads (never writes) the shared session `auth-web` establishes. Fails open: any error
@@ -90,13 +98,17 @@ impl SessionClient {
             }
         };
         let user_json = session_data.get("user")?;
-        match serde_json::from_str(user_json) {
-            Ok(user) => Some(user),
+        let user: SessionUser = match serde_json::from_str(user_json) {
+            Ok(user) => user,
             Err(err) => {
                 tracing::warn!(error = %err, "malformed shared session user, treating as logged-out");
-                None
+                return None;
             }
+        };
+        if user.expiry <= Utc::now() {
+            return None;
         }
+        Some(user)
     }
 }
 
