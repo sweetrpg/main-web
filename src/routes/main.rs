@@ -58,7 +58,7 @@ fn apps() -> Vec<AppCard> {
     vec![
         AppCard {
             name: "Catalogue",
-            description: "Browse, rate and review every RPG book in print.",
+            description: "Browse, rate and review every RPG book in print or digital.",
             href: "/catalog",
             has_status: false,
             status: "",
@@ -93,7 +93,7 @@ fn apps() -> Vec<AppCard> {
             has_status: true,
             status: "Coming soon",
             background: "systems-card-back.jpg",
-            service_scope: None,
+            service_scope: Some("service:systems"),
             maintenance: None,
         },
         AppCard {
