@@ -10,6 +10,7 @@ resources:
     - secrets.yaml
     - pod-monitor.yaml
     - ingress.yaml
+    - middlewares.yaml
 
 labels:
   - pairs:
