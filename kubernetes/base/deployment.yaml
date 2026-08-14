@@ -26,6 +26,8 @@ spec:
                 package: main
                 component: web
                 version: v1
+            annotations:
+                reloader.stakater.com/auto: "true"
         spec:
             serviceAccountName: web
             # No dependency of this service's own is at risk of the classic <SERVICE_NAME>_PORT

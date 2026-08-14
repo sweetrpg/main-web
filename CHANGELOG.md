@@ -1,4 +1,15 @@
 
+## 0.10.0 - 2026-08-14
+
+### Added
+- Route generic error status codes to shared-web
+
+
+### Fixed
+- Descriptive text for catalogue server
+
+
+
 ## 0.9.0 - 2026-08-11
 
 ### Added
