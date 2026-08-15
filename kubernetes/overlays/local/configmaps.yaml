@@ -9,7 +9,9 @@ data:
     # Shared host behind the single traefik-tailscale front door (see
     # support/config/K8s/traefik/overlays/minikube) - Traefik strips /assets before it reaches
     # assets-web, same as the dev overlay's dev.sweetrpg.com/assets convention.
-    SHARED_ASSETS_URL: https://sweetrpg.local/assets
+    ROOT_URL: https://sweetrpg.local/
+    ASSETS_URL: https://sweetrpg.local/assets
+    SHARED_URL: https://sweetrpg.local/shared
     BUILD_INFO_PATH: /app/config/build-info.json
     LOG_LEVEL: info
     # Server-to-server, no ingress in the path - same value admin-web's own local overlay uses.
@@ -22,3 +24,4 @@ data:
     SHARED_SESSION_REDIS_DB: "0"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
     # OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo-distributor.observability.svc.cluster.local:4318
+    ENV: local

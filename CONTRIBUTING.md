@@ -37,8 +37,8 @@ cargo test
 cargo run
 ```
 
-`cargo run` serves on `:8080`. Set `SHARED_ASSETS_URL` to a reachable `assets-web` instance
-(e.g. `https://dev.sweetrpg.com/assets`) to see the real logo/branding rendered locally instead
+`cargo run` serves on `:8080`. Set `SHARED_URL` to a reachable `shared-web` instance
+(e.g. `https://dev.sweetrpg.com/shared`) to see the real logo/branding rendered locally instead
 of broken image references.
 
 ## Pull requests
