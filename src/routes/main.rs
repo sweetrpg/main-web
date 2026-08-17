@@ -131,7 +131,7 @@ fn apply_maintenance(apps: &mut [AppCard], records: &[MaintenanceMode]) {
 #[derive(Template)]
 #[template(path = "main.html")]
 struct LandingTemplate {
-    shared_assets_url: String,
+    shared_url: String,
     apps: Vec<AppCard>,
     version: String,
     build_date: String,
@@ -268,7 +268,7 @@ async fn index(
     // /auth on this same host, and main-web itself serves the host's root - see
     // design.md's "auth-web is the sole owner of the Authorization Code exchange" decision.
     LandingTemplate {
-        shared_assets_url: state.config.shared_assets_url.clone(),
+        shared_url: state.config.shared_url.clone(),
         apps,
         version: state.build_info.version.clone(),
         build_date: state.build_info.date.clone(),
@@ -303,7 +303,7 @@ mod tests {
 
     fn template(current_user_name: Option<String>, is_admin: bool) -> LandingTemplate {
         LandingTemplate {
-            shared_assets_url: "http://localhost:8081".to_string(),
+            shared_url: "http://localhost:8081".to_string(),
             apps: apps(),
             version: "dev".to_string(),
             build_date: "unset".to_string(),
