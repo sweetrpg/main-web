@@ -33,9 +33,9 @@ data migration, a clean rewrite rather than an incremental port.
 ### Shared static assets
 
 Suite-wide branding (logo variants, favicon, Broadsheet's design tokens) is served by
-`assets-web`, not duplicated here - see `sweetrpg/platform`'s `docs/frontend-conventions.md`.
-Referenced through `SHARED_ASSETS_URL` (`src/config.rs`), never a hardcoded host - defaults to
-a local `assets-web` instance's own address for local development.
+`shared-web`, not duplicated here - see `sweetrpg/platform`'s `docs/frontend-conventions.md`.
+Referenced through `SHARED_URL` (`src/config.rs`), never a hardcoded host - defaults to
+a local `shared-web` instance's own address for local development.
 
 This app's own `static/` directory holds only what's genuinely local to this page: the
 extracted theme-toggle JS (`theme.js`), the adapted Broadsheet CSS (`broadsheet.css`), and the
@@ -102,6 +102,6 @@ cargo test
 cargo run
 ```
 
-`cargo run` serves on `:8080`. Set `SHARED_ASSETS_URL` to a reachable `assets-web` instance
-(e.g. `https://dev.sweetrpg.com/assets`) to see the real logo/branding rendered locally instead
+`cargo run` serves on `:8080`. Set `SHARED_URL` to a reachable `shared-web` instance
+(e.g. `https://dev.sweetrpg.com/shared`) to see the real logo/branding rendered locally instead
 of broken image references.
