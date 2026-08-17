@@ -9,6 +9,22 @@
 - Rename SHARED_ASSETS_URL to SHARED_URL and add ASSETS_URL
 
 
+### Fixed
+- Correct main.css stylesheet path
+- Use local image name instead of full registry path
+
+
+
+## 0.10.1 - 2026-08-17
+
+### Changed
+- Rename shared_assets_url to shared_url in templates and routes
+
+
+### Documentation
+- Rename SHARED_ASSETS_URL to SHARED_URL and add ASSETS_URL
+
+
 
 ## 0.10.0 - 2026-08-14
 
