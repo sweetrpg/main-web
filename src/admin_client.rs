@@ -1,7 +1,24 @@
 use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
+use opentelemetry::propagation::Injector;
 use serde::Deserialize;
+use tracing_opentelemetry::OpenTelemetrySpanExt;
+
+/// Lets the global propagator write traceparent/tracestate onto a `reqwest` request's headers -
+/// `reqwest::header::HeaderMap` has no built-in `opentelemetry::propagation::Injector` impl.
+struct HeaderInjector<'a>(&'a mut reqwest::header::HeaderMap);
+
+impl Injector for HeaderInjector<'_> {
+    fn set(&mut self, key: &str, value: String) {
+        if let (Ok(name), Ok(val)) = (
+            reqwest::header::HeaderName::from_bytes(key.as_bytes()),
+            reqwest::header::HeaderValue::from_str(&value),
+        ) {
+            self.0.insert(name, val);
+        }
+    }
+}
 
 /// A banner message as returned by `admin-api`'s `GET /banners`. Only the fields this
 /// service renders are deserialized - `admin-api`'s `models.BannerMessage` has more
@@ -123,7 +140,13 @@ impl AdminClient {
             }
         }
 
-        match self.http.get(url).send().await {
+        let mut headers = reqwest::header::HeaderMap::new();
+        let otel_context = tracing::Span::current().context();
+        opentelemetry::global::get_text_map_propagator(|propagator| {
+            propagator.inject_context(&otel_context, &mut HeaderInjector(&mut headers))
+        });
+
+        match self.http.get(url).headers(headers).send().await {
             Ok(resp) if resp.status().is_success() => match resp.json::<Vec<T>>().await {
                 Ok(items) => items,
                 Err(err) => {

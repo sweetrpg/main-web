@@ -39,6 +39,14 @@ pub fn init(
         tracing_opentelemetry::layer().with_tracer(tracer)
     });
 
+    // Without a propagator registered, opentelemetry::global::get_text_map_propagator defaults
+    // to a no-op - admin_client.rs's outgoing traceparent injection would silently do nothing.
+    // W3C TraceContext matches the Go services' otelgin extraction and the Swift frontends'
+    // OTelW3CPropagator, so a trace started here links correctly into admin-api's own trace.
+    opentelemetry::global::set_text_map_propagator(
+        opentelemetry_sdk::propagation::TraceContextPropagator::new(),
+    );
+
     // Guarded on SENTRY_DSN being set - unset means this stays uninitialized and the
     // sentry-tracing layer's captured events simply have nowhere to go, a silent no-op rather
     // than a startup failure (matches every other frontend's own guarded Sentry setup).
