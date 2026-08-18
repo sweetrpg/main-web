@@ -1,4 +1,19 @@
 
+## 0.11.0 - 2026-08-18
+
+### Added
+- Add theme stylesheet to main.html
+
+
+### Documentation
+- Add ArgoCD deployment badge
+
+
+### Fixed
+- Propagate trace context to admin-api
+
+
+
 ## 0.10.1 - 2026-08-17
 
 
