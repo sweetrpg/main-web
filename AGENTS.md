@@ -37,9 +37,10 @@ Suite-wide branding (logo variants, favicon, Broadsheet's design tokens) is serv
 Referenced through `SHARED_URL` (`src/config.rs`), never a hardcoded host - defaults to
 a local `shared-web` instance's own address for local development.
 
-This app's own `static/` directory holds only what's genuinely local to this page: the
-extracted theme-toggle JS (`theme.js`), the adapted Broadsheet CSS (`broadsheet.css`), and the
-landing page's own layout CSS (`main.css`).
+This app's `static/` directory holds only `img/` (the app-card background images) - the
+theme-toggle JS, Broadsheet CSS, and this page's own landing layout all moved into `shared-web`'s
+`static/css/main.css`/`static/js/theme.js` and are pulled in via `SHARED_URL` (see
+`sweetrpg/platform`'s `openspec/changes/consolidate-shared-design-system`).
 
 ### Build info / version footer
 
