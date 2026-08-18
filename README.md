@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/github/license/sweetrpg/main-web.svg)](https://img.shields.io/github/license/sweetrpg/main-web.svg)
 [![Issues](https://img.shields.io/github/issues/sweetrpg/main-web.svg)](https://img.shields.io/github/issues/sweetrpg/main-web.svg)
 [![PRs](https://img.shields.io/github/issues-pr/sweetrpg/main-web.svg)](https://img.shields.io/github/issues-pr/sweetrpg/main-web.svg)
+[![Deployment](https://argocd.dev.pilgrimagesoftware.com/api/badge?name=sweetrpg-main-web&revision=true&showAppName=true&namespace=sweetrpg-system)](https://argocd.dev.pilgrimagesoftware.com/applications/sweetrpg-main-web)
 
 [![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
 [![Built with love](https://ForTheBadge.com/images/badges/built-with-love.svg)](https://ForTheBadge.com/images/badges/built-with-love.svg)
