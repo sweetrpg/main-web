@@ -19,7 +19,7 @@ data:
     # render, no error) - see config.rs's admin_api_url doc comment.
     ADMIN_API_URL: http://api-v1.sweetrpg-admin.svc.cluster.local:8000
     # auth-web's own dedicated Redis instance - see dev overlay's comment for the same reasoning.
-    SHARED_SESSION_REDIS_HOST: redis.sweetrpg-auth.svc.cluster.local
+    SHARED_SESSION_REDIS_HOST: cache.sweetrpg-auth.svc.cluster.local
     SHARED_SESSION_REDIS_PORT: "6379"
     SHARED_SESSION_REDIS_DB: "0"
     # Same collector the other frontends export to (tempo-distributor's OTLP/HTTP receiver).
