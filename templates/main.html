@@ -7,6 +7,7 @@
 <link rel="icon" href="{{ shared_url }}/static/img/main/favicon.png">
 <link rel="stylesheet" href="{{ shared_url }}/static/css/main.css">
 <link rel="stylesheet" href="{{ shared_url }}/static/css/avatar-menu.css">
+<link rel="stylesheet" href="{{ shared_url }}/static/css/app-switcher.css">
 <script>
 /* Applied synchronously, before first paint, so the page never flashes the wrong theme
    while theme.js (deferred) loads. */
@@ -23,6 +24,21 @@
 <div class="landing">
   <nav class="nav">
     <div style="flex:1"></div>
+    <div class="app-switcher">
+      <button type="button" class="app-switcher-trigger" aria-label="Switch app">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/>
+          <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+          <circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+        </svg>
+      </button>
+      <div class="app-switcher-panel" hidden>
+        <a class="app-switcher-item" href="/">Main</a>
+        <a class="app-switcher-item" href="/catalog">Catalog</a>
+        <a class="app-switcher-item" href="/shelf">Shelf</a>
+        <a class="app-switcher-item" href="/initiative">Initiative</a>
+      </div>
+    </div>
     <div class="avatar-menu">
       <button type="button" class="avatar-menu-trigger">
         {% if let Some(name) = current_user_name %}
@@ -113,6 +129,7 @@
 </div>
 
 <script src="{{ shared_url }}/static/js/avatar-menu.js" defer></script>
+<script src="{{ shared_url }}/static/js/app-switcher.js" defer></script>
 <script src="{{ shared_url }}/static/js/theme.js" defer></script>
 <script src="{{ shared_url }}/static/js/footer-fade.js" defer></script>
 </body>
