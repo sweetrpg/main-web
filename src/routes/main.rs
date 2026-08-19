@@ -337,6 +337,17 @@ mod tests {
     }
 
     #[test]
+    fn app_switcher_renders_with_four_destinations_and_no_admin_link() {
+        let html = template(None, false).render().expect("template renders");
+        assert!(html.contains("app-switcher-trigger"));
+        assert!(html.contains(r#"href="/">Main"#));
+        assert!(html.contains(r#"href="/catalog">Catalog"#));
+        assert!(html.contains(r#"href="/shelf">Shelf"#));
+        assert!(html.contains(r#"href="/initiative">Initiative"#));
+        assert!(!html.contains("app-switcher-item\" href=\"/admin\""));
+    }
+
+    #[test]
     fn login_error_query_parses_from_form_encoded_flag() {
         let query: IndexQuery = serde_urlencoded::from_str("login_error=expired").unwrap();
         assert_eq!(query.login_error.as_deref(), Some("expired"));
