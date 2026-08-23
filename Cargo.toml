@@ -1,6 +1,6 @@
 [package]
 name = "sweetrpg-main-web"
-version = "0.12.0"
+version = "0.13.0"
 edition = "2021"
 publish = false
 
@@ -16,6 +16,7 @@ opentelemetry-otlp = { version = "0.32", default-features = false, features = ["
 opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
 redis = { version = "1.5", features = ["tokio-comp", "connection-manager"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+rust-i18n = "4.2"
 sentry = { version = "0.49", default-features = false, features = ["backtrace", "contexts", "panic", "reqwest", "rustls"] }
 sentry-tracing = "0.49"
 serde = { version = "1", features = ["derive"] }

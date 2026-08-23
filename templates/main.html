@@ -25,7 +25,7 @@
   <nav class="nav">
     <div style="flex:1"></div>
     <div class="app-switcher">
-      <button type="button" class="app-switcher-trigger" aria-label="Switch app">
+      <button type="button" class="app-switcher-trigger" aria-label="{{ tr.menu_switch_app() }}">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/>
           <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
@@ -33,10 +33,11 @@
         </svg>
       </button>
       <div class="app-switcher-panel" hidden>
-        <a class="app-switcher-item" href="/">Main</a>
-        <a class="app-switcher-item" href="/catalog">Catalog</a>
-        <a class="app-switcher-item" href="/shelf">Shelf</a>
-        <a class="app-switcher-item" href="/initiative">Initiative</a>
+        <a class="app-switcher-item" href="/">{{ tr.nav_main() }}</a>
+        <a class="app-switcher-item" href="/catalog">{{ tr.nav_catalog() }}</a>
+        <a class="app-switcher-item" href="/gamesystems">{{ tr.nav_game_systems() }}</a>
+        <a class="app-switcher-item" href="/shelf">{{ tr.nav_shelf() }}</a>
+        <a class="app-switcher-item" href="/initiative">{{ tr.nav_initiative() }}</a>
       </div>
     </div>
     <div class="avatar-menu">
@@ -59,22 +60,22 @@
           {% endif %}
         </div>
         <hr class="avatar-menu-divider">
-        <a class="avatar-menu-item" href="{{ user_settings_url }}">User Settings</a>
+        <a class="avatar-menu-item" href="{{ user_settings_url }}">{{ tr.menu_user_settings() }}</a>
         {% if is_admin %}
-        <a class="avatar-menu-item" href="{{ admin_url }}">Administration</a>
+        <a class="avatar-menu-item" href="{{ admin_url }}">{{ tr.menu_administration() }}</a>
         {% endif %}
         <hr class="avatar-menu-divider">
         <form method="post" action="{{ logout_url }}" class="avatar-menu-item-form">
-          <button type="submit" class="avatar-menu-item avatar-menu-item-danger">Log out</button>
+          <button type="submit" class="avatar-menu-item avatar-menu-item-danger">{{ tr.menu_log_out() }}</button>
         </form>
         {% else %}
-        <a class="avatar-menu-item" href="{{ login_url }}">Log in</a>
+        <a class="avatar-menu-item" href="{{ login_url }}">{{ tr.menu_log_in() }}</a>
         {% endif %}
         <hr class="avatar-menu-divider">
-        <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="Theme">
-          <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="Light"></button>
-          <button type="button" class="avatar-menu-theme-option" data-theme-choice="dark" aria-label="Dark"></button>
-          <button type="button" class="avatar-menu-theme-option" data-theme-choice="system" aria-label="System"></button>
+        <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="{{ tr.menu_theme() }}">
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="{{ tr.menu_theme_light() }}"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="dark" aria-label="{{ tr.menu_theme_dark() }}"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="system" aria-label="{{ tr.menu_theme_system() }}"></button>
         </div>
       </div>
     </div>
@@ -95,7 +96,7 @@
         <img class="landing-logo landing-logo-dark" src="{{ shared_url }}/static/img/sweetrpg-logo-white.svg" alt="SweetRPG">
       </a>
       <div class="landing-title"><span class="landing-title-sweet">Sweet</span><span class="landing-title-rpg">RPG</span></div>
-      <p class="landing-tagline">A suite of tools and services for managing your tabletop role-playing games</p>
+      <p class="landing-tagline">{{ tr.landing_tagline() }}</p>
     </section>
 
     <section class="landing-grid">
@@ -109,7 +110,7 @@
           </div>
           <div class="landing-card-spacer"></div>
           {% if let Some(m) = app.maintenance %}
-          <span class="tag tag-danger landing-card-tag" title="{{ m.label }}: {{ m.description }} ({{ m.starts_at }}{% if let Some(ends_at) = m.ends_at %} - {{ ends_at }}{% endif %})">Maintenance</span>
+          <span class="tag tag-danger landing-card-tag" title="{{ m.label }}: {{ m.description }} ({{ m.starts_at }}{% if let Some(ends_at) = m.ends_at %} - {{ ends_at }}{% endif %})">{{ tr.cards_maintenance() }}</span>
           {% endif %}
           {% if app.has_status %}
           <span class="tag tag-outline landing-card-tag">{{ app.status }}</span>

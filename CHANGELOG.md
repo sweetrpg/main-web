@@ -1,4 +1,16 @@
 
+## 0.13.0 - 2026-08-23
+
+### Added
+- Add Game Systems link to navigation panel
+- Extract user-facing strings into rust-i18n locale resources
+
+
+### Fixed
+- Retry the shared session Redis connection instead of giving up once
+
+
+
 ## 0.12.0 - 2026-08-19
 
 ### Added

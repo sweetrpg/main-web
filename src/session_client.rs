@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::Mutex;
 
 use chrono::{DateTime, Utc};
 use redis::aio::ConnectionManager;
@@ -34,8 +35,18 @@ pub struct SessionUser {
 /// than surfacing a failure to the page being decorated - the same fail-open contract Vapor's
 /// `ResilientRedisSessionDriver` gives every Swift frontend, applied here since main-web isn't
 /// Vapor and has no session driver of its own to plug into.
+///
+/// `client` is built once (cheap - just URL parsing, doesn't touch the network) and kept for
+/// the app's lifetime. The actual `ConnectionManager` is built lazily on first use and cached
+/// in `manager` - if that first attempt fails (e.g. Redis isn't accepting connections yet
+/// during a rollout), the *next* call tries again instead of staying disabled forever. Once one
+/// attempt succeeds, `ConnectionManager`'s own built-in reconnect logic handles later transient
+/// blips, same as before - this only fixes the "never got a first connection" case. See
+/// sweetrpg/main-web#214: a boot-time race with a Redis rename left this permanently disabled
+/// for a pod's entire lifetime, with no way to self-heal short of a manual restart.
 pub struct SessionClient {
-    manager: Option<ConnectionManager>,
+    client: Option<redis::Client>,
+    manager: Mutex<Option<ConnectionManager>>,
 }
 
 impl SessionClient {
@@ -48,7 +59,10 @@ impl SessionClient {
     pub async fn new(host: Option<String>, port: u16, db: u16, password: Option<String>) -> Self {
         let Some(host) = host else {
             tracing::warn!("SHARED_SESSION_REDIS_HOST not set - shared session reads disabled, every visitor treated as logged-out");
-            return Self { manager: None };
+            return Self {
+                client: None,
+                manager: Mutex::new(None),
+            };
         };
 
         let credentials = password
@@ -56,27 +70,47 @@ impl SessionClient {
             .map(|pass| format!(":{pass}@"))
             .unwrap_or_default();
         let url = format!("redis://{credentials}{host}:{port}/{db}");
-        let manager = match redis::Client::open(url) {
-            Ok(client) => match ConnectionManager::new(client).await {
-                Ok(manager) => Some(manager),
-                Err(err) => {
-                    tracing::warn!(error = %err, "failed to connect to shared session Redis, sessions will read as logged-out");
-                    None
-                }
-            },
+        let client = match redis::Client::open(url) {
+            Ok(client) => Some(client),
             Err(err) => {
                 tracing::warn!(error = %err, "invalid SHARED_SESSION_REDIS_HOST, sessions will read as logged-out");
                 None
             }
         };
-        Self { manager }
+        Self {
+            client,
+            manager: Mutex::new(None),
+        }
+    }
+
+    /// Returns the cached connection if one exists, otherwise tries to build one. Every call
+    /// with no cached connection retries - see the struct doc comment for why this matters.
+    async fn connection(&self) -> Option<ConnectionManager> {
+        let client = self.client.as_ref()?;
+        if let Some(manager) = self.manager.lock().unwrap().as_ref() {
+            return Some(manager.clone());
+        }
+        // Deliberately not held across this await - a concurrent caller finding no cached
+        // manager either might build its own redundant connection too, which is harmless
+        // (both work independently, one is simply discarded) and simpler than a lock that
+        // spans an .await point.
+        match ConnectionManager::new(client.clone()).await {
+            Ok(manager) => {
+                *self.manager.lock().unwrap() = Some(manager.clone());
+                Some(manager)
+            }
+            Err(err) => {
+                tracing::warn!(error = %err, "failed to connect to shared session Redis, sessions will read as logged-out");
+                None
+            }
+        }
     }
 
     /// Looks up the session for a session ID (the shared cookie's raw value). Never errors -
     /// any failure (disabled client, unreachable Redis, missing key, malformed JSON) degrades
     /// to `None`.
     pub async fn current_user(&self, session_id: &str) -> Option<SessionUser> {
-        let mut manager = self.manager.clone()?;
+        let mut manager = self.connection().await?;
 
         // Key format matches Vapor's ResilientRedisSessionDriver (auth-web's session writer):
         // `vrs-<sessionID>`, JSON-encoded Vapor `SessionData` (a flat `[String: String]`).
@@ -142,6 +176,17 @@ mod tests {
             Some("s3cret".to_string()),
         )
         .await;
+        assert!(client.current_user("any-session-id").await.is_none());
+    }
+
+    #[tokio::test]
+    async fn repeated_calls_after_a_failed_connection_dont_panic_or_deadlock() {
+        // Exercises connection()'s retry path (Mutex locked, released before the .await, then
+        // re-locked to store a result) across multiple calls with no cached manager - a
+        // regression check for sweetrpg/main-web#214's fix, which replaced a single boot-time
+        // connection attempt with retry-on-next-call.
+        let client = SessionClient::new(Some("127.0.0.1".to_string()), 1, 0, None).await;
+        assert!(client.current_user("any-session-id").await.is_none());
         assert!(client.current_user("any-session-id").await.is_none());
     }
 }
