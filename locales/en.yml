@@ -1,0 +1,46 @@
+# Locale resources for main-web. English is the default/fallback locale; add new
+# locales as `locales/<code>.yml`. Keys are namespaced by template/feature.
+nav:
+  main: Main
+  catalog: Catalog
+  game_systems: Game Systems
+  shelf: Shelf
+  initiative: Initiative
+menu:
+  switch_app: Switch app
+  theme: Theme
+  theme_light: Light
+  theme_dark: Dark
+  theme_system: System
+  user_settings: User Settings
+  administration: Administration
+  log_out: Log out
+  log_in: Log in
+landing:
+  tagline: A suite of tools and services for managing your tabletop role-playing games
+cards:
+  maintenance: Maintenance
+  coming_soon: Coming soon
+  catalogue:
+    name: Catalogue
+    description: Browse, rate and review every RPG book in print or digital.
+  shelf:
+    name: Shelf
+    description: Track what you own, want, and are playing right now.
+  initiative:
+    name: Initiative!
+    description: Track turn order and initiative live at the table.
+  systems:
+    name: Systems
+    description: Deep-dive reference on the game systems behind the books.
+  profile:
+    name: Profile
+    description: Your account, your table, your reading history.
+login_error:
+  denied: Login was cancelled.
+  expired: Your login attempt expired. Please try again.
+  unavailable: Login is temporarily unavailable. Please try again in a moment.
+  forbidden: Your account doesn't have access to this application.
+  generic: Login failed. Please try again.
+
+flat_test: hello
