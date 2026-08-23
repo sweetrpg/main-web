@@ -1,9 +1,12 @@
 mod admin_client;
 mod build_info;
 mod config;
+mod i18n;
 mod routes;
 mod session_client;
 mod telemetry;
+
+rust_i18n::i18n!("locales", fallback = "en");
 
 use std::sync::Arc;
 

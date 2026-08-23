@@ -30,6 +30,22 @@ data migration, a clean rewrite rather than an incremental port.
   adding a new app already requires a code change (its `href` moving off `#`) and redeploy
   either way, so a config file would add indirection without removing a deploy step.
 
+### Localization
+
+User-facing strings come from `locales/<code>.yml` via `rust-i18n`, never hardcoded in
+templates. English is the default/fallback locale; add a new locale by creating
+`locales/<code>.yml` and adding its code to `SUPPORTED_LOCALES` in `src/i18n.rs`. Locale
+resolution per request: `locale` cookie override, then `Accept-Language` (first tag, base
+subtag matched), then English - see the `web-frontend-localization` spec in
+`sweetrpg/platform`'s `openspec/changes/full-localization-web-apps`.
+
+Askama can't invoke the `t!` macro directly, so templates receive a `Tr` translator
+(`src/i18n.rs`) and call its methods (`{{ tr.menu_log_in() }}`). Dynamic keys go through
+`tr.get("cards.<id>.name")`. Locale files are embedded at compile time; `build.rs` re-runs
+the `i18n!` expansion when anything under `locales/` changes. CI runs
+`scripts/check-template-strings.sh` (`locale-lint` job), which fails on literal text
+between HTML tags that isn't a whitelisted brand string or sourced from `{{ tr.* }}`.
+
 ### Shared static assets
 
 Suite-wide branding (logo variants, favicon, Broadsheet's design tokens) is served by

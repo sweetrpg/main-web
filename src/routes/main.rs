@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use askama::Template;
 use axum::extract::{Query, State};
-use axum::http::StatusCode;
+use axum::http::{HeaderMap, StatusCode};
 use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use axum::Router;
@@ -10,6 +10,7 @@ use axum_extra::extract::CookieJar;
 use serde::Deserialize;
 
 use crate::admin_client::{Banner, MaintenanceMode};
+use crate::i18n::Tr;
 use crate::session_client::SESSION_COOKIE_NAME;
 use crate::AppState;
 
@@ -18,11 +19,11 @@ use crate::AppState;
 /// YAML/JSON config was rejected (YAGNI: adding a new app already requires a code change and
 /// redeploy to update its `href`).
 struct AppCard {
-    name: &'static str,
-    description: &'static str,
+    name: String,
+    description: String,
     href: &'static str,
     has_status: bool,
-    status: &'static str,
+    status: String,
     background: &'static str,
     /// The `service:<name>` scope this card's app registers with `admin-api`, or `None` for
     /// a card with no backing service yet (e.g. "Systems") - such a card never shows a
@@ -54,54 +55,55 @@ impl From<&MaintenanceMode> for MaintenanceBadge {
     }
 }
 
-fn apps() -> Vec<AppCard> {
+fn apps(tr: &Tr) -> Vec<AppCard> {
+    let coming_soon = tr.cards_coming_soon();
     vec![
         AppCard {
-            name: "Catalogue",
-            description: "Browse, rate and review every RPG book in print or digital.",
+            name: tr.get("cards.catalogue.name"),
+            description: tr.get("cards.catalogue.description"),
             href: "/catalog",
             has_status: false,
-            status: "",
+            status: String::new(),
             background: "catalog-card-back.png",
             service_scope: Some("service:catalog"),
             maintenance: None,
         },
         AppCard {
-            name: "Shelf",
-            description: "Track what you own, want, and are playing right now.",
+            name: tr.get("cards.shelf.name"),
+            description: tr.get("cards.shelf.description"),
             href: "#",
             has_status: true,
-            status: "Coming soon",
+            status: coming_soon.clone(),
             background: "shelf-card-back.jpg",
             service_scope: Some("service:shelf"),
             maintenance: None,
         },
         AppCard {
-            name: "Initiative!",
-            description: "Track turn order and initiative live at the table.",
+            name: tr.get("cards.initiative.name"),
+            description: tr.get("cards.initiative.description"),
             href: "#",
             has_status: true,
-            status: "Coming soon",
+            status: coming_soon.clone(),
             background: "initiative-card-back.png",
             service_scope: Some("service:initiative"),
             maintenance: None,
         },
         AppCard {
-            name: "Systems",
-            description: "Deep-dive reference on the game systems behind the books.",
+            name: tr.get("cards.systems.name"),
+            description: tr.get("cards.systems.description"),
             href: "#",
             has_status: true,
-            status: "Coming soon",
+            status: coming_soon.clone(),
             background: "systems-card-back.jpg",
             service_scope: Some("service:systems"),
             maintenance: None,
         },
         AppCard {
-            name: "Profile",
-            description: "Your account, your table, your reading history.",
+            name: tr.get("cards.profile.name"),
+            description: tr.get("cards.profile.description"),
             href: "#",
             has_status: true,
-            status: "Coming soon",
+            status: coming_soon,
             background: "profile-card-back.jpg",
             service_scope: Some("service:users"),
             maintenance: None,
@@ -162,6 +164,8 @@ struct LandingTemplate {
     logout_url: String,
     admin_url: String,
     user_settings_url: String,
+    /// Per-request translator - the template's source for every user-facing string.
+    tr: Tr,
 }
 
 impl IntoResponse for LandingTemplate {
@@ -192,16 +196,17 @@ fn gravatar_url(email: Option<&str>) -> Option<String> {
 }
 
 /// Maps auth-web's closed set of `login_error` reason codes (`AuthController.swift`'s
-/// `LoginErrorReason`) to user-facing copy. Never echoes the raw query value - an unrecognized
-/// reason (including the old bare `1` flag this replaces) falls back to the generic message,
-/// so there's nothing here an attacker could use to inject arbitrary text into the page.
-fn login_error_message(reason: &str) -> &'static str {
+/// `LoginErrorReason`) to a `login_error.*` locale key. Never echoes the raw query value - an
+/// unrecognized reason (including the old bare `1` flag this replaces) falls back to the
+/// generic key, so there's nothing here an attacker could use to inject arbitrary text into
+/// the page.
+fn login_error_message_key(reason: &str) -> &'static str {
     match reason {
-        "denied" => "Login was cancelled.",
-        "expired" => "Your login attempt expired. Please try again.",
-        "unavailable" => "Login is temporarily unavailable. Please try again in a moment.",
-        "forbidden" => "Your account doesn't have access to this application.",
-        _ => "Login failed. Please try again.",
+        "denied" => "login_error.denied",
+        "expired" => "login_error.expired",
+        "unavailable" => "login_error.unavailable",
+        "forbidden" => "login_error.forbidden",
+        _ => "login_error.generic",
     }
 }
 
@@ -213,13 +218,19 @@ async fn index(
     State(state): State<Arc<AppState>>,
     Query(query): Query<IndexQuery>,
     jar: CookieJar,
+    headers: HeaderMap,
 ) -> LandingTemplate {
+    let accept_language = headers
+        .get(axum::http::header::ACCEPT_LANGUAGE)
+        .and_then(|v| v.to_str().ok());
+    let tr = Tr::resolve(&jar, accept_language);
+
     let mut banners = state
         .admin_client
         .fetch_banners(&["platform", "service:main"])
         .await;
 
-    let mut apps = apps();
+    let mut apps = apps(&tr);
     let mut maintenance_scopes = vec!["platform"];
     maintenance_scopes.extend(apps.iter().filter_map(|app| app.service_scope));
     let maintenance_records = state
@@ -241,7 +252,7 @@ async fn index(
             0,
             Banner {
                 severity: "critical".to_string(),
-                message: login_error_message(reason).to_string(),
+                message: tr.get(login_error_message_key(reason)),
             },
         );
     }
@@ -294,6 +305,7 @@ async fn index(
         // `/users` 404s until `users-web` ships; that's a separate, already-tracked gap.
         admin_url: "/admin".to_string(),
         user_settings_url: "/users".to_string(),
+        tr,
     }
 }
 
@@ -304,7 +316,7 @@ mod tests {
     fn template(current_user_name: Option<String>, is_admin: bool) -> LandingTemplate {
         LandingTemplate {
             shared_url: "http://localhost:8081".to_string(),
-            apps: apps(),
+            apps: apps(&Tr::english()),
             version: "dev".to_string(),
             build_date: "unset".to_string(),
             build_hash: "unset".to_string(),
@@ -322,6 +334,7 @@ mod tests {
             logout_url: "/auth/logout".to_string(),
             admin_url: "/admin".to_string(),
             user_settings_url: "/users".to_string(),
+            tr: Tr::english(),
         }
     }
 
@@ -359,7 +372,7 @@ mod tests {
     #[test]
     fn login_error_message_covers_every_known_reason_distinctly() {
         let known = ["denied", "expired", "unavailable", "forbidden"];
-        let messages: Vec<&str> = known.iter().map(|r| login_error_message(r)).collect();
+        let messages: Vec<&str> = known.iter().map(|r| login_error_message_key(r)).collect();
         // Every known reason gets its own distinct copy - no two collapse to the same message.
         let mut unique = messages.clone();
         unique.sort_unstable();
@@ -371,11 +384,27 @@ mod tests {
     fn login_error_message_falls_back_for_unrecognized_reason() {
         // Covers the legacy bare `1` flag this replaced, and any unrecognized value - never
         // echoes the input back into the message.
-        assert_eq!(login_error_message("1"), "Login failed. Please try again.");
+        assert_eq!(login_error_message_key("1"), "login_error.generic");
         assert_eq!(
-            login_error_message("<script>alert(1)</script>"),
-            "Login failed. Please try again."
+            login_error_message_key("<script>alert(1)</script>"),
+            "login_error.generic"
         );
+    }
+
+    #[test]
+    fn every_login_error_key_resolves_to_english_copy() {
+        let tr = Tr::english();
+        for reason in [
+            "denied",
+            "expired",
+            "unavailable",
+            "forbidden",
+            "anything-else",
+        ] {
+            let message = tr.get(login_error_message_key(reason));
+            assert!(!message.is_empty());
+            assert_ne!(message, login_error_message_key(reason), "missing key");
+        }
     }
 
     #[test]
@@ -487,7 +516,7 @@ mod tests {
 
     #[test]
     fn service_scoped_maintenance_affects_only_that_card() {
-        let mut apps = apps();
+        let mut apps = apps(&Tr::english());
         apply_maintenance(&mut apps, &[maintenance_mode("service", "catalog")]);
 
         let catalog = apps.iter().find(|a| a.name == "Catalogue").unwrap();
@@ -501,7 +530,7 @@ mod tests {
 
     #[test]
     fn platform_scoped_maintenance_affects_every_card_with_a_service_scope() {
-        let mut apps = apps();
+        let mut apps = apps(&Tr::english());
         apply_maintenance(&mut apps, &[maintenance_mode("platform", "")]);
 
         for app in &apps {
