@@ -71,8 +71,8 @@ impl Tr {
     pub fn nav_game_systems(&self) -> String {
         self.s("nav.game_systems")
     }
-    pub fn nav_shelf(&self) -> String {
-        self.s("nav.shelf")
+    pub fn nav_game_room(&self) -> String {
+        self.s("nav.game_room")
     }
     pub fn nav_initiative(&self) -> String {
         self.s("nav.initiative")
