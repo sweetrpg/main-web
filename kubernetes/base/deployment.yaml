@@ -28,6 +28,8 @@ spec:
                 version: v1
             annotations:
                 reloader.stakater.com/auto: "true"
+                openfeature.dev/enabled: "true"
+                openfeature.dev/featureflagsource: "sweetrpg-system/main-web"
         spec:
             serviceAccountName: web
             # No dependency of this service's own is at risk of the classic <SERVICE_NAME>_PORT

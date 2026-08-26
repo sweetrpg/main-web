@@ -8,7 +8,7 @@ working in this repository.
 `main-web` is the landing page for the SweetRPG suite, serving `dev.sweetrpg.com/` (and
 `sweetrpg.com/` in production): suite branding, a light/dark/system theme toggle, and a card
 grid linking out to each app in the suite (`Catalogue` live via `catalog-web`'s `/catalog` path,
-`Shelf`/`Systems`/`Profile`/`Initiative!` marked "Coming soon" until those frontends exist).
+`Game Room`/`Systems`/`Profile`/`Initiative!` marked "Coming soon" until those frontends exist).
 
 It's the org's first Rust **web service** (as opposed to the existing Rust *library* crates -
 `common.rs`, `model-core.rs`, `catalog-objects.rs`, etc.) and the reference implementation for

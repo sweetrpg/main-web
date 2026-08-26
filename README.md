@@ -12,7 +12,7 @@
 
 The landing page for the SweetRPG suite, serving `dev.sweetrpg.com/` (and `sweetrpg.com/` in
 production): suite branding, a light/dark/system theme toggle, and a card grid linking out to
-each app in the suite (`Catalogue` live, `Shelf`/`Systems`/`Profile`/`Initiative!` marked "Coming
+each app in the suite (`Catalogue` live, `Game Room`/`Systems`/`Profile`/`Initiative!` marked "Coming
 soon" until those frontends exist).
 
 Built with [Axum](https://github.com/tokio-rs/axum) and [Askama](https://github.com/askama-rs/askama)

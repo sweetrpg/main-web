@@ -4,7 +4,7 @@ nav:
   main: Main
   catalog: Catalog
   game_systems: Game Systems
-  shelf: Shelf
+  game_room: Game Room
   initiative: Initiative
 menu:
   switch_app: Switch app
@@ -24,8 +24,8 @@ cards:
   catalogue:
     name: Catalogue
     description: Browse, rate and review every RPG book in print or digital.
-  shelf:
-    name: Shelf
+  game_room:
+    name: Game Room
     description: Track what you own, want, and are playing right now.
   initiative:
     name: Initiative!

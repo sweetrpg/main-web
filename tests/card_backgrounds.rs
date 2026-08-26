@@ -8,7 +8,7 @@ fn card_backgrounds_render() {
 
     let backgrounds = [
         "catalog-card-back.png",
-        "shelf-card-back.jpg",
+        "game-room-card-back.jpg",
         "systems-card-back.jpg",
         "profile-card-back.jpg",
         "initiative-card-back.png",

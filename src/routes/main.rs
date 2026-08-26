@@ -69,13 +69,13 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
             maintenance: None,
         },
         AppCard {
-            name: tr.get("cards.shelf.name"),
-            description: tr.get("cards.shelf.description"),
+            name: tr.get("cards.game_room.name"),
+            description: tr.get("cards.game_room.description"),
             href: "#",
             has_status: true,
             status: coming_soon.clone(),
-            background: "shelf-card-back.jpg",
-            service_scope: Some("service:shelf"),
+            background: "game-room-card-back.jpg",
+            service_scope: Some("service:game_room"),
             maintenance: None,
         },
         AppCard {
@@ -355,7 +355,7 @@ mod tests {
         assert!(html.contains("app-switcher-trigger"));
         assert!(html.contains(r#"href="/">Main"#));
         assert!(html.contains(r#"href="/catalog">Catalog"#));
-        assert!(html.contains(r#"href="/shelf">Shelf"#));
+        assert!(html.contains(r#"href="/game-room">Game Room"#));
         assert!(html.contains(r#"href="/initiative">Initiative"#));
         assert!(!html.contains("app-switcher-item\" href=\"/admin\""));
     }
