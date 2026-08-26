@@ -1,4 +1,11 @@
 
+## 0.14.0 - 2026-08-26
+
+### Added
+- Rename Shelf to Game Room across suite
+
+
+
 ## 0.13.0 - 2026-08-23
 
 ### Added
