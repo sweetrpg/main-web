@@ -71,9 +71,9 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
         AppCard {
             name: tr.get("cards.game_room.name"),
             description: tr.get("cards.game_room.description"),
-            href: "#",
-            has_status: true,
-            status: coming_soon.clone(),
+            href: "/game-room",
+            has_status: false,
+            status: String::new(),
             background: "game-room-card-back.jpg",
             service_scope: Some("service:game_room"),
             maintenance: None,
