@@ -1,4 +1,11 @@
 
+## 0.14.2 - 2026-08-28
+
+### Fixed
+- Link Game Room card to game-room-web's landing page
+
+
+
 ## 0.14.1 - 2026-08-28
 
 ### Fixed
