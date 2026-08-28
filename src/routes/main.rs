@@ -302,9 +302,8 @@ async fn index(
         logout_url: "/auth/logout".to_string(),
         // Fixed paths on the shared `dev.sweetrpg.com` host, matching `/catalog`'s convention -
         // see design.md's "User Settings links to a fixed, currently-unbuilt path" decision.
-        // `/users` 404s until `users-web` ships; that's a separate, already-tracked gap.
         admin_url: "/admin".to_string(),
-        user_settings_url: "/users".to_string(),
+        user_settings_url: "/users/profile".to_string(),
         tr,
     }
 }
@@ -333,7 +332,7 @@ mod tests {
             login_url: "/auth/login?return_to=/".to_string(),
             logout_url: "/auth/logout".to_string(),
             admin_url: "/admin".to_string(),
-            user_settings_url: "/users".to_string(),
+            user_settings_url: "/users/profile".to_string(),
             tr: Tr::english(),
         }
     }
@@ -456,7 +455,7 @@ mod tests {
         let html = template(Some("Alice".to_string()), false)
             .render()
             .expect("template renders");
-        assert!(html.contains(r#"href="/users""#));
+        assert!(html.contains(r#"href="/users/profile""#));
         assert!(!html.contains(r#"href="/admin""#));
     }
 
@@ -466,7 +465,7 @@ mod tests {
             .render()
             .expect("template renders");
         assert!(html.contains(r#"href="/admin""#));
-        assert!(html.contains(r#"href="/users""#));
+        assert!(html.contains(r#"href="/users/profile""#));
     }
 
     #[test]
