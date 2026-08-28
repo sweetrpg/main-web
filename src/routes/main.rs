@@ -488,8 +488,9 @@ mod tests {
         tpl.avatar_gravatar_url = gravatar_url(Some("alice@example.com"));
         let html = tpl.render().expect("template renders");
         assert!(html.contains("avatar-menu-avatar"));
-        assert!(html.contains("onload=\"this.nextElementSibling.style.display='none'\""));
-        assert!(html.contains("onerror=\"this.style.display='none'\""));
+        assert!(html.contains(
+            "onerror=\"this.style.display='none'; this.nextElementSibling.style.display='flex';\""
+        ));
         assert!(html.contains("avatar-menu-fallback"));
     }
 
