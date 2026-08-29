@@ -35,7 +35,7 @@
       <div class="app-switcher-panel" hidden>
         <a class="app-switcher-item" href="/">{{ tr.nav_main() }}</a>
         <a class="app-switcher-item" href="/catalog">{{ tr.nav_catalog() }}</a>
-        <a class="app-switcher-item" href="/gamesystems">{{ tr.nav_game_systems() }}</a>
+        <a class="app-switcher-item" href="/game-systems">{{ tr.nav_game_systems() }}</a>
         <a class="app-switcher-item" href="/game-room">{{ tr.nav_game_room() }}</a>
         <a class="app-switcher-item" href="/initiative">{{ tr.nav_initiative() }}</a>
       </div>
@@ -44,7 +44,7 @@
       <button type="button" class="avatar-menu-trigger">
         {% if let Some(name) = current_user_name %}
         {% if let Some(gravatar_url) = avatar_gravatar_url %}
-        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'">
+        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         {% endif %}
         <span class="avatar-menu-fallback">{{ avatar_initial }}</span>
         {% else %}
