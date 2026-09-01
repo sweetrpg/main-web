@@ -16,7 +16,7 @@
 ## 0.14.1 - 2026-08-28
 
 ### Fixed
-- Point avatar menu's User Settings link at users-web's real profile route
+- Point avatar menu's Profile link at users-web's real profile route
 
 
 

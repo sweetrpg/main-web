@@ -301,7 +301,7 @@ async fn index(
         login_url: "/auth/login?return_to=/".to_string(),
         logout_url: "/auth/logout".to_string(),
         // Fixed paths on the shared `dev.sweetrpg.com` host, matching `/catalog`'s convention -
-        // see design.md's "User Settings links to a fixed, currently-unbuilt path" decision.
+        // see design.md's "Profile links to a fixed, currently-unbuilt path" decision.
         admin_url: "/admin".to_string(),
         user_settings_url: "/users/profile".to_string(),
         tr,
