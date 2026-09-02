@@ -1,4 +1,13 @@
 
+## 0.14.4 - 2026-09-02
+
+### Fixed
+- Remove "coming soon" badge from profile card
+- Rename user settings link to profile
+- Update rust-toolchain
+
+
+
 ## 0.14.3 - 2026-08-29
 
 ### Fixed
@@ -16,7 +25,7 @@
 ## 0.14.1 - 2026-08-28
 
 ### Fixed
-- Point avatar menu's User Settings link at users-web's real profile route
+- Point avatar menu's Profile link at users-web's real profile route
 
 
 
