@@ -1,4 +1,13 @@
 
+## 0.14.4 - 2026-09-02
+
+### Fixed
+- Remove "coming soon" badge from profile card
+- Rename user settings link to profile
+- Update rust-toolchain
+
+
+
 ## 0.14.3 - 2026-08-29
 
 ### Fixed
