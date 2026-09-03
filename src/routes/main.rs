@@ -102,7 +102,7 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
             name: tr.get("cards.profile.name"),
             description: tr.get("cards.profile.description"),
             href: "#",
-            has_status: true,
+            has_status: false,
             status: String::new(),
             background: "profile-card-back.jpg",
             service_scope: Some("service:users"),
