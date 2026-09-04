@@ -1,4 +1,15 @@
 
+## 0.15.0 - 2026-09-04
+
+### Added
+- Source app card status from admin-api app-card-status records
+
+
+### Fixed
+- Hide empty status pill on Profile card
+
+
+
 ## 0.14.4 - 2026-09-02
 
 ### Fixed
