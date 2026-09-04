@@ -9,7 +9,7 @@ use axum::Router;
 use axum_extra::extract::CookieJar;
 use serde::Deserialize;
 
-use crate::admin_client::{Banner, MaintenanceMode};
+use crate::admin_client::{AppCardStatus, Banner, MaintenanceMode};
 use crate::i18n::Tr;
 use crate::session_client::SESSION_COOKIE_NAME;
 use crate::AppState;
@@ -22,7 +22,11 @@ struct AppCard {
     name: String,
     description: String,
     href: &'static str,
+    /// Populated after `apps()` returns, from the active app-card-status records - not
+    /// compile-time data. Paired with `status` to render the status pill.
     has_status: bool,
+    /// Populated after `apps()` returns by `apply_app_card_status()`, containing the label text
+    /// from the active record. Ignored if `has_status` is `false`.
     status: String,
     background: &'static str,
     /// The `service:<name>` scope this card's app registers with `admin-api`, or `None` for
@@ -56,7 +60,6 @@ impl From<&MaintenanceMode> for MaintenanceBadge {
 }
 
 fn apps(tr: &Tr) -> Vec<AppCard> {
-    let coming_soon = tr.cards_coming_soon();
     vec![
         AppCard {
             name: tr.get("cards.catalogue.name"),
@@ -82,8 +85,8 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
             name: tr.get("cards.initiative.name"),
             description: tr.get("cards.initiative.description"),
             href: "#",
-            has_status: true,
-            status: coming_soon.clone(),
+            has_status: false,
+            status: String::new(),
             background: "initiative-card-back.png",
             service_scope: Some("service:initiative"),
             maintenance: None,
@@ -92,8 +95,8 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
             name: tr.get("cards.systems.name"),
             description: tr.get("cards.systems.description"),
             href: "#",
-            has_status: true,
-            status: coming_soon.clone(),
+            has_status: false,
+            status: String::new(),
             background: "systems-card-back.jpg",
             service_scope: Some("service:systems"),
             maintenance: None,
@@ -102,7 +105,7 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
             name: tr.get("cards.profile.name"),
             description: tr.get("cards.profile.description"),
             href: "#",
-            has_status: true,
+            has_status: false,
             status: String::new(),
             background: "profile-card-back.jpg",
             service_scope: Some("service:users"),
@@ -127,6 +130,25 @@ fn apply_maintenance(apps: &mut [AppCard], records: &[MaintenanceMode]) {
         app.maintenance = service_record
             .or(platform_record)
             .map(MaintenanceBadge::from);
+    }
+}
+
+/// Resolves each card's `has_status` and `status` fields from the active app-card-status
+/// records. A card with an active record gets `has_status: true` with the record's label text;
+/// a card without a record keeps `has_status: false` and `status: String::new()`.
+fn apply_app_card_status(apps: &mut [AppCard], records: &[AppCardStatus]) {
+    for app in apps.iter_mut() {
+        let Some(scope) = app.service_scope else {
+            continue;
+        };
+        let service_value = scope.trim_start_matches("service:");
+        if let Some(record) = records
+            .iter()
+            .find(|r| r.scope_type == "service" && r.scope_value == service_value)
+        {
+            app.has_status = true;
+            app.status = record.label.clone();
+        }
     }
 }
 
@@ -232,12 +254,19 @@ async fn index(
 
     let mut apps = apps(&tr);
     let mut maintenance_scopes = vec!["platform"];
-    maintenance_scopes.extend(apps.iter().filter_map(|app| app.service_scope));
+    let app_card_scopes: Vec<&str> = apps.iter().filter_map(|app| app.service_scope).collect();
+    maintenance_scopes.extend(app_card_scopes.iter().cloned());
     let maintenance_records = state
         .admin_client
         .fetch_maintenance_modes(&maintenance_scopes)
         .await;
     apply_maintenance(&mut apps, &maintenance_records);
+
+    let app_card_statuses = state
+        .admin_client
+        .fetch_app_card_statuses(&app_card_scopes)
+        .await;
+    apply_app_card_status(&mut apps, &app_card_statuses);
 
     // auth-web (the suite's sole Auth0 callback handler) redirects back here with
     // ?login_error=<reason> on any login failure - render it via the same banner markup
@@ -551,5 +580,38 @@ mod tests {
         assert!(html.contains("tag-danger"));
         assert!(html.contains("Scheduled downtime: Upgrading the database."));
         assert!(html.contains("2026-08-01T00:00:00Z - 2026-08-01T04:00:00Z"));
+    }
+
+    fn app_card_status(scope_value: &str, label: &str) -> AppCardStatus {
+        AppCardStatus {
+            scope_type: "service".to_string(),
+            scope_value: scope_value.to_string(),
+            label: label.to_string(),
+        }
+    }
+
+    #[test]
+    fn service_scoped_app_card_status_affects_only_that_card() {
+        let mut apps = apps(&Tr::english());
+        apply_app_card_status(&mut apps, &[app_card_status("catalog", "Beta")]);
+
+        let catalog = apps.iter().find(|a| a.name == "Catalogue").unwrap();
+        assert!(catalog.has_status);
+        assert_eq!(catalog.status, "Beta");
+        let others_unaffected = apps
+            .iter()
+            .filter(|a| a.name != "Catalogue")
+            .all(|a| !a.has_status);
+        assert!(others_unaffected);
+    }
+
+    #[test]
+    fn app_card_status_pill_renders_when_active() {
+        let mut tpl = template(None, false);
+        tpl.apps[0].has_status = true;
+        tpl.apps[0].status = "Beta".to_string();
+        let html = tpl.render().expect("template renders");
+        assert!(html.contains("tag-outline"));
+        assert!(html.contains("Beta"));
     }
 }

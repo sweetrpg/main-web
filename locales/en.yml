@@ -20,7 +20,6 @@ landing:
   tagline: A suite of tools and services for managing your tabletop role-playing games
 cards:
   maintenance: Maintenance
-  coming_soon: Coming soon
   catalogue:
     name: Catalogue
     description: Browse, rate and review every RPG book in print or digital.

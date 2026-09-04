@@ -8,7 +8,7 @@ working in this repository.
 `main-web` is the landing page for the SweetRPG suite, serving `dev.sweetrpg.com/` (and
 `sweetrpg.com/` in production): suite branding, a light/dark/system theme toggle, and a card
 grid linking out to each app in the suite (`Catalogue` live via `catalog-web`'s `/catalog` path,
-`Game Room`/`Systems`/`Profile`/`Initiative!` marked "Coming soon" until those frontends exist).
+others linked via `admin-api` app-card-status records).
 
 It's the org's first Rust **web service** (as opposed to the existing Rust *library* crates -
 `common.rs`, `model-core.rs`, `catalog-objects.rs`, etc.) and the reference implementation for
@@ -27,8 +27,9 @@ data migration, a clean rewrite rather than an incremental port.
 - **Askama** for templates (`templates/main.html`) - compile-time-checked: a template referencing
   a field the context struct doesn't have fails the build, not a request.
 - The app card list (`src/routes/main.rs`) is a compile-time `Vec<AppCard>`, not a config file -
-  adding a new app already requires a code change (its `href` moving off `#`) and redeploy
-  either way, so a config file would add indirection without removing a deploy step.
+  card status (the label text and status pill) comes from `admin-api`'s app-card-status records,
+  fetched per-request and cached for 90s. Cards without a matching admin-api record show no pill.
+  Adding a new app requires a code change (its `href` moving off `#`) and redeploy either way.
 
 ### Localization
 
@@ -66,15 +67,16 @@ theme-toggle JS, Broadsheet CSS, and this page's own landing layout all moved in
 Falls back to placeholder values (`version: "dev"`) when the file doesn't exist, e.g. local
 `cargo run` outside a container.
 
-### Banner messages (`admin_client.rs`)
+### Banner messages and app card status (`admin_client.rs`)
 
-`AdminClient` fetches platform-wide banner messages from `admin-api` (`sweetrpg/admin-api`) for
-the `platform` and `service:main` scopes, per the `add-banner-messages` OpenSpec change
-(`sweetrpg/platform`). Disabled by default - `base_url` is `None` unless `ADMIN_API_URL` is set,
-so a deploy with the var unset makes zero network calls. When enabled: a 90s in-memory cache
-(one `Mutex<Option<CacheEntry>>`, not per-scope-key - fine at this service's read volume) and a
-2s request timeout. Fails open on every error path (timeout, connection error, non-200, bad
-JSON) by returning an empty `Vec<Banner>` - a banner outage must never break the landing page.
+`AdminClient` fetches from `admin-api` (`sweetrpg/admin-api`): platform-wide banner messages for
+the `platform` and `service:main` scopes (per the `add-banner-messages` OpenSpec change), and
+app-card-status records for each app's own service scope (per the `admin-managed-app-card-status`
+OpenSpec change). Both are disabled by default - `base_url` is `None` unless `ADMIN_API_URL` is
+set, so a deploy with the var unset makes zero network calls. When enabled: 90s in-memory cache
+(one `Mutex<Option<CacheEntry>>` per resource type, not per-scope-key) and a 2s request timeout.
+Fails open on every error path (timeout, connection error, non-200, bad JSON) by returning an
+empty `Vec` - an `admin-api` outage must never break the landing page.
 
 ## Observability
 

@@ -41,21 +41,31 @@ pub struct MaintenanceMode {
     pub ends_at: Option<String>,
 }
 
+/// An app-card-status record as returned by `admin-api`'s `GET /app-card-statuses/active`.
+/// Only the fields this service renders are deserialized.
+#[derive(Clone, Debug, Deserialize)]
+pub struct AppCardStatus {
+    pub scope_type: String,
+    pub scope_value: String,
+    pub label: String,
+}
+
 struct CacheEntry<T> {
     fetched_at: Instant,
     value: T,
 }
 
-/// Fetches banner messages and maintenance-mode state from `admin-api` for this service's
-/// scopes, with a bounded-TTL cache and fail-open behavior: any error, timeout, or missing
-/// `ADMIN_API_URL` yields an empty list rather than surfacing a failure to the page being
-/// decorated.
+/// Fetches banner messages, maintenance-mode state, and app-card status from `admin-api` for
+/// this service's scopes, with a bounded-TTL cache and fail-open behavior: any error, timeout,
+/// or missing `ADMIN_API_URL` yields an empty list rather than surfacing a failure to the page
+/// being decorated.
 pub struct AdminClient {
     http: reqwest::Client,
     base_url: Option<String>,
     ttl: Duration,
     banner_cache: Mutex<Option<CacheEntry<Vec<Banner>>>>,
     maintenance_cache: Mutex<Option<CacheEntry<Vec<MaintenanceMode>>>>,
+    app_card_status_cache: Mutex<Option<CacheEntry<Vec<AppCardStatus>>>>,
 }
 
 impl AdminClient {
@@ -72,6 +82,7 @@ impl AdminClient {
             ttl: Duration::from_secs(90),
             banner_cache: Mutex::new(None),
             maintenance_cache: Mutex::new(None),
+            app_card_status_cache: Mutex::new(None),
         }
     }
 
@@ -117,6 +128,31 @@ impl AdminClient {
 
         Self::store(&self.maintenance_cache, modes.clone());
         modes
+    }
+
+    /// Returns active app-card-status records for the given scopes (e.g.
+    /// `["service:catalog", "service:game_room"]`). Never errors: any failure (disabled client,
+    /// timeout, network error, non-200, bad body) yields an empty `Vec`.
+    pub async fn fetch_app_card_statuses(&self, scopes: &[&str]) -> Vec<AppCardStatus> {
+        let Some(base_url) = &self.base_url else {
+            return Vec::new();
+        };
+
+        if let Some(cached) = Self::cached(&self.app_card_status_cache, self.ttl) {
+            return cached;
+        }
+
+        let statuses = self
+            .get_scoped(
+                base_url,
+                "app-card-statuses/active",
+                scopes,
+                "app-card-status",
+            )
+            .await;
+
+        Self::store(&self.app_card_status_cache, statuses.clone());
+        statuses
     }
 
     async fn get_scoped<T: serde::de::DeserializeOwned>(
@@ -218,5 +254,19 @@ mod tests {
         let client = AdminClient::new(Some("http://127.0.0.1:1".to_string()));
         let modes = client.fetch_maintenance_modes(&["platform"]).await;
         assert!(modes.is_empty());
+    }
+
+    #[tokio::test]
+    async fn disabled_client_returns_no_app_card_statuses_without_making_a_request() {
+        let client = AdminClient::new(None);
+        let statuses = client.fetch_app_card_statuses(&["service:catalog"]).await;
+        assert!(statuses.is_empty());
+    }
+
+    #[tokio::test]
+    async fn unreachable_admin_api_fails_open_for_app_card_statuses() {
+        let client = AdminClient::new(Some("http://127.0.0.1:1".to_string()));
+        let statuses = client.fetch_app_card_statuses(&["service:catalog"]).await;
+        assert!(statuses.is_empty());
     }
 }

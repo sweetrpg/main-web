@@ -110,9 +110,6 @@ impl Tr {
     pub fn cards_maintenance(&self) -> String {
         self.s("cards.maintenance")
     }
-    pub fn cards_coming_soon(&self) -> String {
-        self.s("cards.coming_soon")
-    }
 }
 
 #[cfg(test)]
