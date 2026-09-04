@@ -1,26 +1,28 @@
-[2m2026-09-03T14:34:52.868309Z[0m [32m INFO[0m [2mcargo_tarpaulin::config[0m[2m:[0m Creating config
-[2m2026-09-03T14:34:53.836515Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Running Tarpaulin
-[2m2026-09-03T14:34:53.836532Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Building project
-[2m2026-09-03T14:34:53.848506Z[0m [32m INFO[0m [2mcargo_tarpaulin::cargo[0m[2m:[0m Cleaning project
-[2m2026-09-03T14:36:05.281169Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/card_backgrounds-1416a3925e548859
-[2m2026-09-03T14:36:05.281240Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
+[2m2026-09-04T04:12:26.805192Z[0m [32m INFO[0m [2mcargo_tarpaulin::config[0m[2m:[0m Creating config
+[2m2026-09-04T04:12:27.399012Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Running Tarpaulin
+[2m2026-09-04T04:12:27.399025Z[0m [32m INFO[0m [2mcargo_tarpaulin[0m[2m:[0m Building project
+[2m2026-09-04T04:12:27.409043Z[0m [32m INFO[0m [2mcargo_tarpaulin::cargo[0m[2m:[0m Cleaning project
+[2m2026-09-04T04:13:27.533522Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/card_backgrounds-1416a3925e548859
+[2m2026-09-04T04:13:27.533603Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
 
 running 1 test
 test card_backgrounds_render ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-[2m2026-09-03T14:36:05.282676Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/card_backgrounds-1416a3925e548859
-[2m2026-09-03T14:36:05.282686Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/card_backgrounds-1416a3925e548859_7285805058316686420_0-15881.profraw
-[2m2026-09-03T14:36:05.282689Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
-[2m2026-09-03T14:36:05.282798Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
-[2m2026-09-03T14:36:05.645184Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/sweetrpg_main_web-a230bfb55765ac63
-[2m2026-09-03T14:36:05.645288Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
+[2m2026-09-04T04:13:27.535152Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/card_backgrounds-1416a3925e548859
+[2m2026-09-04T04:13:27.535162Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/card_backgrounds-1416a3925e548859_7285805058316686420_0-15833.profraw
+[2m2026-09-04T04:13:27.535165Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
+[2m2026-09-04T04:13:27.535292Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
+[2m2026-09-04T04:13:27.861932Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m running /home/runner/work/main-web/main-web/target/debug/deps/sweetrpg_main_web-a230bfb55765ac63
+[2m2026-09-04T04:13:27.862014Z[0m [32m INFO[0m [2mcargo_tarpaulin::process_handling[0m[2m:[0m Setting LLVM_PROFILE_FILE
 
-running 36 tests
+running 40 tests
+test admin_client::tests::disabled_client_returns_no_app_card_statuses_without_making_a_request ... ok
 test admin_client::tests::disabled_client_returns_no_banners_without_making_a_request ... ok
 test admin_client::tests::disabled_client_returns_no_maintenance_modes_without_making_a_request ... ok
 test admin_client::tests::unreachable_admin_api_fails_open ... ok
+test admin_client::tests::unreachable_admin_api_fails_open_for_app_card_statuses ... ok
 test admin_client::tests::unreachable_admin_api_fails_open_for_maintenance_modes ... ok
 test build_info::tests::leaves_bare_version_unchanged ... ok
 test build_info::tests::leaves_dev_placeholder_unchanged ... ok
@@ -32,6 +34,7 @@ test i18n::tests::missing_everything_falls_back_to_english ... ok
 test i18n::tests::unsupported_accept_language_and_no_cookie_falls_back_to_english ... ok
 test i18n::tests::unsupported_cookie_falls_through_to_accept_language ... ok
 test routes::main::tests::admin_session_shows_admin_link ... ok
+test routes::main::tests::app_card_status_pill_renders_when_active ... ok
 test routes::main::tests::app_switcher_renders_with_four_destinations_and_no_admin_link ... ok
 test routes::main::tests::every_login_error_key_resolves_to_english_copy ... ok
 test routes::main::tests::gravatar_url_hashes_a_trimmed_lowercased_email_with_a_404_fallback ... ok
@@ -49,29 +52,30 @@ test routes::main::tests::login_error_message_falls_back_for_unrecognized_reason
 test routes::main::tests::login_error_query_parses_from_form_encoded_flag ... ok
 test routes::main::tests::maintenance_badge_renders_with_tooltip ... ok
 test routes::main::tests::platform_scoped_maintenance_affects_every_card_with_a_service_scope ... ok
+test routes::main::tests::service_scoped_app_card_status_affects_only_that_card ... ok
 test routes::main::tests::service_scoped_maintenance_affects_only_that_card ... ok
 test session_client::tests::disabled_client_returns_no_user_without_making_a_request ... ok
 test session_client::tests::repeated_calls_after_a_failed_connection_dont_panic_or_deadlock ... ok
 test session_client::tests::unreachable_redis_fails_open ... ok
 test session_client::tests::unreachable_redis_fails_open_with_a_password_configured ... ok
 
-test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 37.81s
+test result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 37.81s
 
-[2m2026-09-03T14:36:43.460585Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/sweetrpg_main_web-a230bfb55765ac63
-[2m2026-09-03T14:36:43.460600Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/sweetrpg_main_web-a230bfb55765ac63_9700213963597462920_0-15885.profraw
-[2m2026-09-03T14:36:43.460603Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
-[2m2026-09-03T14:36:43.546985Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
-[2m2026-09-03T14:36:44.236488Z[0m [32m INFO[0m [2mcargo_tarpaulin::report[0m[2m:[0m Coverage Results:
-[2m2026-09-03T14:36:44.237089Z[0m [32m INFO[0m [2mcargo_tarpaulin::report::html[0m[2m:[0m HTML report written to /home/runner/work/main-web/main-web/coverage/tarpaulin-report.html
+[2m2026-09-04T04:14:05.671558Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m For binary: target/debug/deps/sweetrpg_main_web-a230bfb55765ac63
+[2m2026-09-04T04:14:05.671572Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Generated: target/tarpaulin/profraws/sweetrpg_main_web-a230bfb55765ac63_5877502245964318817_0-15836.profraw
+[2m2026-09-04T04:14:05.671575Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Merging coverage reports
+[2m2026-09-04T04:14:05.751442Z[0m [32m INFO[0m [2mcargo_tarpaulin::statemachine::instrumented[0m[2m:[0m Mapping coverage data to source
+[2m2026-09-04T04:14:06.318238Z[0m [32m INFO[0m [2mcargo_tarpaulin::report[0m[2m:[0m Coverage Results:
+[2m2026-09-04T04:14:06.318760Z[0m [32m INFO[0m [2mcargo_tarpaulin::report::html[0m[2m:[0m HTML report written to /home/runner/work/main-web/main-web/coverage/tarpaulin-report.html
 || Tested/Total Lines:
-|| src/admin_client.rs: 44/65
+|| src/admin_client.rs: 55/77
 || src/build_info.rs: 4/23
 || src/config.rs: 0/12
-|| src/i18n.rs: 53/53
+|| src/i18n.rs: 51/51
 || src/main.rs: 0/40
 || src/routes/health.rs: 0/6
-|| src/routes/main.rs: 74/125
+|| src/routes/main.rs: 81/139
 || src/session_client.rs: 21/49
 || src/telemetry.rs: 0/27
 || 
-49.00% coverage, 196/400 lines covered
+50.00% coverage, 212/424 lines covered
