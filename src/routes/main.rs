@@ -94,7 +94,7 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
         AppCard {
             name: tr.get("cards.systems.name"),
             description: tr.get("cards.systems.description"),
-            href: "#",
+            href: "/game-systems",
             has_status: false,
             status: String::new(),
             background: "systems-card-back.jpg",
@@ -386,6 +386,18 @@ mod tests {
         assert!(html.contains(r#"href="/game-room">Game Room"#));
         assert!(html.contains(r#"href="/initiative">Initiative"#));
         assert!(!html.contains("app-switcher-item\" href=\"/admin\""));
+    }
+
+    #[test]
+    fn systems_card_links_to_game_systems_web() {
+        // game-systems-web now serves dev.sweetrpg.com/game-systems - the Systems card is no
+        // longer a dead "#" link. See platform's game-systems-web OpenSpec change.
+        let apps = apps(&Tr::english());
+        let systems = apps
+            .iter()
+            .find(|c| c.name == Tr::english().get("cards.systems.name"))
+            .expect("Systems card present");
+        assert_eq!(systems.href, "/game-systems");
     }
 
     #[test]
