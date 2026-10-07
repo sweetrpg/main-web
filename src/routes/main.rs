@@ -365,7 +365,7 @@ mod tests {
             logout_url: "/auth/logout".to_string(),
             admin_url: "/admin".to_string(),
             user_settings_url: "/users/profile".to_string(),
-            feedback_api_url: "https://api.admin.dev.sweetrpg.com/api/0/feedback".to_string(),
+            feedback_api_url: "/api/0/admin/feedback".to_string(),
             tr: Tr::english(),
         }
     }
