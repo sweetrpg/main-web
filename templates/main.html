@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{{ shared_url }}/static/css/main.css">
 <link rel="stylesheet" href="{{ shared_url }}/static/css/avatar-menu.css">
 <link rel="stylesheet" href="{{ shared_url }}/static/css/app-switcher.css">
+<link rel="stylesheet" href="{{ shared_url }}/static/css/feedback-widget.css">
 <script>
 /* Applied synchronously, before first paint, so the page never flashes the wrong theme
    while theme.js (deferred) loads. */
@@ -23,6 +24,7 @@
 <body>
 <div class="landing">
   <nav class="nav">
+    <button type="button" id="feedback-trigger" class="btn btn-ghost">{{ tr.menu_feedback() }}</button>
     <div style="flex:1"></div>
     <div class="app-switcher">
       <button type="button" class="app-switcher-trigger" aria-label="{{ tr.menu_switch_app() }}">
@@ -133,5 +135,8 @@
 <script src="{{ shared_url }}/static/js/app-switcher.js" defer></script>
 <script src="{{ shared_url }}/static/js/theme.js" defer></script>
 <script src="{{ shared_url }}/static/js/footer-fade.js" defer></script>
+<script src="{{ shared_url }}/static/js/feedback-widget.js"
+        data-api-url="{{ feedback_api_url }}"
+        data-trigger-selector="#feedback-trigger" defer></script>
 </body>
 </html>

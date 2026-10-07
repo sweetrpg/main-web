@@ -104,6 +104,9 @@ impl Tr {
     pub fn menu_log_in(&self) -> String {
         self.s("menu.log_in")
     }
+    pub fn menu_feedback(&self) -> String {
+        self.s("menu.feedback")
+    }
     pub fn landing_tagline(&self) -> String {
         self.s("landing.tagline")
     }
