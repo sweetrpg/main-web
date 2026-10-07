@@ -186,6 +186,8 @@ struct LandingTemplate {
     logout_url: String,
     admin_url: String,
     user_settings_url: String,
+    /// Public `admin-api` base URL for the feedback widget's `data-api-url` attribute.
+    feedback_api_url: String,
     /// Per-request translator - the template's source for every user-facing string.
     tr: Tr,
 }
@@ -333,6 +335,7 @@ async fn index(
         // see design.md's "Profile links to a fixed, currently-unbuilt path" decision.
         admin_url: "/admin".to_string(),
         user_settings_url: "/users/profile".to_string(),
+        feedback_api_url: state.config.feedback_api_url.clone(),
         tr,
     }
 }
@@ -362,6 +365,7 @@ mod tests {
             logout_url: "/auth/logout".to_string(),
             admin_url: "/admin".to_string(),
             user_settings_url: "/users/profile".to_string(),
+            feedback_api_url: "https://api.admin.dev.sweetrpg.com/api/0/feedback".to_string(),
             tr: Tr::english(),
         }
     }
