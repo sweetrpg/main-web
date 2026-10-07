@@ -13,6 +13,10 @@ pub struct Config {
     /// stays disabled (no network calls, always returns no banners) until this is
     /// explicitly set, so the deploy is inert until rollout enables it.
     pub admin_api_url: Option<String>,
+    /// Public (through-Ingress) base URL for `admin-api`'s feedback endpoint, used by the
+    /// browser-side feedback widget's `data-api-url` attribute - distinct from `admin_api_url`,
+    /// which is this service's own server-side in-cluster call and never reaches the browser.
+    pub feedback_api_url: String,
     /// Host of the shared session Redis instance `auth-web` owns - this app only ever reads
     /// it, never writes. Unset by default - the `SessionClient` stays disabled (every visitor
     /// reads as logged-out) until this is set. Named `SHARED_SESSION_REDIS_*`, matching
@@ -51,6 +55,9 @@ impl Config {
             otlp_endpoint: env::var("OTEL_EXPORTER_OTLP_ENDPOINT").ok(),
             log_level: env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string()),
             admin_api_url: env::var("ADMIN_API_URL").ok(),
+            feedback_api_url: env::var("FEEDBACK_API_URL").unwrap_or_else(|_| {
+                "https://api.admin.dev.sweetrpg.com/api/0/feedback".to_string()
+            }),
             shared_session_redis_host: env::var("SHARED_SESSION_REDIS_HOST")
                 .ok()
                 .filter(|v| !v.is_empty()),
