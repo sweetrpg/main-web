@@ -13,9 +13,13 @@ pub struct Config {
     /// stays disabled (no network calls, always returns no banners) until this is
     /// explicitly set, so the deploy is inert until rollout enables it.
     pub admin_api_url: Option<String>,
-    /// Public (through-Ingress) base URL for `admin-api`'s feedback endpoint, used by the
-    /// browser-side feedback widget's `data-api-url` attribute - distinct from `admin_api_url`,
-    /// which is this service's own server-side in-cluster call and never reaches the browser.
+    /// URL for `admin-api`'s feedback endpoint, used by the browser-side feedback widget's
+    /// `data-api-url` attribute - distinct from `admin_api_url`, which is this service's own
+    /// server-side in-cluster call and never reaches the browser. Defaults to a path-only
+    /// value: every API on this platform is exposed under the *same* `dev.sweetrpg.com` host
+    /// as every frontend, at `/api/0/<package>` (see `docs/deployment-conventions.md`'s "API
+    /// Ingress path versioning") - so this call is same-origin from the browser's perspective,
+    /// not cross-origin, and needs no host/scheme of its own.
     pub feedback_api_url: String,
     /// Host of the shared session Redis instance `auth-web` owns - this app only ever reads
     /// it, never writes. Unset by default - the `SessionClient` stays disabled (every visitor
@@ -55,9 +59,8 @@ impl Config {
             otlp_endpoint: env::var("OTEL_EXPORTER_OTLP_ENDPOINT").ok(),
             log_level: env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string()),
             admin_api_url: env::var("ADMIN_API_URL").ok(),
-            feedback_api_url: env::var("FEEDBACK_API_URL").unwrap_or_else(|_| {
-                "https://api.admin.dev.sweetrpg.com/api/0/feedback".to_string()
-            }),
+            feedback_api_url: env::var("FEEDBACK_API_URL")
+                .unwrap_or_else(|_| "/api/0/admin/feedback".to_string()),
             shared_session_redis_host: env::var("SHARED_SESSION_REDIS_HOST")
                 .ok()
                 .filter(|v| !v.is_empty()),
