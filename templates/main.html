@@ -24,7 +24,6 @@
 <body>
 <div class="landing">
   <nav class="nav">
-    <button type="button" id="feedback-trigger" class="btn btn-ghost">{{ tr.menu_feedback() }}</button>
     <div style="flex:1"></div>
     <div class="app-switcher">
       <button type="button" class="app-switcher-trigger" aria-label="{{ tr.menu_switch_app() }}">
@@ -73,6 +72,8 @@
         {% else %}
         <a class="avatar-menu-item" href="{{ login_url }}">{{ tr.menu_log_in() }}</a>
         {% endif %}
+        <hr class="avatar-menu-divider">
+        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ tr.menu_feedback() }}</button>
         <hr class="avatar-menu-divider">
         <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="{{ tr.menu_theme() }}">
           <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="{{ tr.menu_theme_light() }}"></button>
