@@ -1,4 +1,11 @@
 
+## 0.16.0 - 2026-09-08
+
+### Added
+- Link the Systems landing card to game-systems-web
+
+
+
 ## 0.15.0 - 2026-09-04
 
 ### Added
