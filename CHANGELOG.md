@@ -1,4 +1,11 @@
 
+## 0.17.0 - 2026-10-07
+
+### Added
+- Embed shared-web feedback widget in nav
+
+
+
 ## 0.16.0 - 2026-09-08
 
 ### Added
