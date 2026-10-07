@@ -1,4 +1,11 @@
 
+## 0.17.2 - 2026-10-07
+
+### Fixed
+- Move feedback trigger into avatar menu instead of a standalone nav button
+
+
+
 ## 0.17.1 - 2026-10-07
 
 ### Fixed
