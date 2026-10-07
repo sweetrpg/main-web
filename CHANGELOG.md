@@ -1,4 +1,11 @@
 
+## 0.17.3 - 2026-10-07
+
+### Fixed
+- Move feedback item above login/logout, shorten its label
+
+
+
 ## 0.17.2 - 2026-10-07
 
 ### Fixed
