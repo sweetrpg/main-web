@@ -61,6 +61,10 @@
           {% endif %}
         </div>
         <hr class="avatar-menu-divider">
+        {% endif %}
+        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ tr.menu_feedback() }}</button>
+        <hr class="avatar-menu-divider">
+        {% if let Some(name) = current_user_name %}
         <a class="avatar-menu-item" href="{{ user_settings_url }}">{{ tr.menu_user_settings() }}</a>
         {% if is_admin %}
         <a class="avatar-menu-item" href="{{ admin_url }}">{{ tr.menu_administration() }}</a>
@@ -72,8 +76,6 @@
         {% else %}
         <a class="avatar-menu-item" href="{{ login_url }}">{{ tr.menu_log_in() }}</a>
         {% endif %}
-        <hr class="avatar-menu-divider">
-        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ tr.menu_feedback() }}</button>
         <hr class="avatar-menu-divider">
         <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="{{ tr.menu_theme() }}">
           <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="{{ tr.menu_theme_light() }}"></button>
