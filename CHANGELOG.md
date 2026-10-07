@@ -1,4 +1,11 @@
 
+## 0.17.1 - 2026-10-07
+
+### Fixed
+- Point widget at same-origin /api/0/admin/feedback path
+
+
+
 ## 0.17.0 - 2026-10-07
 
 ### Added
