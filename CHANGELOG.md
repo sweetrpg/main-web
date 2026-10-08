@@ -1,4 +1,11 @@
 
+## 0.17.4 - 2026-10-08
+
+### Fixed
+- Move feedback item below admin links, directly above log out
+
+
+
 ## 0.17.3 - 2026-10-07
 
 ### Fixed
