@@ -122,9 +122,6 @@ impl Tr {
     pub fn footer_support(&self) -> String {
         self.s("footer.support")
     }
-    pub fn page_home(&self) -> String {
-        self.s("page.home")
-    }
     pub fn terms_title(&self) -> String {
         self.s("terms.title")
     }

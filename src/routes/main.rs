@@ -10,9 +10,8 @@ use axum_extra::extract::CookieJar;
 use serde::Deserialize;
 
 use crate::admin_client::{AppCardStatus, Banner, MaintenanceMode};
-use crate::constants::{PRIVACY_PATH, SUPPORT_PATH, TERMS_PATH};
 use crate::i18n::Tr;
-use crate::session_client::SESSION_COOKIE_NAME;
+use crate::page::{translator, Chrome, HeaderMenu};
 use crate::AppState;
 
 /// The suite's app list is a compile-time data structure, not a config file — see
@@ -156,44 +155,10 @@ fn apply_app_card_status(apps: &mut [AppCard], records: &[AppCardStatus]) {
 #[derive(Template)]
 #[template(path = "main.html")]
 struct LandingTemplate {
-    shared_url: String,
     apps: Vec<AppCard>,
-    version: String,
-    build_date: String,
-    build_hash: String,
     banners: Vec<Banner>,
-    /// `Some(display_name)` when the shared session (see `session_client`) resolves to a
-    /// logged-in visitor; `None` otherwise. `auth-web` is the only writer of this session -
-    /// this app only ever reads it.
-    current_user_name: Option<String>,
-    /// Shown as a smaller, muted subtitle line under the name in the avatar menu. `None` when
-    /// logged out or the session has no email (same source as `avatar_gravatar_url`).
-    current_user_email: Option<String>,
-    /// First character of `current_user_name`, uppercased - the avatar trigger's label.
-    /// Precomputed here rather than in the template (matching `build_hash`'s existing
-    /// precedent above) since Askama's expression syntax doesn't reliably support chained
-    /// method calls. Empty when logged out; unused in that branch of the template.
-    avatar_initial: String,
-    /// Gravatar image URL derived from the session's email (`d=404` so a visitor with no
-    /// Gravatar gets a real 404 rather than Gravatar's generic mystery-person image) - the
-    /// template's `onerror` falls back to the `avatar_initial` letter circle on load failure.
-    /// `None` when logged out or the session has no email.
-    avatar_gravatar_url: Option<String>,
-    /// `true` when the session's `roles` (verified by `users-api`, see `session_client`)
-    /// includes `admin` - gates the avatar menu's "Admin" item, mirroring `admin-web`'s own
-    /// `AuthRequiredMiddleware` role check.
-    is_admin: bool,
-    login_url: String,
-    logout_url: String,
-    admin_url: String,
-    user_settings_url: String,
-    /// Public `admin-api` base URL for the feedback widget's `data-api-url` attribute.
-    feedback_api_url: String,
-    terms_path: &'static str,
-    privacy_path: &'static str,
-    support_path: &'static str,
-    /// Per-request translator - the template's source for every user-facing string.
-    tr: Tr,
+    chrome: Chrome,
+    menu: HeaderMenu,
 }
 
 impl IntoResponse for LandingTemplate {
@@ -211,16 +176,6 @@ impl IntoResponse for LandingTemplate {
 #[derive(Deserialize)]
 struct IndexQuery {
     login_error: Option<String>,
-}
-
-/// Builds a Gravatar image URL from a session email, or `None` if no email is present.
-/// `d=404` makes Gravatar return a real 404 for an email with no registered image, instead of
-/// its generic mystery-person placeholder - the template's `onerror` handler catches that and
-/// falls back to the initial-letter circle.
-fn gravatar_url(email: Option<&str>) -> Option<String> {
-    let email = email?;
-    let hash = format!("{:x}", md5::compute(email.trim().to_lowercase().as_bytes()));
-    Some(format!("https://www.gravatar.com/avatar/{hash}?s=64&d=404"))
 }
 
 /// Maps auth-web's closed set of `login_error` reason codes (`AuthController.swift`'s
@@ -248,10 +203,7 @@ async fn index(
     jar: CookieJar,
     headers: HeaderMap,
 ) -> LandingTemplate {
-    let accept_language = headers
-        .get(axum::http::header::ACCEPT_LANGUAGE)
-        .and_then(|v| v.to_str().ok());
-    let tr = Tr::resolve(&jar, accept_language);
+    let tr = translator(&jar, &headers);
 
     let mut banners = state
         .admin_client
@@ -292,84 +244,56 @@ async fn index(
         );
     }
 
-    let current_user = match jar.get(SESSION_COOKIE_NAME) {
-        Some(cookie) => state.session_client.current_user(cookie.value()).await,
-        None => None,
-    };
-    let is_admin = current_user
-        .as_ref()
-        .is_some_and(|user| user.roles.iter().any(|role| role == "admin"));
-    let avatar_initial = current_user
-        .as_ref()
-        .and_then(|user| user.name.chars().next())
-        .map(|c| c.to_uppercase().to_string())
-        .unwrap_or_default();
-    let avatar_gravatar_url = current_user
-        .as_ref()
-        .and_then(|user| gravatar_url(user.email.as_deref()));
-    let current_user_email = current_user.as_ref().and_then(|user| user.email.clone());
-    let current_user_name = current_user.map(|user| user.name);
+    let menu = HeaderMenu::resolve(&state, &jar, "/").await;
+    let chrome = Chrome::new(&state, tr).landing();
 
-    // No INGRESS_BASE_PATH prefix needed, unlike catalog-web/admin-web: auth-web sits at
-    // /auth on this same host, and main-web itself serves the host's root - see
-    // design.md's "auth-web is the sole owner of the Authorization Code exchange" decision.
     LandingTemplate {
-        shared_url: state.config.shared_url.clone(),
         apps,
-        version: state.build_info.version.clone(),
-        build_date: state.build_info.date.clone(),
-        // Pre-truncated: Askama's `build_hash[..8]` panicked on any string shorter than 8 bytes.
-        build_hash: state.build_info.short_sha(),
         banners,
-        current_user_name,
-        current_user_email,
-        avatar_initial,
-        avatar_gravatar_url,
-        is_admin,
-        login_url: "/auth/login?return_to=/".to_string(),
-        logout_url: "/auth/logout".to_string(),
-        // Fixed paths on the shared `dev.sweetrpg.com` host, matching `/catalog`'s convention -
-        // see design.md's "Profile links to a fixed, currently-unbuilt path" decision.
-        admin_url: "/admin".to_string(),
-        user_settings_url: "/users/profile".to_string(),
-        feedback_api_url: state.config.feedback_api_url.clone(),
-        terms_path: TERMS_PATH,
-        privacy_path: PRIVACY_PATH,
-        support_path: SUPPORT_PATH,
-        tr,
+        chrome,
+        menu,
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::page::gravatar_url;
+    use crate::session_client::SessionUser;
 
-    fn template(current_user_name: Option<String>, is_admin: bool) -> LandingTemplate {
-        LandingTemplate {
+    fn test_chrome() -> Chrome {
+        Chrome {
             shared_url: "http://localhost:8081".to_string(),
-            apps: apps(&Tr::english()),
             version: "dev".to_string(),
             build_date: "unset".to_string(),
             build_hash: "unset".to_string(),
-            banners: Vec::new(),
-            avatar_initial: current_user_name
-                .as_deref()
-                .and_then(|n| n.chars().next())
-                .map(|c| c.to_uppercase().to_string())
-                .unwrap_or_default(),
-            current_user_name,
-            current_user_email: None,
-            avatar_gravatar_url: None,
-            is_admin,
-            login_url: "/auth/login?return_to=/".to_string(),
-            logout_url: "/auth/logout".to_string(),
-            admin_url: "/admin".to_string(),
-            user_settings_url: "/users/profile".to_string(),
-            feedback_api_url: "/api/0/admin/feedback".to_string(),
-            terms_path: TERMS_PATH,
-            privacy_path: PRIVACY_PATH,
-            support_path: SUPPORT_PATH,
+            year: 2026,
+            terms_path: "/terms",
+            privacy_path: "/privacy",
+            support_path: "/support",
+            footer_class: "landing-footer",
+            footer_line_class: "landing-footer-line",
             tr: Tr::english(),
+        }
+    }
+
+    fn template(current_user_name: Option<String>, is_admin: bool) -> LandingTemplate {
+        let user = current_user_name.map(|name| SessionUser {
+            sub: "sub".to_string(),
+            name,
+            email: None,
+            roles: if is_admin {
+                vec!["admin".to_string()]
+            } else {
+                vec![]
+            },
+            expiry: chrono::Utc::now() + chrono::Duration::hours(1),
+        });
+        LandingTemplate {
+            apps: apps(&Tr::english()),
+            banners: Vec::new(),
+            chrome: test_chrome(),
+            menu: HeaderMenu::new(user, "/api/0/admin/feedback", "/"),
         }
     }
 
@@ -484,7 +408,7 @@ mod tests {
     #[test]
     fn logged_in_with_email_shows_it_as_a_subtitle() {
         let mut tpl = template(Some("Alice".to_string()), false);
-        tpl.current_user_email = Some("alice@example.com".to_string());
+        tpl.menu.current_user_email = Some("alice@example.com".to_string());
         let html = tpl.render().expect("template renders");
         assert!(html.contains("avatar-menu-email"));
         assert!(html.contains("alice@example.com"));
@@ -533,7 +457,7 @@ mod tests {
     #[test]
     fn logged_in_with_email_renders_gravatar_img_with_onerror_fallback() {
         let mut tpl = template(Some("Alice".to_string()), false);
-        tpl.avatar_gravatar_url = gravatar_url(Some("alice@example.com"));
+        tpl.menu.avatar_gravatar_url = gravatar_url(Some("alice@example.com"));
         let html = tpl.render().expect("template renders");
         assert!(html.contains("avatar-menu-avatar"));
         assert!(html.contains(
