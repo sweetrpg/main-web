@@ -34,6 +34,12 @@ fn dev() -> String {
 }
 
 impl BuildInfo {
+    /// First 8 chars of the commit SHA, or all of it when shorter - slicing blindly panics on
+    /// a short placeholder.
+    pub fn short_sha(&self) -> String {
+        self.sha.get(..8).unwrap_or(&self.sha).to_string()
+    }
+
     pub fn load() -> Self {
         let path =
             env::var("BUILD_INFO_PATH").unwrap_or_else(|_| "/app/config/build-info.json".into());

@@ -43,4 +43,25 @@ login_error:
   forbidden: Your account doesn't have access to this application.
   generic: Login failed. Please try again.
 
+footer:
+  terms: Terms of Service
+  privacy: Privacy Policy
+  support: Support
+page:
+  home: SweetRPG home
+terms:
+  title: Terms of Service
+  draft_notice: This is a draft and is not in force. It has not been reviewed and does not yet apply to your use of SweetRPG.
+  version: "Version:"
+  effective_date: "Effective date:"
+  effective_date_unset: Not yet set
+privacy:
+  title: Privacy Policy
+support:
+  title: Support
+  intro: Questions, problems, or something wrong with your account? Contact us and we will get back to you.
+  contact_label: "Contact:"
+  terms_link: Read the Terms of Service
+  privacy_link: Read the Privacy Policy
+
 flat_test: hello

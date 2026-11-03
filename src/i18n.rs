@@ -113,6 +113,51 @@ impl Tr {
     pub fn cards_maintenance(&self) -> String {
         self.s("cards.maintenance")
     }
+    pub fn footer_privacy(&self) -> String {
+        self.s("footer.privacy")
+    }
+    pub fn footer_terms(&self) -> String {
+        self.s("footer.terms")
+    }
+    pub fn footer_support(&self) -> String {
+        self.s("footer.support")
+    }
+    pub fn page_home(&self) -> String {
+        self.s("page.home")
+    }
+    pub fn terms_title(&self) -> String {
+        self.s("terms.title")
+    }
+    pub fn terms_draft_notice(&self) -> String {
+        self.s("terms.draft_notice")
+    }
+    pub fn terms_version(&self) -> String {
+        self.s("terms.version")
+    }
+    pub fn terms_effective_date(&self) -> String {
+        self.s("terms.effective_date")
+    }
+    pub fn terms_effective_date_unset(&self) -> String {
+        self.s("terms.effective_date_unset")
+    }
+    pub fn privacy_title(&self) -> String {
+        self.s("privacy.title")
+    }
+    pub fn support_privacy_link(&self) -> String {
+        self.s("support.privacy_link")
+    }
+    pub fn support_title(&self) -> String {
+        self.s("support.title")
+    }
+    pub fn support_intro(&self) -> String {
+        self.s("support.intro")
+    }
+    pub fn support_contact_label(&self) -> String {
+        self.s("support.contact_label")
+    }
+    pub fn support_terms_link(&self) -> String {
+        self.s("support.terms_link")
+    }
 }
 
 #[cfg(test)]
