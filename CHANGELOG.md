@@ -1,4 +1,25 @@
 
+## 0.17.4 - 2026-10-08
+
+### Fixed
+- Move feedback item below admin links, directly above log out
+
+
+
+## 0.17.3 - 2026-10-07
+
+### Fixed
+- Move feedback item above login/logout, shorten its label
+
+
+
+## 0.17.2 - 2026-10-07
+
+### Fixed
+- Move feedback trigger into avatar menu instead of a standalone nav button
+
+
+
 ## 0.17.1 - 2026-10-07
 
 ### Fixed
