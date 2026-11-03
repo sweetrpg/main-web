@@ -1,4 +1,16 @@
 
+## 0.18.0 - 2026-11-03
+
+### Added
+- Serve terms, privacy and support pages
+
+
+### Fixed
+- Move feedback item above login/logout, shorten its label
+- Move feedback item below admin links, directly above log out
+
+
+
 ## 0.17.4 - 2026-10-08
 
 ### Fixed
