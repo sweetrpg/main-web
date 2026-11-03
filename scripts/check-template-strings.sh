@@ -9,7 +9,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-ALLOWED='SweetRPG|GitHub|Pilgrimage Software|home|^Sweet$|^RPG$|^v\s*(&middot;|·)?\s*built'
+ALLOWED='SweetRPG|GitHub|Pilgrimage Software|home|^Sweet$|^RPG$|^\s*&middot;\s*$|^v\s*(&middot;|·)?\s*built'
 status=0
 
 for template in templates/*.html; do

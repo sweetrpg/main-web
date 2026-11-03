@@ -1,7 +1,9 @@
 mod admin_client;
 mod build_info;
 mod config;
+mod constants;
 mod i18n;
+mod legal_doc;
 mod routes;
 mod session_client;
 mod telemetry;
@@ -16,6 +18,8 @@ use axum::Router;
 use axum_prometheus::PrometheusMetricLayer;
 use build_info::BuildInfo;
 use config::Config;
+use constants::{PRIVACY_SOURCE, TERMS_SOURCE};
+use legal_doc::LegalDoc;
 use session_client::SessionClient;
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
@@ -25,6 +29,8 @@ pub struct AppState {
     build_info: BuildInfo,
     admin_client: AdminClient,
     session_client: SessionClient,
+    terms: LegalDoc,
+    privacy: LegalDoc,
 }
 
 #[tokio::main]
@@ -53,17 +59,24 @@ async fn main() {
         config.shared_session_redis_pass.clone(),
     )
     .await;
+    let terms = LegalDoc::parse(TERMS_SOURCE)
+        .unwrap_or_else(|err| panic!("invalid terms of service file: {err}"));
+    let privacy = LegalDoc::parse(PRIVACY_SOURCE)
+        .unwrap_or_else(|err| panic!("invalid privacy policy file: {err}"));
     let state = Arc::new(AppState {
         config,
         build_info,
         admin_client,
         session_client,
+        terms,
+        privacy,
     });
 
     let (prometheus_layer, metric_handle) = PrometheusMetricLayer::pair();
 
     let app = Router::new()
         .merge(routes::main::router())
+        .merge(routes::legal::router())
         .with_state(state)
         .merge(routes::health::router())
         .route("/metrics", get(|| async move { metric_handle.render() }))

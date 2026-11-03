@@ -1,5 +1,7 @@
 use std::env;
 
+use crate::constants::SUPPORT_CONTACT_ENV;
+
 /// Runtime configuration read from the environment once at startup, matching the
 /// `SHARED_URL` / `INGRESS_BASE_PATH` convention documented in
 /// `docs/frontend-conventions.md` (sweetrpg/platform).
@@ -43,6 +45,47 @@ pub struct Config {
     /// failure) until this is set, e.g. local dev, where Sentry isn't used at all.
     pub sentry_dsn: Option<String>,
     pub env: String,
+    /// Where users reach support: an email address or an http(s) URL. Required - the
+    /// `/support` page has nothing to show without it, so a missing or malformed value stops
+    /// startup rather than shipping a page with no way to get help.
+    pub support_contact: SupportContact,
+}
+
+/// Validated support contact, ready for the `/support` page to link to.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SupportContact {
+    /// Shown as the link text.
+    pub display: String,
+    /// The link target (`mailto:` for an email address, the URL itself otherwise).
+    pub href: String,
+}
+
+impl SupportContact {
+    pub fn parse(raw: &str) -> Result<Self, String> {
+        let value = raw.trim();
+        if value.is_empty() || value.chars().any(|c| c.is_whitespace() || c.is_control()) {
+            return Err(format!(
+                "{SUPPORT_CONTACT_ENV} must be a single non-empty value"
+            ));
+        }
+        let is_url = value.starts_with("https://") || value.starts_with("http://");
+        let is_email = value
+            .split_once('@')
+            .is_some_and(|(local, domain)| !local.is_empty() && domain.contains('.'));
+        let href = match (is_url, is_email) {
+            (true, _) => value.to_string(),
+            (false, true) => format!("mailto:{value}"),
+            (false, false) => {
+                return Err(format!(
+                    "{SUPPORT_CONTACT_ENV} must be an email address or an http(s) URL"
+                ))
+            }
+        };
+        Ok(Self {
+            display: value.to_string(),
+            href,
+        })
+    }
 }
 
 impl Config {
@@ -77,6 +120,46 @@ impl Config {
                 .filter(|v| !v.is_empty()),
             sentry_dsn: env::var("SENTRY_DSN").ok().filter(|v| !v.is_empty()),
             env: env::var("ENV").unwrap_or_else(|_| "dev".to_string()),
+            support_contact: env::var(SUPPORT_CONTACT_ENV)
+                .map_err(|_| format!("{SUPPORT_CONTACT_ENV} is not set"))
+                .and_then(|v| SupportContact::parse(&v))
+                .unwrap_or_else(|err| panic!("invalid configuration: {err}")),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn email_becomes_a_mailto_link() {
+        let contact = SupportContact::parse(" help@example.com ").unwrap();
+        assert_eq!(contact.display, "help@example.com");
+        assert_eq!(contact.href, "mailto:help@example.com");
+    }
+
+    #[test]
+    fn http_url_is_used_as_is() {
+        let contact = SupportContact::parse("https://example.com/help").unwrap();
+        assert_eq!(contact.href, "https://example.com/help");
+    }
+
+    #[test]
+    fn invalid_values_are_rejected() {
+        for bad in [
+            "",
+            "   ",
+            "help",
+            "@example.com",
+            "a@b",
+            "javascript:alert(1)",
+            "two words@example.com",
+        ] {
+            assert!(
+                SupportContact::parse(bad).is_err(),
+                "{bad:?} should be rejected"
+            );
         }
     }
 }

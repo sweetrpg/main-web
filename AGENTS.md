@@ -47,6 +47,18 @@ the `i18n!` expansion when anything under `locales/` changes. CI runs
 `scripts/check-template-strings.sh` (`locale-lint` job), which fails on literal text
 between HTML tags that isn't a whitelisted brand string or sourced from `{{ tr.* }}`.
 
+### Legal pages and support
+
+`/terms` and `/privacy` render `content/legal/terms-of-service.md` and
+`content/legal/privacy-policy.md`, the canonical copies (embedded at compile time; nothing else
+holds the text). Each starts with a front-matter header - `version`, `status` (`draft` or
+`in_force`), `effective_date`, `material` - parsed in `src/legal_doc.rs`; a missing or malformed
+header panics at startup. A `draft` status shows a "not in force" notice; the page renders
+version and effective date from the header, so don't repeat them in the body. Raw HTML in the
+markdown is escaped. `/support` shows the `SUPPORT_CONTACT` config value (required, validated
+in `config.rs`) and links to both documents. See `publish-terms-of-service` in
+`sweetrpg/platform`'s `openspec/changes`.
+
 ### Shared static assets
 
 Suite-wide branding (logo variants, favicon, Broadsheet's design tokens) is served by

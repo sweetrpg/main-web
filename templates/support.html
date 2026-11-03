@@ -1,0 +1,13 @@
+{% extends "base_page.html" %}
+
+{% block title %}{{ chrome.tr.support_title() }}{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h1>{{ chrome.tr.support_title() }}</h1>
+</header>
+<p>{{ chrome.tr.support_intro() }}</p>
+<p><strong>{{ chrome.tr.support_contact_label() }}</strong> <a href="{{ contact_href }}">{{ contact_display }}</a></p>
+<p><a href="{{ chrome.terms_path }}">{{ chrome.tr.support_terms_link() }}</a></p>
+<p><a href="{{ chrome.privacy_path }}">{{ chrome.tr.support_privacy_link() }}</a></p>
+{% endblock %}
