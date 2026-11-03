@@ -4,6 +4,7 @@ mod config;
 mod constants;
 mod i18n;
 mod legal_doc;
+mod page;
 mod routes;
 mod session_client;
 mod telemetry;

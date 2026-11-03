@@ -4,11 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SweetRPG</title>
-<link rel="icon" href="{{ shared_url }}/static/img/main/favicon.png">
-<link rel="stylesheet" href="{{ shared_url }}/static/css/main.css">
-<link rel="stylesheet" href="{{ shared_url }}/static/css/avatar-menu.css">
-<link rel="stylesheet" href="{{ shared_url }}/static/css/app-switcher.css">
-<link rel="stylesheet" href="{{ shared_url }}/static/css/feedback-widget.css">
+<link rel="icon" href="{{ chrome.shared_url }}/static/img/main/favicon.png">
+<link rel="stylesheet" href="{{ chrome.shared_url }}/static/css/main.css">
+{% include "partials/header_styles.html" %}
 <script>
 /* Applied synchronously, before first paint, so the page never flashes the wrong theme
    while theme.js (deferred) loads. */
@@ -23,67 +21,7 @@
 </head>
 <body>
 <div class="landing">
-  <nav class="nav">
-    <div style="flex:1"></div>
-    <div class="app-switcher">
-      <button type="button" class="app-switcher-trigger" aria-label="{{ tr.menu_switch_app() }}">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/>
-          <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
-          <circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
-        </svg>
-      </button>
-      <div class="app-switcher-panel" hidden>
-        <a class="app-switcher-item" href="/">{{ tr.nav_main() }}</a>
-        <a class="app-switcher-item" href="/catalog">{{ tr.nav_catalog() }}</a>
-        <a class="app-switcher-item" href="/game-systems">{{ tr.nav_game_systems() }}</a>
-        <a class="app-switcher-item" href="/game-room">{{ tr.nav_game_room() }}</a>
-        <a class="app-switcher-item" href="/initiative">{{ tr.nav_initiative() }}</a>
-      </div>
-    </div>
-    <div class="avatar-menu">
-      <button type="button" class="avatar-menu-trigger">
-        {% if let Some(name) = current_user_name %}
-        {% if let Some(gravatar_url) = avatar_gravatar_url %}
-        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        {% endif %}
-        <span class="avatar-menu-fallback">{{ avatar_initial }}</span>
-        {% else %}
-        <img class="avatar-menu-avatar" src="{{ shared_url }}/static/img/mystery-man.svg" alt="">
-        {% endif %}
-      </button>
-      <div class="avatar-menu-panel" hidden>
-        {% if let Some(name) = current_user_name %}
-        <div class="avatar-menu-identity">
-          <span class="avatar-menu-name">{{ name }}</span>
-          {% if let Some(email) = current_user_email %}
-          <span class="avatar-menu-email">{{ email }}</span>
-          {% endif %}
-        </div>
-        <hr class="avatar-menu-divider">
-        <a class="avatar-menu-item" href="{{ user_settings_url }}">{{ tr.menu_user_settings() }}</a>
-        {% if is_admin %}
-        <a class="avatar-menu-item" href="{{ admin_url }}">{{ tr.menu_administration() }}</a>
-        {% endif %}
-        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ tr.menu_feedback() }}</button>
-        <hr class="avatar-menu-divider">
-        <form method="post" action="{{ logout_url }}" class="avatar-menu-item-form">
-          <button type="submit" class="avatar-menu-item avatar-menu-item-danger">{{ tr.menu_log_out() }}</button>
-        </form>
-        {% else %}
-        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ tr.menu_feedback() }}</button>
-        <hr class="avatar-menu-divider">
-        <a class="avatar-menu-item" href="{{ login_url }}">{{ tr.menu_log_in() }}</a>
-        {% endif %}
-        <hr class="avatar-menu-divider">
-        <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="{{ tr.menu_theme() }}">
-          <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="{{ tr.menu_theme_light() }}"></button>
-          <button type="button" class="avatar-menu-theme-option" data-theme-choice="dark" aria-label="{{ tr.menu_theme_dark() }}"></button>
-          <button type="button" class="avatar-menu-theme-option" data-theme-choice="system" aria-label="{{ tr.menu_theme_system() }}"></button>
-        </div>
-      </div>
-    </div>
-  </nav>
+  {% include "partials/header.html" %}
 
   {% if !banners.is_empty() %}
   <div class="banner-region">
@@ -96,11 +34,11 @@
   <div class="landing-container">
     <section class="landing-hero">
       <a href="/" aria-label="SweetRPG home">
-        <img class="landing-logo landing-logo-light" src="{{ shared_url }}/static/img/sweetrpg-logo-black.svg" alt="SweetRPG">
-        <img class="landing-logo landing-logo-dark" src="{{ shared_url }}/static/img/sweetrpg-logo-white.svg" alt="SweetRPG">
+        <img class="landing-logo landing-logo-light" src="{{ chrome.shared_url }}/static/img/sweetrpg-logo-black.svg" alt="SweetRPG">
+        <img class="landing-logo landing-logo-dark" src="{{ chrome.shared_url }}/static/img/sweetrpg-logo-white.svg" alt="SweetRPG">
       </a>
       <div class="landing-title"><span class="landing-title-sweet">Sweet</span><span class="landing-title-rpg">RPG</span></div>
-      <p class="landing-tagline">{{ tr.landing_tagline() }}</p>
+      <p class="landing-tagline">{{ chrome.tr.landing_tagline() }}</p>
     </section>
 
     <section class="landing-grid">
@@ -114,7 +52,7 @@
           </div>
           <div class="landing-card-spacer"></div>
           {% if let Some(m) = app.maintenance %}
-          <span class="tag tag-danger landing-card-tag" title="{{ m.label }}: {{ m.description }} ({{ m.starts_at }}{% if let Some(ends_at) = m.ends_at %} - {{ ends_at }}{% endif %})">{{ tr.cards_maintenance() }}</span>
+          <span class="tag tag-danger landing-card-tag" title="{{ m.label }}: {{ m.description }} ({{ m.starts_at }}{% if let Some(ends_at) = m.ends_at %} - {{ ends_at }}{% endif %})">{{ chrome.tr.cards_maintenance() }}</span>
           {% endif %}
           {% if app.has_status %}
           <span class="tag tag-outline landing-card-tag">{{ app.status }}</span>
@@ -127,19 +65,10 @@
     <div id="landing-footer-sentinel" class="landing-footer-sentinel"></div>
   </div>
 
-  <div class="landing-footer">
-    <span class="landing-footer-line">&copy; 2026 Pilgrimage Software &middot; <a href="https://github.com/sweetrpg" target="_blank" rel="noopener">GitHub</a></span>
-    <span class="landing-footer-line"><a href="{{ terms_path }}">{{ tr.footer_terms() }}</a> &middot; <a href="{{ privacy_path }}">{{ tr.footer_privacy() }}</a> &middot; <a href="{{ support_path }}">{{ tr.footer_support() }}</a></span>
-    <span class="landing-footer-line">v{{ version }} &middot; built {{ build_date }} / {{ build_hash }}</span>
-  </div>
+  {% include "partials/footer.html" %}
 </div>
 
-<script src="{{ shared_url }}/static/js/avatar-menu.js" defer></script>
-<script src="{{ shared_url }}/static/js/app-switcher.js" defer></script>
-<script src="{{ shared_url }}/static/js/theme.js" defer></script>
-<script src="{{ shared_url }}/static/js/footer-fade.js" defer></script>
-<script src="{{ shared_url }}/static/js/feedback-widget.js"
-        data-api-url="{{ feedback_api_url }}"
-        data-trigger-selector="#feedback-trigger" defer></script>
+{% include "partials/header_scripts.html" %}
+<script src="{{ chrome.shared_url }}/static/js/footer-fade.js" defer></script>
 </body>
 </html>
