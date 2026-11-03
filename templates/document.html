@@ -1,0 +1,18 @@
+{% extends "base_page.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{% if is_draft %}
+<div class="banner-region">
+  <div class="banner banner-warning" role="status">{{ chrome.tr.terms_draft_notice() }}</div>
+</div>
+{% endif %}
+<p class="terms-meta">
+  <strong>{{ chrome.tr.terms_version() }}</strong> {{ version_label }}
+  <strong>{{ chrome.tr.terms_effective_date() }}</strong> {{ effective_date }}
+</p>
+<article class="terms-body">
+{{ body_html|safe }}
+</article>
+{% endblock %}

@@ -37,7 +37,7 @@ cargo test
 cargo run
 ```
 
-`cargo run` serves on `:8080`. Set `SHARED_URL` to a reachable `shared-web` instance
+`cargo run` serves on `:8080` and requires `SUPPORT_CONTACT` (an email address or http(s) URL; see `.env.example`). Set `SHARED_URL` to a reachable `shared-web` instance
 (e.g. `https://dev.sweetrpg.com/shared`) to see the real logo/branding rendered locally instead
 of broken image references.
 

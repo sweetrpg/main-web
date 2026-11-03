@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% endblock %} - SweetRPG</title>
+<link rel="icon" href="{{ chrome.shared_url }}/static/img/main/favicon.png">
+<link rel="stylesheet" href="{{ chrome.shared_url }}/static/css/main.css">
+<script>
+/* Applied synchronously, before first paint, so the page never flashes the wrong theme. */
+(function () {
+  var stored = null;
+  try { stored = localStorage.getItem('sweetrpg_theme_v1'); } catch (e) {}
+  var theme = stored || 'system';
+  var dark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+})();
+</script>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-brand" href="/" aria-label="{{ chrome.tr.page_home() }}">
+    <img class="nav-logo nav-logo-light" src="{{ chrome.shared_url }}/static/img/sweetrpg-logo-black.svg" alt="">
+    <img class="nav-logo nav-logo-dark" src="{{ chrome.shared_url }}/static/img/sweetrpg-logo-white.svg" alt="">
+  </a>
+</nav>
+
+<main class="page">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{{ chrome.terms_path }}">{{ chrome.tr.footer_terms() }}</a>
+    <a href="{{ chrome.privacy_path }}">{{ chrome.tr.footer_privacy() }}</a>
+    <a href="{{ chrome.support_path }}">{{ chrome.tr.footer_support() }}</a>
+  </div>
+  <div class="footer-build">v{{ chrome.version }} &middot; built {{ chrome.build_date }} / {{ chrome.build_hash }}</div>
+</footer>
+
+<script src="{{ chrome.shared_url }}/static/js/theme.js" defer></script>
+</body>
+</html>

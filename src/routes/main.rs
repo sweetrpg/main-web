@@ -10,6 +10,7 @@ use axum_extra::extract::CookieJar;
 use serde::Deserialize;
 
 use crate::admin_client::{AppCardStatus, Banner, MaintenanceMode};
+use crate::constants::{PRIVACY_PATH, SUPPORT_PATH, TERMS_PATH};
 use crate::i18n::Tr;
 use crate::session_client::SESSION_COOKIE_NAME;
 use crate::AppState;
@@ -188,6 +189,9 @@ struct LandingTemplate {
     user_settings_url: String,
     /// Public `admin-api` base URL for the feedback widget's `data-api-url` attribute.
     feedback_api_url: String,
+    terms_path: &'static str,
+    privacy_path: &'static str,
+    support_path: &'static str,
     /// Per-request translator - the template's source for every user-facing string.
     tr: Tr,
 }
@@ -314,15 +318,8 @@ async fn index(
         apps,
         version: state.build_info.version.clone(),
         build_date: state.build_info.date.clone(),
-        // Pre-truncated here rather than sliced in the template: a real commit SHA can be
-        // longer than 8 chars, and Askama's `build_hash[..8]` panicked on any string shorter
-        // than 8 bytes (the local-dev placeholder is exactly 8, but don't rely on that).
-        build_hash: state
-            .build_info
-            .sha
-            .get(..8)
-            .unwrap_or(&state.build_info.sha)
-            .to_string(),
+        // Pre-truncated: Askama's `build_hash[..8]` panicked on any string shorter than 8 bytes.
+        build_hash: state.build_info.short_sha(),
         banners,
         current_user_name,
         current_user_email,
@@ -336,6 +333,9 @@ async fn index(
         admin_url: "/admin".to_string(),
         user_settings_url: "/users/profile".to_string(),
         feedback_api_url: state.config.feedback_api_url.clone(),
+        terms_path: TERMS_PATH,
+        privacy_path: PRIVACY_PATH,
+        support_path: SUPPORT_PATH,
         tr,
     }
 }
@@ -366,6 +366,9 @@ mod tests {
             admin_url: "/admin".to_string(),
             user_settings_url: "/users/profile".to_string(),
             feedback_api_url: "/api/0/admin/feedback".to_string(),
+            terms_path: TERMS_PATH,
+            privacy_path: PRIVACY_PATH,
+            support_path: SUPPORT_PATH,
             tr: Tr::english(),
         }
     }

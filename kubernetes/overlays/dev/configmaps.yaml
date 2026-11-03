@@ -9,6 +9,8 @@ data:
     ASSETS_URL: https://dev.sweetrpg.com/assets
     SHARED_URL: https://dev.sweetrpg.com/shared
     BUILD_INFO_PATH: /app/config/build-info.json
+    # Required: startup fails if unset or not an email address / http(s) URL (config.rs).
+    SUPPORT_CONTACT: support@pilgrimagesoftware.com
     LOG_LEVEL: info
     # Server-to-server, no ingress in the path - same value admin-web's own dev overlay uses.
     # Unset means AdminClient stays permanently disabled (banners/maintenance-mode badges never
