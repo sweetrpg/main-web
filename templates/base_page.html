@@ -6,6 +6,7 @@
 <title>{% block title %}{% endblock %} - SweetRPG</title>
 <link rel="icon" href="{{ chrome.shared_url }}/static/img/main/favicon.png">
 <link rel="stylesheet" href="{{ chrome.shared_url }}/static/css/main.css">
+{% include "partials/header_styles.html" %}
 <script>
 /* Applied synchronously, before first paint, so the page never flashes the wrong theme. */
 (function () {
@@ -18,26 +19,14 @@
 </script>
 </head>
 <body>
-<nav class="nav">
-  <a class="nav-brand" href="/" aria-label="{{ chrome.tr.page_home() }}">
-    <img class="nav-logo nav-logo-light" src="{{ chrome.shared_url }}/static/img/sweetrpg-logo-black.svg" alt="">
-    <img class="nav-logo nav-logo-dark" src="{{ chrome.shared_url }}/static/img/sweetrpg-logo-white.svg" alt="">
-  </a>
-</nav>
+{% include "partials/header.html" %}
 
 <main class="page">
 {% block content %}{% endblock %}
 </main>
 
-<footer class="footer">
-  <div class="footer-links">
-    <a href="{{ chrome.terms_path }}">{{ chrome.tr.footer_terms() }}</a>
-    <a href="{{ chrome.privacy_path }}">{{ chrome.tr.footer_privacy() }}</a>
-    <a href="{{ chrome.support_path }}">{{ chrome.tr.footer_support() }}</a>
-  </div>
-  <div class="footer-build">v{{ chrome.version }} &middot; built {{ chrome.build_date }} / {{ chrome.build_hash }}</div>
-</footer>
+{% include "partials/footer.html" %}
 
-<script src="{{ chrome.shared_url }}/static/js/theme.js" defer></script>
+{% include "partials/header_scripts.html" %}
 </body>
 </html>

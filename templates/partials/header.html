@@ -1,0 +1,61 @@
+  <nav class="nav">
+    <div style="flex:1"></div>
+    <div class="app-switcher">
+      <button type="button" class="app-switcher-trigger" aria-label="{{ chrome.tr.menu_switch_app() }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/>
+          <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+          <circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+        </svg>
+      </button>
+      <div class="app-switcher-panel" hidden>
+        <a class="app-switcher-item" href="/">{{ chrome.tr.nav_main() }}</a>
+        <a class="app-switcher-item" href="/catalog">{{ chrome.tr.nav_catalog() }}</a>
+        <a class="app-switcher-item" href="/game-systems">{{ chrome.tr.nav_game_systems() }}</a>
+        <a class="app-switcher-item" href="/game-room">{{ chrome.tr.nav_game_room() }}</a>
+        <a class="app-switcher-item" href="/initiative">{{ chrome.tr.nav_initiative() }}</a>
+      </div>
+    </div>
+    <div class="avatar-menu">
+      <button type="button" class="avatar-menu-trigger">
+        {% if let Some(name) = menu.current_user_name %}
+        {% if let Some(gravatar_url) = menu.avatar_gravatar_url %}
+        <img class="avatar-menu-avatar" src="{{ gravatar_url }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        {% endif %}
+        <span class="avatar-menu-fallback">{{ menu.avatar_initial }}</span>
+        {% else %}
+        <img class="avatar-menu-avatar" src="{{ chrome.shared_url }}/static/img/mystery-man.svg" alt="">
+        {% endif %}
+      </button>
+      <div class="avatar-menu-panel" hidden>
+        {% if let Some(name) = menu.current_user_name %}
+        <div class="avatar-menu-identity">
+          <span class="avatar-menu-name">{{ name }}</span>
+          {% if let Some(email) = menu.current_user_email %}
+          <span class="avatar-menu-email">{{ email }}</span>
+          {% endif %}
+        </div>
+        <hr class="avatar-menu-divider">
+        <a class="avatar-menu-item" href="{{ menu.user_settings_url }}">{{ chrome.tr.menu_user_settings() }}</a>
+        {% if menu.is_admin %}
+        <a class="avatar-menu-item" href="{{ menu.admin_url }}">{{ chrome.tr.menu_administration() }}</a>
+        {% endif %}
+        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ chrome.tr.menu_feedback() }}</button>
+        <hr class="avatar-menu-divider">
+        <form method="post" action="{{ menu.logout_url }}" class="avatar-menu-item-form">
+          <button type="submit" class="avatar-menu-item avatar-menu-item-danger">{{ chrome.tr.menu_log_out() }}</button>
+        </form>
+        {% else %}
+        <button type="button" id="feedback-trigger" class="avatar-menu-item">{{ chrome.tr.menu_feedback() }}</button>
+        <hr class="avatar-menu-divider">
+        <a class="avatar-menu-item" href="{{ menu.login_url }}">{{ chrome.tr.menu_log_in() }}</a>
+        {% endif %}
+        <hr class="avatar-menu-divider">
+        <div id="avatar-menu-theme-row" class="avatar-menu-theme-row" role="group" aria-label="{{ chrome.tr.menu_theme() }}">
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="light" aria-label="{{ chrome.tr.menu_theme_light() }}"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="dark" aria-label="{{ chrome.tr.menu_theme_dark() }}"></button>
+          <button type="button" class="avatar-menu-theme-option" data-theme-choice="system" aria-label="{{ chrome.tr.menu_theme_system() }}"></button>
+        </div>
+      </div>
+    </div>
+  </nav>

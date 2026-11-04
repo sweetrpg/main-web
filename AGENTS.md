@@ -49,7 +49,7 @@ between HTML tags that isn't a whitelisted brand string or sourced from `{{ tr.*
 
 ### Legal pages and support
 
-`/terms` and `/privacy` render `content/legal/terms-of-service.md` and
+The landing page and `/terms`, `/privacy`, `/support` share one header (`templates/partials/header.html`, context `page::HeaderMenu`) and one three-line footer (`partials/footer.html`, context `page::Chrome`); the landing page keeps its fixed, fading `landing-footer` variant. `/terms` and `/privacy` render `content/legal/terms-of-service.md` and
 `content/legal/privacy-policy.md`, the canonical copies (embedded at compile time; nothing else
 holds the text). Each starts with a front-matter header - `version`, `status` (`draft` or
 `in_force`), `effective_date`, `material` - parsed in `src/legal_doc.rs`; a missing or malformed
