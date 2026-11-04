@@ -1,4 +1,15 @@
 
+## 0.19.0 - 2026-11-04
+
+### Added
+- Share landing header and footer with legal pages
+
+
+### Fixed
+- Render the footer as a footer element
+
+
+
 ## 0.18.0 - 2026-11-03
 
 ### Added
