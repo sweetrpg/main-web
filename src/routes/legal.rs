@@ -273,6 +273,7 @@ mod tests {
         assert!(html.contains(
             r#"href="/privacy">Privacy Policy</a> &middot; <a href="/support">Support</a>"#
         ));
+        assert!(html.contains(r#"<footer class="footer">"#));
         assert_eq!(html.matches("footer-line").count(), 3);
     }
 }
