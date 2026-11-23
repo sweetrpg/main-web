@@ -1,7 +1,7 @@
 ---
 version: "0.1"
-status: draft
-effective_date: ""
+status: in_force
+effective_date: "2026-11-23"
 material: false
 ---
 
