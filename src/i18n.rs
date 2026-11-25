@@ -122,6 +122,30 @@ impl Tr {
     pub fn footer_support(&self) -> String {
         self.s("footer.support")
     }
+    pub fn footer_about(&self) -> String {
+        self.s("footer.about")
+    }
+    pub fn about_title(&self) -> String {
+        self.s("about.title")
+    }
+    pub fn about_credits_heading(&self) -> String {
+        self.s("about.credits_heading")
+    }
+    pub fn about_font_awesome_name(&self) -> String {
+        self.s("about.font_awesome_name")
+    }
+    pub fn about_font_awesome_credit(&self) -> String {
+        self.s("about.font_awesome_credit")
+    }
+    pub fn about_cc_by_name(&self) -> String {
+        self.s("about.cc_by_name")
+    }
+    pub fn about_feather_name(&self) -> String {
+        self.s("about.feather_name")
+    }
+    pub fn about_feather_credit(&self) -> String {
+        self.s("about.feather_credit")
+    }
     pub fn terms_title(&self) -> String {
         self.s("terms.title")
     }

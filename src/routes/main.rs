@@ -271,6 +271,7 @@ mod tests {
             terms_path: "/terms",
             privacy_path: "/privacy",
             support_path: "/support",
+            about_path: "/about",
             footer_class: "landing-footer",
             footer_line_class: "landing-footer-line",
             tr: Tr::english(),

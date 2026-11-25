@@ -2,7 +2,7 @@ use axum::http::HeaderMap;
 use axum_extra::extract::CookieJar;
 use chrono::Datelike;
 
-use crate::constants::{PRIVACY_PATH, SUPPORT_PATH, TERMS_PATH};
+use crate::constants::{ABOUT_PATH, PRIVACY_PATH, SUPPORT_PATH, TERMS_PATH};
 use crate::i18n::Tr;
 use crate::session_client::{SessionUser, SESSION_COOKIE_NAME};
 use crate::AppState;
@@ -17,6 +17,7 @@ pub struct Chrome {
     pub terms_path: &'static str,
     pub privacy_path: &'static str,
     pub support_path: &'static str,
+    pub about_path: &'static str,
     /// Wrapper class for the footer: the landing page pins it to the viewport and fades it
     /// (`landing-footer`), every other page uses the shared `footer`.
     pub footer_class: &'static str,
@@ -35,6 +36,7 @@ impl Chrome {
             terms_path: TERMS_PATH,
             privacy_path: PRIVACY_PATH,
             support_path: SUPPORT_PATH,
+            about_path: ABOUT_PATH,
             footer_class: "footer",
             footer_line_class: "",
             tr,

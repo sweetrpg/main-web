@@ -9,7 +9,10 @@ use axum::Router;
 use axum_extra::extract::CookieJar;
 
 use crate::config::SupportContact;
-use crate::constants::{PRIVACY_PATH, SUPPORT_PATH, TERMS_PATH};
+use crate::constants::{
+    ABOUT_PATH, CC_BY_4_URL, FEATHER_LICENSE_NOTICE, FEATHER_URL, FONT_AWESOME_URL, PRIVACY_PATH,
+    SUPPORT_PATH, TERMS_PATH,
+};
 use crate::legal_doc::{LegalDoc, LegalStatus};
 use crate::page::{translator, Chrome, HeaderMenu};
 use crate::AppState;
@@ -66,6 +69,30 @@ impl SupportTemplate {
     }
 }
 
+#[derive(Template)]
+#[template(path = "about.html")]
+struct AboutTemplate {
+    chrome: Chrome,
+    menu: HeaderMenu,
+    font_awesome_url: &'static str,
+    cc_by_url: &'static str,
+    feather_url: &'static str,
+    feather_notice: &'static str,
+}
+
+impl AboutTemplate {
+    fn new(chrome: Chrome, menu: HeaderMenu) -> Self {
+        Self {
+            chrome,
+            menu,
+            font_awesome_url: FONT_AWESOME_URL,
+            cc_by_url: CC_BY_4_URL,
+            feather_url: FEATHER_URL,
+            feather_notice: FEATHER_LICENSE_NOTICE,
+        }
+    }
+}
+
 fn render(template: impl Template, page: &str) -> Response {
     match template.render() {
         Ok(body) => Html(body).into_response(),
@@ -81,6 +108,7 @@ pub fn router() -> Router<Arc<AppState>> {
         .route(TERMS_PATH, get(terms))
         .route(PRIVACY_PATH, get(privacy))
         .route(SUPPORT_PATH, get(support))
+        .route(ABOUT_PATH, get(about))
 }
 
 /// Shared header/footer context for a public page; `path` is where login returns to.
@@ -123,6 +151,11 @@ async fn support(
     render(page, "support")
 }
 
+async fn about(State(state): State<Arc<AppState>>, jar: CookieJar, headers: HeaderMap) -> Response {
+    let (chrome, menu) = page_context(&state, &jar, &headers, ABOUT_PATH).await;
+    render(AboutTemplate::new(chrome, menu), "about")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -140,6 +173,7 @@ mod tests {
             terms_path: TERMS_PATH,
             privacy_path: PRIVACY_PATH,
             support_path: SUPPORT_PATH,
+            about_path: ABOUT_PATH,
             footer_class: "footer",
             footer_line_class: "",
             tr: Tr::english(),
@@ -275,5 +309,31 @@ mod tests {
         ));
         assert!(html.contains(r#"<footer class="footer">"#));
         assert_eq!(html.matches("footer-line").count(), 3);
+    }
+
+    fn about_html() -> String {
+        AboutTemplate::new(test_chrome(), signed_out())
+            .render()
+            .expect("template renders")
+    }
+
+    #[test]
+    fn about_page_credits_font_awesome_with_its_license_link() {
+        let html = about_html();
+        assert!(html.contains("Font Awesome Free 5.12.0"));
+        assert!(html.contains(r#"href="https://creativecommons.org/licenses/by/4.0/""#));
+    }
+
+    #[test]
+    fn about_page_carries_the_feather_mit_notice() {
+        let html = about_html();
+        assert!(html.contains("edit-3"));
+        assert!(html.contains("Copyright (c) 2013-2023 Cole Bemis"));
+        assert!(html.contains("The above copyright notice and this permission notice"));
+    }
+
+    #[test]
+    fn footer_links_to_the_about_page() {
+        assert!(support_html(signed_out()).contains(r#"href="/about">About</a>"#));
     }
 }

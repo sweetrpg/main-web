@@ -59,6 +59,9 @@ markdown is escaped. `/support` shows the `SUPPORT_CONTACT` config value (requir
 in `config.rs`) and links to both documents. See `publish-terms-of-service` in
 `sweetrpg/platform`'s `openspec/changes`.
 
+`/about` lists third-party credits (Font Awesome Free, Feather). Add a credit there when a
+third-party asset ships; URLs and the verbatim Feather MIT notice live in `src/constants.rs`.
+
 ### Shared static assets
 
 Suite-wide branding (logo variants, favicon, Broadsheet's design tokens) is served by

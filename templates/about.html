@@ -1,0 +1,15 @@
+{% extends "base_page.html" %}
+
+{% block title %}{{ chrome.tr.about_title() }}{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h1>{{ chrome.tr.about_title() }}</h1>
+</header>
+<h2>{{ chrome.tr.about_credits_heading() }}</h2>
+<h3><a href="{{ font_awesome_url }}">{{ chrome.tr.about_font_awesome_name() }}</a></h3>
+<p>{{ chrome.tr.about_font_awesome_credit() }} <a href="{{ cc_by_url }}" rel="license">{{ chrome.tr.about_cc_by_name() }}</a></p>
+<h3><a href="{{ feather_url }}">{{ chrome.tr.about_feather_name() }}</a></h3>
+<p>{{ chrome.tr.about_feather_credit() }}</p>
+<p style="white-space: pre-line">{{ feather_notice }}</p>
+{% endblock %}
