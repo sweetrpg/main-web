@@ -47,6 +47,15 @@ footer:
   terms: Terms of Service
   privacy: Privacy Policy
   support: Support
+  about: About
+about:
+  title: About
+  credits_heading: Third-party credits
+  font_awesome_name: Font Awesome Free 5.12.0
+  font_awesome_credit: Icons by Font Awesome, licensed under
+  cc_by_name: CC BY 4.0
+  feather_name: Feather
+  feather_credit: The edit icon is Feather's edit-3, used under the MIT License.
 terms:
   title: Terms of Service
   draft_notice: This is a draft and is not in force. It has not been reviewed and does not yet apply to your use of SweetRPG.
