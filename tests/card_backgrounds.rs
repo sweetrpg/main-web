@@ -7,7 +7,7 @@ fn card_backgrounds_render() {
     // The template should contain background-image URLs for each app card.
 
     let backgrounds = [
-        "catalog-card-back.png",
+        "cards/catalog.jpg",
         "game-room-card-back.jpg",
         "systems-card-back.jpg",
         "profile-card-back.jpg",

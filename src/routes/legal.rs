@@ -10,8 +10,8 @@ use axum_extra::extract::CookieJar;
 
 use crate::config::SupportContact;
 use crate::constants::{
-    ABOUT_PATH, CC_BY_4_URL, FEATHER_LICENSE_NOTICE, FEATHER_URL, FONT_AWESOME_URL, PRIVACY_PATH,
-    SUPPORT_PATH, TERMS_PATH,
+    ABOUT_PATH, CATALOG_PHOTO_TITLE, CATALOG_PHOTO_URL, CC_BY_4_URL, FEATHER_LICENSE_NOTICE,
+    FEATHER_URL, FONT_AWESOME_URL, PRIVACY_PATH, SUPPORT_PATH, TERMS_PATH,
 };
 use crate::legal_doc::{LegalDoc, LegalStatus};
 use crate::page::{translator, Chrome, HeaderMenu};
@@ -78,6 +78,8 @@ struct AboutTemplate {
     cc_by_url: &'static str,
     feather_url: &'static str,
     feather_notice: &'static str,
+    catalog_photo_url: &'static str,
+    catalog_photo_title: &'static str,
 }
 
 impl AboutTemplate {
@@ -89,6 +91,8 @@ impl AboutTemplate {
             cc_by_url: CC_BY_4_URL,
             feather_url: FEATHER_URL,
             feather_notice: FEATHER_LICENSE_NOTICE,
+            catalog_photo_url: CATALOG_PHOTO_URL,
+            catalog_photo_title: CATALOG_PHOTO_TITLE,
         }
     }
 }
@@ -330,6 +334,23 @@ mod tests {
         assert!(html.contains("edit-3"));
         assert!(html.contains("Copyright (c) 2013-2023 Cole Bemis"));
         assert!(html.contains("The above copyright notice and this permission notice"));
+    }
+
+    #[test]
+    fn about_page_credits_every_registered_photo() {
+        let html = about_html();
+        let registry = include_str!("../../static/img/cards/LICENSES.md");
+        let rows: Vec<_> = registry
+            .lines()
+            .filter(|l| l.starts_with('|'))
+            .skip(2)
+            .collect();
+        assert!(!rows.is_empty());
+        for row in rows {
+            let cells: Vec<_> = row.split('|').map(str::trim).collect();
+            assert!(html.contains(cells[2]), "source link missing: {row}");
+            assert!(html.contains(cells[4]), "photographer missing: {row}");
+        }
     }
 
     #[test]

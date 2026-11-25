@@ -67,7 +67,7 @@ fn apps(tr: &Tr) -> Vec<AppCard> {
             href: "/catalog",
             has_status: false,
             status: String::new(),
-            background: "catalog-card-back.png",
+            background: "cards/catalog.jpg",
             service_scope: Some("service:catalog"),
             maintenance: None,
         },
