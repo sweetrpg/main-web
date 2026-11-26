@@ -163,9 +163,15 @@ async fn about(State(state): State<Arc<AppState>>, jar: CookieJar, headers: Head
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::admin_client::AdminClient;
+    use crate::build_info::BuildInfo;
+    use crate::config::Config;
     use crate::constants::{PRIVACY_SOURCE, TERMS_SOURCE};
     use crate::i18n::Tr;
-    use crate::session_client::SessionUser;
+    use crate::session_client::{SessionClient, SessionUser};
+    use axum::body::Body;
+    use axum::http::Request;
+    use tower::ServiceExt;
 
     fn test_chrome() -> Chrome {
         Chrome {
@@ -351,6 +357,45 @@ mod tests {
             assert!(html.contains(cells[2]), "source link missing: {row}");
             assert!(html.contains(cells[4]), "photographer missing: {row}");
         }
+    }
+
+    #[test]
+    fn about_page_links_to_both_license_pages() {
+        let html = about_html();
+        assert!(html.contains(r#"href="https://fontawesome.com/license/free""#));
+        assert!(
+            html.contains(r#"href="https://github.com/feathericons/feather/blob/main/LICENSE""#)
+        );
+    }
+
+    #[tokio::test]
+    async fn about_route_returns_200() {
+        let config = Config {
+            port: 0,
+            shared_url: String::new(),
+            otlp_endpoint: None,
+            log_level: "info".to_string(),
+            admin_api_url: None,
+            feedback_api_url: String::new(),
+            shared_session_redis_host: None,
+            shared_session_redis_port: 6379,
+            shared_session_redis_db: 0,
+            shared_session_redis_pass: None,
+            sentry_dsn: None,
+            env: "test".to_string(),
+            support_contact: SupportContact::parse("help@example.com").unwrap(),
+        };
+        let state = Arc::new(AppState {
+            config,
+            build_info: BuildInfo::load(),
+            admin_client: AdminClient::new(None),
+            session_client: SessionClient::new(None, 6379, 0, None).await,
+            terms: LegalDoc::parse(TERMS_SOURCE).unwrap(),
+            privacy: LegalDoc::parse(PRIVACY_SOURCE).unwrap(),
+        });
+        let request = Request::get(ABOUT_PATH).body(Body::empty()).unwrap();
+        let response = router().with_state(state).oneshot(request).await.unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
     }
 
     #[test]

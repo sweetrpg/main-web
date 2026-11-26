@@ -12,9 +12,9 @@ pub const SUPPORT_PATH: &str = "/support";
 /// Public path of the about page (third-party credits).
 pub const ABOUT_PATH: &str = "/about";
 
-pub const FONT_AWESOME_URL: &str = "https://fontawesome.com";
+pub const FONT_AWESOME_URL: &str = "https://fontawesome.com/license/free";
 pub const CC_BY_4_URL: &str = "https://creativecommons.org/licenses/by/4.0/";
-pub const FEATHER_URL: &str = "https://github.com/feathericons/feather";
+pub const FEATHER_URL: &str = "https://github.com/feathericons/feather/blob/main/LICENSE";
 pub const CATALOG_PHOTO_URL: &str =
     "https://thenounproject.com/photo/the-george-peabody-library-baltimore-maryland-B5QMm5/";
 /// The photo's published title, so it is not localized.
