@@ -61,6 +61,8 @@ in `config.rs`) and links to both documents. See `publish-terms-of-service` in
 
 `/about` lists third-party credits (Font Awesome Free, Feather). Add a credit there when a
 third-party asset ships; URLs and the verbatim Feather MIT notice live in `src/constants.rs`.
+Third-party card photos live in `static/img/cards/`, each with a row in its `LICENSES.md`
+(`tests/photo_registry.rs` enforces it) and a credit on `/about`.
 
 ### Shared static assets
 

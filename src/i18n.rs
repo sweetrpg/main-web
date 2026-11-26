@@ -146,6 +146,12 @@ impl Tr {
     pub fn about_feather_credit(&self) -> String {
         self.s("about.feather_credit")
     }
+    pub fn about_photos_heading(&self) -> String {
+        self.s("about.photos_heading")
+    }
+    pub fn about_catalog_photo_credit(&self) -> String {
+        self.s("about.catalog_photo_credit")
+    }
     pub fn terms_title(&self) -> String {
         self.s("terms.title")
     }

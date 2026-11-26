@@ -15,6 +15,10 @@ pub const ABOUT_PATH: &str = "/about";
 pub const FONT_AWESOME_URL: &str = "https://fontawesome.com";
 pub const CC_BY_4_URL: &str = "https://creativecommons.org/licenses/by/4.0/";
 pub const FEATHER_URL: &str = "https://github.com/feathericons/feather";
+pub const CATALOG_PHOTO_URL: &str =
+    "https://thenounproject.com/photo/the-george-peabody-library-baltimore-maryland-B5QMm5/";
+/// The photo's published title, so it is not localized.
+pub const CATALOG_PHOTO_TITLE: &str = "The George Peabody Library, Baltimore, Maryland";
 
 /// Feather's license notice. MIT requires it verbatim, so it is not localized.
 pub const FEATHER_LICENSE_NOTICE: &str = "The MIT License (MIT)
